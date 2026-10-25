@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Rink Receipt Scanner</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      margin: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 4px;
+    }
+
+    form {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Big Camera Button Area */
+    .camera-upload-area {
+      position: relative;
+      border: 2px dashed #475569;
+      border-radius: 1rem;
+      padding: 2.25rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #0f172a66;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-upload-area:active {
+      border-color: var(--primary);
+      background: #1e293b;
+    }
+
+    .camera-icon {
+      width: 64px;
+      height: 64px;
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-bottom: 0.75rem;
+    }
+
+    .upload-text {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .upload-subtext {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Native hidden input that invokes device camera */
+    #receiptImage {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    /* Thumbnail preview */
+    .preview-container {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 180px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-top: 0.5rem;
+    }
+
+    .preview-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    input[type="text"], textarea {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 0.625rem;
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      outline: none;
+      width: 100%;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    input:read-only {
+      color: var(--text-muted);
+      cursor: not-allowed;
+      background: #0b1120;
+    }
+
+    textarea {
+      resize: none;
+      height: 70px;
+    }
+
+    .submit-btn {
+      background-color: var(--primary);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      transition: background-color 0.2s;
+    }
+
+    .submit-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 2rem;
+      background: #10b981;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Roller Rink Expenses</h1>
+      <p>Snap receipts immediately on the go</p>
+    </header>
+
+    <form id="expenseForm">
+      <!-- Big Camera Trigger -->
+      <div class="camera-upload-area">
+        <svg class="camera-icon" viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+        <span class="upload-text" id="uploadLabel">Tap to Snap Receipt</span>
+        <span class="upload-subtext">Opens device camera</span>
+        <!-- capture="environment" forces back camera on phones -->
+        <input type="file" id="receiptImage" name="receiptImage" accept="image/*" capture="environment" required>
+      </div>
+
+      <!-- Preview Image -->
+      <div class="preview-container" id="previewWrapper">
+        <img id="preview" alt="Receipt preview">
+      </div>
+
+      <!-- Auto-filled Timestamp -->
+      <div class="field-group">
+        <label for="timestamp">Timestamp</label>
+        <input type="text" id="timestamp" name="timestamp" readonly>
+      </div>
+
+      <!-- Optional Quick Note -->
+      <div class="field-group">
+        <label for="quickNote">Quick Note (Optional)</label>
+        <textarea id="quickNote" name="quickNote" placeholder="e.g. Concessions soda restock, Skate wheel bearings..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Save Receipt</button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast">✓ Saved Successfully!</div>
+
+  <script>
+    const form = document.getElementById('expenseForm');
+    const cameraInput = document.getElementById('receiptImage');
+    const timestampInput = document.getElementById('timestamp');
+    const previewWrapper = document.getElementById('previewWrapper');
+    const preview = document.getElementById('preview');
+    const uploadLabel = document.getElementById('uploadLabel');
+    const toast = document.getElementById('toast');
+
+    // Auto-populate timestamp in readable local format
+    function updateTimestamp() {
+      const now = new Date();
+      timestampInput.value = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    updateTimestamp();
+
+    // Show image preview when captured
+    cameraInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        previewWrapper.style.display = 'block';
+        uploadLabel.textContent = 'Retake Photo';
+      }
+    });
+
+    // Handle Submission
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Bundle payload
+      const expenseEntry = {
+        timestamp: timestampInput.value,
+        quickNote: document.getElementById('quickNote').value,
+        file: cameraInput.files[0]
+      };
+
+      // TODO: Connect to backend, Google Apps Script, Supabase, or Firebase:
+      // const formData = new FormData();
+      // formData.append('image', expenseEntry.file);
+      // formData.append('timestamp', expenseEntry.timestamp);
+      // formData.append('note', expenseEntry.quickNote);
+      // fetch('YOUR_ENDPOINT_URL', { method: 'POST', body: formData });
+
+      console.log('Expense Saved:', expenseEntry);
+
+      // Flash confirmation toast
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2500);
+
+      // Reset form instantly for next receipt
+      form.reset();
+      previewWrapper.style.display = 'none';
+      uploadLabel.textContent = 'Tap to Snap Receipt';
+      updateTimestamp();
+    });
+  </script>
+</body>
+</html>
