@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rink Receipt Scanner</title>
+  <title>Rink Scanner</title>
+  
+  <!-- 🛼 Roller Skate App Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛼</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛼</text></svg>">
+  
+  <!-- Tells your phone to treat this as a standalone native app -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0f172a">
+
   <style>
     :root {
       --primary: #6366f1;
@@ -311,3 +321,13 @@
   </script>
 </body>
 </html>
+
+Key Highlights of this Layout:
+
+1.  Camera-First Usability: Uses <input type="file" accept="image/*"
+    capture="environment">, which directly triggers the rear camera on iOS and
+    Android rather than opening the file picker.
+2.  Read-Only Automated Timestamp: Updates on load and resets whenever a receipt
+    is submitted.
+3.  Friction-Free: Only three fields exist. There are no distracting menus,
+    tabs, or extra screens—saving time for busy rink staff.
