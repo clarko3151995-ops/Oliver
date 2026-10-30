@@ -137,6 +137,20 @@
       font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     }
     .toast.error { background: var(--error); }
+
+    /* Recent uploads (kept on this phone only) */
+    .history-card {
+      display: none; margin-top: 1.25rem;
+      background-color: var(--card); border: 1px solid var(--border);
+      border-radius: 1.25rem; padding: 1.25rem 1.5rem;
+    }
+    .history-card h2 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .history-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .history-list li { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.875rem; }
+    .history-note { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .history-status { flex-shrink: 0; color: var(--success); font-weight: 600; }
+    .history-status.queued { color: #f59e0b; }
+    .history-empty { color: var(--text-muted); font-size: 0.875rem; }
   </style>
 </head>
 <body>
@@ -188,6 +202,13 @@
       <button type="submit" class="submit-btn" id="submitBtn">Save Receipt</button>
       <button type="button" class="link-btn" id="changePin">Change PIN</button>
     </form>
+
+    <!-- Recent uploads (kept on this phone only) -->
+    <section class="history-card" id="historyCard">
+      <h2>Recent uploads on this phone</h2>
+      <ul class="history-list" id="historyList"></ul>
+      <p class="history-empty" id="historyEmpty">Nothing sent yet.</p>
+    </section>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -197,6 +218,8 @@
     // Make rejects any upload without the correct PIN, and the PIN is never stored in this file.
     const ENDPOINT = 'https://hook.us2.make.com/euzazwbm3qirwiryjb4uru36tk1j8y9c';
     const PIN_KEY = 'rinkScannerPin';
+    const HISTORY_KEY = 'rinkScannerHistory';
+    const HISTORY_MAX = 10;    // how many recent uploads to remember
     const MAX_SIDE = 1600;     // longest edge in pixels after resizing
     const JPEG_QUALITY = 0.82;
 
@@ -212,6 +235,9 @@
     const pinCard = document.getElementById('pinCard');
     const pinInput = document.getElementById('pinInput');
     const pinError = document.getElementById('pinError');
+    const historyCard = document.getElementById('historyCard');
+    const historyList = document.getElementById('historyList');
+    const historyEmpty = document.getElementById('historyEmpty');
 
     // ---------- PIN (kept on this phone only) ----------
     function getPin() { try { return localStorage.getItem(PIN_KEY) || ''; } catch (e) { return memoryPin; } }
@@ -222,12 +248,14 @@
       pinError.style.display = rejected ? 'block' : 'none';
       pinInput.value = '';
       form.style.display = 'none';
+      historyCard.style.display = 'none';
       pinCard.style.display = 'flex';
       pinInput.focus();
     }
     function showForm() {
       pinCard.style.display = 'none';
       form.style.display = 'flex';
+      historyCard.style.display = 'block';
     }
     document.getElementById('pinSave').addEventListener('click', () => {
       const v = pinInput.value.trim();
@@ -237,6 +265,38 @@
     });
     pinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('pinSave').click(); });
     document.getElementById('changePin').addEventListener('click', () => showPinScreen(false));
+
+    // ---------- Recent uploads (kept on this phone only) ----------
+    function loadHistory() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch (e) { return memoryHistory; }
+    }
+    let memoryHistory = [];
+    function addToHistory(entry) {
+      const list = [entry].concat(loadHistory()).slice(0, HISTORY_MAX);
+      memoryHistory = list;
+      try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+      renderHistory();
+    }
+    function renderHistory() {
+      const list = loadHistory();
+      historyList.innerHTML = '';
+      historyEmpty.style.display = list.length ? 'none' : 'block';
+      list.forEach((item) => {
+        const d = new Date(item.timestamp);
+        const li = document.createElement('li');
+        const note = document.createElement('span');
+        note.className = 'history-note';
+        // textContent (not innerHTML) so a note can never inject HTML into the page
+        note.textContent = d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' +
+          d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) +
+          (item.note ? ' · ' + item.note : '');
+        const status = document.createElement('span');
+        status.className = 'history-status' + (item.status === 'queued' ? ' queued' : '');
+        status.textContent = item.status === 'queued' ? 'Queued' : '✓ Sent';
+        li.append(note, status);
+        historyList.appendChild(li);
+      });
+    }
 
     // ---------- Timestamp ----------
     let capturedAt = new Date();
@@ -337,10 +397,12 @@
           return;
         }
         if (res.ok && data && data.ok) {
+          addToHistory({ timestamp: isoLocal(capturedAt), note: noteInput.value.trim(), status: 'sent' });
           showToast('✓ Receipt received');
           resetForm();
         } else if (res.ok && text.trim() === 'Accepted') {
           // Make accepted the upload but the scenario is switched off; it will process when turned on.
+          addToHistory({ timestamp: isoLocal(capturedAt), note: noteInput.value.trim(), status: 'queued' });
           showToast('✓ Received (queued for processing)');
           resetForm();
         } else {
@@ -357,6 +419,7 @@
 
     // ---------- Start ----------
     updateTimestamp();
+    renderHistory();
     if (getPin()) { showForm(); } else { showPinScreen(false); }
   </script>
 </body>
