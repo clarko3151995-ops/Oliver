@@ -150,6 +150,8 @@
     .history-note { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .history-status { flex-shrink: 0; color: var(--success); font-weight: 600; }
     .history-status.queued { color: #f59e0b; }
+    .history-status.waiting { color: #f59e0b; }
+    .history-status.failed { color: #ef4444; }
     .history-empty { color: var(--text-muted); font-size: 0.875rem; }
   </style>
 </head>
@@ -262,6 +264,7 @@
       if (!v) return;
       setPin(v);
       showForm();
+      flushOutbox();
     });
     pinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('pinSave').click(); });
     document.getElementById('changePin').addEventListener('click', () => showPinScreen(false));
@@ -271,11 +274,17 @@
       try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch (e) { return memoryHistory; }
     }
     let memoryHistory = [];
-    function addToHistory(entry) {
-      const list = [entry].concat(loadHistory()).slice(0, HISTORY_MAX);
+    function saveHistory(list) {
+      // Keep the newest few, but never drop a receipt that is still waiting to send.
+      list = list.filter((item, i) => i < HISTORY_MAX || item.status === 'waiting');
       memoryHistory = list;
       try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
       renderHistory();
+    }
+    function addToHistory(entry) { saveHistory([entry].concat(loadHistory())); }
+    // Flip a waiting entry to its final status once the outbox delivers it.
+    function updateHistoryStatus(id, status) {
+      saveHistory(loadHistory().map((item) => item.id === id ? Object.assign({}, item, { status: status }) : item));
     }
     function renderHistory() {
       const list = loadHistory();
@@ -291,8 +300,9 @@
           d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) +
           (item.note ? ' · ' + item.note : '');
         const status = document.createElement('span');
-        status.className = 'history-status' + (item.status === 'queued' ? ' queued' : '');
-        status.textContent = item.status === 'queued' ? 'Queued' : '✓ Sent';
+        const labels = { queued: 'Queued', waiting: 'Waiting for signal', failed: '✗ Failed' };
+        status.className = 'history-status' + (labels[item.status] ? ' ' + item.status : '');
+        status.textContent = labels[item.status] || '✓ Sent';
         li.append(note, status);
         historyList.appendChild(li);
       });
@@ -361,53 +371,146 @@
       updateTimestamp();
     }
 
+    // ---------- Outbox (receipts waiting for a signal, kept on this phone) ----------
+    // Think of it as a staging lane: if the truck (the network) isn't there, the receipt
+    // waits here and ships automatically the next time the phone is online.
+    // IndexedDB is the browser's built-in database; it has room for photos, unlike localStorage.
+    const DB_NAME = 'rinkScanner';
+    const STORE = 'outbox';
+    function openDb() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = () => req.result.createObjectStore(STORE, { keyPath: 'id' });
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function outbox(mode, action) {
+      const db = await openDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, mode);
+        const req = action(tx.objectStore(STORE));
+        tx.oncomplete = () => { db.close(); resolve(req.result); };
+        tx.onerror = tx.onabort = () => { db.close(); reject(tx.error); };
+      });
+    }
+    const outboxAdd = (item) => outbox('readwrite', (st) => st.put(item));
+    const outboxRemove = (id) => outbox('readwrite', (st) => st.delete(id));
+    const outboxAll = () => outbox('readonly', (st) => st.getAll());
+
+    // ---------- Sending ----------
+    // Returns 'sent', 'queued' (Make accepted it but the scenario is off) or 'badpin'.
+    // Throws an error with .retry = true when trying again later could work (no signal, server hiccup).
+    async function sendReceipt(item) {
+      // Form-encoded body keeps this a "simple" request, so no CORS preflight is needed.
+      const body = new URLSearchParams({
+        pin: getPin(),
+        image: item.image,
+        filename: item.filename,
+        mimeType: 'image/jpeg',
+        timestamp: item.timestamp,
+        note: item.note
+      });
+      let res;
+      try {
+        res = await fetch(ENDPOINT, { method: 'POST', body: body });
+      } catch (err) {
+        err.retry = true;   // fetch itself failed: no connection
+        throw err;
+      }
+      const text = await res.text();
+      let data = null;
+      try { data = JSON.parse(text); } catch (err) {}
+
+      if (res.status === 401) return 'badpin';
+      if (res.ok && data && data.ok) return 'sent';
+      if (res.ok && text.trim() === 'Accepted') return 'queued';
+      const err = new Error('Server responded ' + res.status);
+      err.retry = res.status === 429 || res.status >= 500;
+      throw err;
+    }
+
+    // Try to deliver everything in the outbox, oldest first. Stops at the first failure.
+    let flushing = false;
+    async function flushOutbox() {
+      if (flushing || !getPin()) return;
+      flushing = true;
+      try {
+        const items = (await outboxAll()).sort((a, b) => a.id - b.id);
+        let delivered = 0;
+        for (const item of items) {
+          let result;
+          try { result = await sendReceipt(item); } catch (err) {
+            if (err.retry) break;          // still no signal: leave the rest for next time
+            console.error(err);            // this one will never go through; don't block the lane
+            await outboxRemove(item.id);
+            updateHistoryStatus(item.id, 'failed');
+            continue;
+          }
+          if (result === 'badpin') {
+            setPin('');
+            showPinScreen(true);
+            showToast('PIN rejected. Waiting receipts are still saved.', true);
+            return;
+          }
+          await outboxRemove(item.id);
+          updateHistoryStatus(item.id, result);
+          delivered++;
+        }
+        if (delivered) showToast('✓ Sent ' + delivered + ' waiting receipt' + (delivered > 1 ? 's' : ''));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        flushing = false;
+      }
+    }
+    window.addEventListener('online', flushOutbox);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) flushOutbox(); });
+
     // ---------- Submit ----------
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const file = cameraInput.files[0];
       if (!file) { showToast('Snap a receipt first', true); return; }
-      const pin = getPin();
-      if (!pin) { showPinScreen(false); return; }
+      if (!getPin()) { showPinScreen(false); return; }
 
       submitBtn.disabled = true;
       submitBtn.textContent = 'Uploading…';
 
       try {
-        const image = await resizeToBase64(file);
-        // Form-encoded body keeps this a "simple" request, so no CORS preflight is needed.
-        const body = new URLSearchParams({
-          pin: pin,
-          image: image,
+        const item = {
+          id: Date.now(),
+          image: await resizeToBase64(file),
           filename: 'receipt-' + isoLocal(capturedAt).slice(0, 19).replace(/:/g, '-') + '.jpg',
-          mimeType: 'image/jpeg',
           timestamp: isoLocal(capturedAt),
           note: noteInput.value.trim()
-        });
+        };
+        const entry = { id: item.id, timestamp: item.timestamp, note: item.note };
 
-        const res = await fetch(ENDPOINT, { method: 'POST', body: body });
-        const text = await res.text();
-        let data = null;
-        try { data = JSON.parse(text); } catch (err) {}
+        let result;
+        try {
+          result = await sendReceipt(item);
+        } catch (err) {
+          if (!err.retry) throw err;
+          // No signal: park the receipt in the outbox and send it automatically later.
+          await outboxAdd(item);
+          addToHistory(Object.assign(entry, { status: 'waiting' }));
+          showToast('No signal. Saved on this phone, will send automatically.');
+          resetForm();
+          return;
+        }
 
-        if (res.status === 401) {
+        if (result === 'badpin') {
           // Wrong PIN: keep the photo, ask for the PIN again.
           setPin('');
           showPinScreen(true);
           showToast('PIN rejected. Your photo is still here.', true);
           return;
         }
-        if (res.ok && data && data.ok) {
-          addToHistory({ timestamp: isoLocal(capturedAt), note: noteInput.value.trim(), status: 'sent' });
-          showToast('✓ Receipt received');
-          resetForm();
-        } else if (res.ok && text.trim() === 'Accepted') {
-          // Make accepted the upload but the scenario is switched off; it will process when turned on.
-          addToHistory({ timestamp: isoLocal(capturedAt), note: noteInput.value.trim(), status: 'queued' });
-          showToast('✓ Received (queued for processing)');
-          resetForm();
-        } else {
-          throw new Error('Server responded ' + res.status);
-        }
+        addToHistory(Object.assign(entry, { status: result }));
+        showToast(result === 'sent' ? '✓ Receipt received' : '✓ Received (queued for processing)');
+        resetForm();
+        flushOutbox();   // we clearly have signal, so ship anything that was waiting
       } catch (err) {
         console.error(err);
         showToast('Not saved. Check your connection and tap Save again.', true);
@@ -420,7 +523,7 @@
     // ---------- Start ----------
     updateTimestamp();
     renderHistory();
-    if (getPin()) { showForm(); } else { showPinScreen(false); }
+    if (getPin()) { showForm(); flushOutbox(); } else { showPinScreen(false); }
   </script>
 </body>
 </html>
