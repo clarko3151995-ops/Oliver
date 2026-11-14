@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>Oscar · Fix a receipt</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <meta name="theme-color" content="#05080F">
+  <style>
+    :root {
+      --black: #05080F; --card: #0D192E; --card-hi: #132340;
+      --amber: #D97706; --amber-hover: #E8850F; --gold: #D6B88D; --tint: rgba(217, 119, 6, .12);
+      --coral: #E05A47; --text: #F7F3EA; --muted: #AEB7CA; --hair: rgba(255, 255, 255, .08);
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+      color-scheme: dark; /* dark date picker and dropdowns */
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--black); color: var(--text); min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
+    }
+    .container { width: 100%; max-width: 480px; }
+    header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }
+    header svg { width: 44px; height: 44px; flex: none; border-radius: 10px; }
+    header h1 { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; }
+    header p { color: var(--gold); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+    .card { background: var(--card); border: 1px solid var(--hair); border-radius: 1.25rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+    h2 { font-size: 1.1rem; }
+    .muted { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+    .why { color: var(--coral); font-size: .9rem; line-height: 1.45; }
+    a { color: var(--gold); }
+    label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; flex-direction: column; gap: .4rem; }
+    input, select {
+      background: var(--black); border: 1px solid var(--hair); border-radius: .65rem; color: var(--text);
+      padding: .6rem .7rem; font-size: 1rem; font-family: inherit; width: 100%;
+    }
+    input:focus, select:focus { border-color: var(--amber); outline: none; }
+    select.missing { border-color: var(--coral); }
+    .items { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+    .items li { display: grid; grid-template-columns: 1fr auto; gap: .35rem .75rem; padding-bottom: .75rem; border-bottom: 1px solid var(--hair); }
+    .items .name { font-size: .95rem; overflow-wrap: anywhere; }
+    .items .amt { font-variant-numeric: tabular-nums; text-align: right; }
+    .items select, .items .tax { grid-column: 1 / -1; }
+    .items .tax { color: var(--muted); font-size: .85rem; }
+    .buttons { display: flex; gap: .75rem; }
+    .btn { flex: 1; background: var(--amber); color: var(--black); font-size: 1rem; font-weight: 700; border: none; border-radius: .8rem; padding: .9rem; cursor: pointer; font-family: inherit; }
+    .btn:hover { background: var(--amber-hover); }
+    .btn.quiet { background: transparent; color: var(--text); border: 1px solid var(--hair); }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .msg { font-size: .92rem; line-height: 1.45; }
+    .msg.error { color: #FFD9D3; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="44" fill="#14213D"/><g transform="translate(-5 5)"><circle cx="100" cy="95" r="55" fill="none" stroke="#B7791F" stroke-width="22" stroke-dasharray="97.2 18" transform="rotate(-80.5 100 95)"/><path d="M100 139 H168 L174 143.4 L168 147.8 L174 152.2 L168 156.6 L174 161 H100 Z" fill="#F7F3EA"/></g></svg>
+      <div>
+        <h1>Oscar</h1>
+        <p id="customer">Fix a receipt</p>
+      </div>
+    </header>
+
+    <div class="card" id="status">
+      <h2 id="statusTitle">Loading…</h2>
+      <p class="msg" id="statusMsg"></p>
+    </div>
+
+    <form class="card" id="form" hidden novalidate>
+      <div>
+        <h2 id="vendor"></h2>
+        <p class="muted"><span id="total"></span> · <a id="receipt" target="_blank" rel="noopener">View receipt</a></p>
+      </div>
+      <p class="why" id="why"></p>
+      <label>Date <input type="date" id="date"></label>
+      <ul class="items" id="items"></ul>
+      <p class="msg error" id="formMsg" hidden></p>
+      <div class="buttons">
+        <button type="button" class="btn" id="post">Post it</button>
+        <button type="button" class="btn quiet" id="leave">Leave it</button>
+      </div>
+      <p class="muted">Post it adds these items to the sheet. Leave it records nothing. Either one closes this link.</p>
+    </form>
+  </div>
+
+  <script>
+    // The Oscar web app (same address as the scanner). The link's code after # is the only key; it is never stored.
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycby8_2OhLiTulSMDhzm8ppWCQ8UIFdUaW3cn9-K-xjvf8CAfA1YilryvH7C33KY3bpm3/exec';
+    const token = location.hash.slice(1).toLowerCase();
+    const $ = id => document.getElementById(id);
+    let data = null;
+
+    async function call(fields) {
+      // Form-encoded body keeps this a "simple" request: no CORS preflight (same as the scanner).
+      const res = await fetch(ENDPOINT, { method: 'POST', body: new URLSearchParams(fields), redirect: 'follow' });
+      if (!res.ok) throw new Error('Server ' + res.status);
+      return res.json();
+    }
+
+    function show(title, message, isError) {
+      $('form').hidden = true;
+      $('status').hidden = false;
+      $('statusTitle').textContent = title;
+      $('statusMsg').textContent = message || '';
+      $('statusMsg').className = 'msg' + (isError ? ' error' : '');
+    }
+
+    const money = n => (n < 0 ? '−$' : '$') + Math.abs(n).toFixed(2);
+
+    function render(d) {
+      data = d;
+      $('customer').textContent = d.customer;
+      $('vendor').textContent = d.vendor || 'Unknown store';
+      $('total').textContent = 'Total ' + money(d.total);
+      $('receipt').href = d.receipt;
+      $('why').textContent = 'Why it was held: ' + d.reasons.join('; ');
+      $('date').value = d.date;
+      const list = $('items');
+      list.textContent = '';
+      d.items.forEach((it, i) => {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        name.className = 'name';
+        name.textContent = it.name + (it.quantity > 1 ? ' ×' + it.quantity : '');
+        const amt = document.createElement('span');
+        amt.className = 'amt';
+        amt.textContent = money(it.line_total);
+        li.append(name, amt);
+        if (it.tax) {
+          const t = document.createElement('span');
+          t.className = 'tax';
+          t.textContent = 'Tax';
+          li.append(t);
+        } else {
+          const sel = document.createElement('select');
+          sel.id = 'cat_' + i;
+          sel.setAttribute('aria-label', 'Category for ' + it.name);
+          sel.append(new Option('Choose a category…', ''));
+          d.categories.forEach(c => sel.append(new Option(c, c, false, c === it.category)));
+          sel.addEventListener('change', () => sel.classList.toggle('missing', !sel.value));
+          li.append(sel);
+        }
+        list.append(li);
+      });
+      $('status').hidden = true;
+      $('form').hidden = false;
+    }
+
+    async function send(choice) {
+      const fields = { action: 'fixapply', fix: token, choice: choice };
+      if (choice === 'post') {
+        const missing = [];
+        data.items.forEach((it, i) => {
+          if (it.tax) return;
+          const sel = $('cat_' + i);
+          sel.classList.toggle('missing', !sel.value);
+          if (!sel.value) missing.push(it.name); else fields['cat_' + i] = sel.value;
+        });
+        fields.date = $('date').value;
+        const problem = !fields.date ? 'Pick the receipt\'s date.' : missing.length ? 'Choose a category for ' + missing.join(', ') + '.' : '';
+        if (problem) { $('formMsg').textContent = problem; $('formMsg').hidden = false; return; }
+      }
+      $('formMsg').hidden = true;
+      $('post').disabled = $('leave').disabled = true;
+      try {
+        const r = await call(fields);
+        if (!r.ok) throw new Error(r.error || 'Oscar had a problem');
+        if (r.done) { show(r.title, r.message); return; }
+        $('formMsg').textContent = r.title + ': ' + r.message;
+        $('formMsg').hidden = false;
+      } catch (e) {
+        $('formMsg').textContent = 'Not sent: ' + e.message + '. Nothing was changed; try again.';
+        $('formMsg').hidden = false;
+      } finally {
+        $('post').disabled = $('leave').disabled = false;
+      }
+    }
+
+    $('post').addEventListener('click', () => send('post'));
+    $('leave').addEventListener('click', () => send('leave'));
+
+    (async () => {
+      if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Open the Fix it link straight from the email; part of it seems to be missing.', true); return; }
+      try {
+        const d = await call({ action: 'fixload', fix: token });
+        if (!d.ok) { show('Can\'t fix this one', d.error, true); return; }
+        render(d);
+      } catch (e) {
+        show('Can\'t reach Oscar', 'Check the signal and reload this page. (' + e.message + ')', true);
+      }
+    })();
+  </script>
+</body>
+</html>
