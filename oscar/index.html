@@ -204,7 +204,7 @@
     })();
 
     // ---------- history (newest first, on this phone only) ----------
-    const LABELS = { queued: 'Waiting', sending: 'Sending…', posted: '✓ Posted', duplicate: 'Duplicate', review: 'Needs review', already: '✓ Posted', failed: 'Not sent' };
+    const LABELS = { queued: 'Waiting', sending: 'Sending…', posted: '✓ Posted', duplicate: 'Duplicate', review: 'Needs review', fixed: '✓ Fixed', already: '✓ Posted', failed: 'Not sent' };
     function history() { try { return JSON.parse(store.get(HISTORY_KEY) || '[]'); } catch (e) { return []; } }
     function setHistory(id, patch) {
       let list = history();
@@ -269,6 +269,19 @@
         clearTimeout(flush.t);
         if (left) flush.t = setTimeout(flush, RETRY_MS);
       }
+    }
+
+    // "Needs review" turns into "Fixed" once the receipt is fixed (email link, or Status = Fixed in the sheet).
+    let refreshing = false;
+    async function refreshReview() {
+      const ids = history().filter((h) => h.status === 'review').map((h) => h.id);
+      if (refreshing || !ids.length || !navigator.onLine || !store.get(PIN_KEY)) return;
+      refreshing = true;
+      try {
+        const r = await call({ action: 'status', pin: store.get(PIN_KEY), ids: ids.join(',') });
+        if (r.ok && r.statuses) ids.forEach((id) => { if (r.statuses[id] === 'fixed') setHistory(id, { status: 'fixed' }); });
+      } catch (e) { /* no signal: try again next time the app opens */ }
+      finally { refreshing = false; }
     }
 
     // ---------- photo: preview and resize ----------
@@ -355,10 +368,10 @@
       const t = $('toast'); t.textContent = msg; t.className = 'toast ' + (isError ? 'error' : 'ok'); t.style.display = 'block';
       clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = 'none'; }, isError ? 5000 : 3000);
     }
-    function net() { const on = navigator.onLine; $('net').textContent = on ? 'Online' : 'Offline'; $('net').classList.toggle('off', !on); if (on) flush(); }
+    function net() { const on = navigator.onLine; $('net').textContent = on ? 'Online' : 'Offline'; $('net').classList.toggle('off', !on); if (on) { flush(); refreshReview(); } }
     window.addEventListener('online', net);
     window.addEventListener('offline', net);
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) flush(); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { flush(); refreshReview(); } });
 
     // ---------- start ----------
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
