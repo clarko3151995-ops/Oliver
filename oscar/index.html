@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Oscar</title>
+
+  <!-- App icons (PNG files sit next to this page on GitHub) -->
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Oscar">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#05080F">
+
+  <style>
+    :root {
+      --black: #05080F;
+      --card: #0D192E;
+      --card-hi: #132340;
+      --amber: #D97706;
+      --amber-hover: #E8850F;
+      --gold: #D6B88D;
+      --tint: rgba(217, 119, 6, .12);
+      --coral: #E05A47;
+      --ok: #3DBB72;
+      --text: #F7F3EA;
+      --muted: #AEB7CA;
+      --hair: rgba(255, 255, 255, .08);
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--black); color: var(--text); min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex; flex-direction: column; align-items: center;
+      padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
+      -webkit-tap-highlight-color: transparent;
+    }
+    .container { width: 100%; max-width: 440px; }
+
+    header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }
+    header svg { width: 44px; height: 44px; flex: none; border-radius: 10px; }
+    header h1 { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; letter-spacing: -.01em; }
+    header p { color: var(--gold); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+    .net { margin-left: auto; font-size: .72rem; padding: 2px 10px; border-radius: 99px; background: var(--tint); color: var(--amber); white-space: nowrap; }
+    .net.off { background: rgba(224, 90, 71, .14); color: var(--coral); }
+
+    .card {
+      background: var(--card); border: 1px solid var(--hair); border-radius: 1.25rem;
+      padding: 1.25rem; display: flex; flex-direction: column; gap: 1.1rem;
+    }
+    .camera {
+      position: relative; border: 2px dashed rgba(217, 119, 6, .45); border-radius: 1rem;
+      padding: 2rem 1rem; text-align: center; background: var(--black);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .camera:active { border-color: var(--amber); background: var(--card-hi); }
+    .camera svg { width: 56px; height: 56px; fill: none; stroke: var(--amber); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: .6rem; }
+    .camera b { font-size: 1.05rem; }
+    .camera span { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    #receiptImage { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+
+    .preview { display: none; height: 190px; border-radius: .75rem; overflow: hidden; border: 1px solid var(--hair); }
+    .preview img { width: 100%; height: 100%; object-fit: cover; }
+
+    .field { display: flex; flex-direction: column; gap: .45rem; }
+    label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    input[type="password"], input[type="text"], textarea {
+      background: var(--black); border: 1px solid var(--hair); border-radius: .65rem;
+      color: var(--text); padding: .75rem 1rem; font-size: 1rem; outline: none; width: 100%; font-family: inherit;
+    }
+    input:focus, textarea:focus { border-color: var(--amber); }
+    textarea { resize: none; height: 64px; }
+
+    .btn {
+      background: var(--amber); color: var(--black); font-size: 1.02rem; font-weight: 700;
+      border: none; border-radius: .8rem; padding: .95rem; cursor: pointer; font-family: inherit;
+    }
+    .btn:hover { background: var(--amber-hover); }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .btn:focus-visible, .link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .link { background: none; border: none; color: var(--gold); font-size: .82rem; cursor: pointer; align-self: center; font-family: inherit; }
+
+    #pinCard { display: none; }
+    #pinCard p { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+    .pin-error { color: var(--coral); font-size: .85rem; display: none; }
+
+    .toast {
+      display: none; position: fixed; bottom: max(1.5rem, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+      max-width: calc(100% - 2rem); text-align: center; background: var(--card-hi); color: var(--text);
+      border: 1px solid var(--hair); padding: .75rem 1.25rem; border-radius: 1rem; font-weight: 600; font-size: .92rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+    }
+    .toast.ok { border-color: rgba(217, 119, 6, .5); }
+    .toast.error { border-color: var(--coral); color: #FFD9D3; }
+
+    .history { display: none; margin-top: 1rem; }
+    .history h2 { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .history ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .history li { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; font-size: .88rem; }
+    .h-note { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .h-status { flex: none; font-weight: 600; font-size: .8rem; padding: 1px 9px; border-radius: 99px; background: var(--tint); color: var(--amber); }
+    .h-status.queued { background: rgba(255, 255, 255, .06); color: var(--gold); }
+    .h-status.review, .h-status.failed { background: rgba(224, 90, 71, .14); color: var(--coral); }
+    .h-empty { color: var(--muted); font-size: .88rem; }
+    .h-head { display: flex; justify-content: space-between; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <!-- Oscar icon (B1): the O is three amber dashes (Morse O = - - -), with a receipt strip -->
+      <svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="44" fill="#14213D"/><g transform="translate(-5 5)"><circle cx="100" cy="95" r="55" fill="none" stroke="#B7791F" stroke-width="22" stroke-dasharray="97.2 18" transform="rotate(-80.5 100 95)"/><path d="M100 139 H168 L174 143.4 L168 147.8 L174 152.2 L168 156.6 L174 161 H100 Z" fill="#F7F3EA"/></g></svg>
+      <div>
+        <h1>Oscar</h1>
+        <p id="customerName">Receipt scanner</p>
+      </div>
+      <span class="net" id="net" aria-live="polite">Online</span>
+    </header>
+
+    <!-- PIN setup (once per phone) -->
+    <div class="card" id="pinCard">
+      <p>Enter your business's Oscar PIN to connect this phone. You only do this once.</p>
+      <div class="field">
+        <label for="pinInput">PIN</label>
+        <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="6 or more digits">
+      </div>
+      <span class="pin-error" id="pinError" role="alert">That PIN wasn't recognized. Please try again.</span>
+      <button type="button" class="btn" id="pinSave">Connect</button>
+    </div>
+
+    <form class="card" id="scanForm" style="display:none">
+      <div class="camera">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        <b id="cameraLabel">Tap to snap a receipt</b>
+        <span>Opens the camera</span>
+        <!-- capture="environment" opens the back camera on phones -->
+        <input type="file" id="receiptImage" accept="image/*" capture="environment" aria-label="Take a photo of the receipt">
+      </div>
+      <div class="preview" id="preview"><img id="previewImg" alt="Receipt preview"></div>
+      <div class="field">
+        <label for="note">Note (optional)</label>
+        <textarea id="note" maxlength="200" placeholder="e.g. snack bar restock"></textarea>
+      </div>
+      <button type="submit" class="btn" id="saveBtn">Save receipt</button>
+      <button type="button" class="link" id="changePin">Change PIN</button>
+    </form>
+
+    <section class="card history" id="history">
+      <div class="h-head"><h2>Recent on this phone</h2><button type="button" class="link" id="retryBtn" hidden>Send now</button></div>
+      <ul id="historyList"></ul>
+      <p class="h-empty" id="historyEmpty">Nothing sent yet.</p>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    // The Oscar web app (Apps Script, run by oscar.servolabs). Not a secret: every request needs a customer's PIN,
+    // and the PIN is never stored in this file. It decides which customer's books a scan goes to.
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycby8_2OhLiTulSMDhzm8ppWCQ8UIFdUaW3cn9-K-xjvf8CAfA1YilryvH7C33KY3bpm3/exec';
+    const PIN_KEY = 'oscarPin';
+    const CUSTOMER_KEY = 'oscarCustomer';
+    const HISTORY_KEY = 'oscarHistory';
+    const HISTORY_MAX = 12;
+    const MAX_SIDE = 1600;      // longest edge in pixels after resizing
+    const JPEG_QUALITY = 0.82;
+    const RETRY_MS = 60000;     // while scans wait, try again every minute
+
+    const $ = (id) => document.getElementById(id);
+    const form = $('scanForm'), camera = $('receiptImage'), noteInput = $('note'), saveBtn = $('saveBtn');
+    let memory = {};
+
+    // ---------- small storage (PIN, customer name, history) ----------
+    const store = {
+      get(k) { try { const v = localStorage.getItem(k); return v === null ? memory[k] : v; } catch (e) { return memory[k]; } },
+      set(k, v) { memory[k] = v; try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} },
+    };
+
+    // ---------- the queue: scans waiting to be sent, kept in IndexedDB so photos survive closing the app ----------
+    const DB = (() => {
+      let dbp = null, mem = new Map();
+      const open = () => dbp || (dbp = new Promise((res, rej) => {
+        try {
+          const r = indexedDB.open('oscar', 1);
+          r.onupgradeneeded = () => r.result.createObjectStore('queue', { keyPath: 'id' });
+          r.onsuccess = () => res(r.result);
+          r.onerror = () => rej(r.error);
+        } catch (e) { rej(e); }
+      }));
+      const tx = (mode, fn) => open().then((db) => new Promise((res, rej) => {
+        const t = db.transaction('queue', mode); const out = fn(t.objectStore('queue'));
+        t.oncomplete = () => res(out && out.result); t.onerror = () => rej(t.error);
+      }));
+      return {
+        // shortcut: if IndexedDB is blocked (private browsing), the queue lives in memory and is lost when the app closes
+        put: (s) => tx('readwrite', (q) => q.put(s)).catch(() => { mem.set(s.id, s); }),
+        del: (id) => tx('readwrite', (q) => q.delete(id)).catch(() => { mem.delete(id); }),
+        all: () => tx('readonly', (q) => q.getAll()).then((a) => (a || []).concat([...mem.values()])).catch(() => [...mem.values()]),
+      };
+    })();
+
+    // ---------- history (newest first, on this phone only) ----------
+    const LABELS = { queued: 'Waiting', sending: 'Sending…', posted: '✓ Posted', duplicate: 'Duplicate', review: 'Needs review', already: '✓ Posted', failed: 'Not sent' };
+    function history() { try { return JSON.parse(store.get(HISTORY_KEY) || '[]'); } catch (e) { return []; } }
+    function setHistory(id, patch) {
+      let list = history();
+      const i = list.findIndex((h) => h.id === id);
+      if (i >= 0) list[i] = Object.assign(list[i], patch); else list.unshift(Object.assign({ id }, patch));
+      store.set(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX)));
+      renderHistory();
+    }
+    function renderHistory() {
+      const list = history();
+      $('historyList').replaceChildren(...list.map((h) => {
+        const li = document.createElement('li');
+        const d = new Date(h.at);
+        const n = document.createElement('span'); n.className = 'h-note';
+        // textContent (not innerHTML) so a note can never inject HTML
+        n.textContent = d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + (h.note ? ' · ' + h.note : '');
+        if (h.detail) n.title = h.detail;
+        const s = document.createElement('span'); s.className = 'h-status ' + h.status; s.textContent = LABELS[h.status] || h.status;
+        li.append(n, s); return li;
+      }));
+      $('historyEmpty').style.display = list.length ? 'none' : 'block';
+    }
+
+    // ---------- talking to Oscar ----------
+    async function call(fields) {
+      // Form-encoded body keeps this a "simple" request: no CORS preflight.
+      const res = await fetch(ENDPOINT, { method: 'POST', body: new URLSearchParams(fields), redirect: 'follow' });
+      if (!res.ok) throw new Error('Server ' + res.status);
+      return res.json();
+    }
+
+    let sending = false;
+    async function flush() {
+      if (sending || !navigator.onLine || !store.get(PIN_KEY) || ENDPOINT.indexOf('https://') !== 0) return;
+      sending = true;
+      try {
+        const waiting = (await DB.all()).sort((a, b) => a.at.localeCompare(b.at));
+        for (const s of waiting) {
+          setHistory(s.id, { status: 'sending', at: s.at, note: s.note });
+          let r;
+          try {
+            r = await call({ action: 'scan', pin: store.get(PIN_KEY), scan_id: s.id, image: s.image, mime_type: 'image/jpeg', note: s.note });
+          } catch (e) {
+            setHistory(s.id, { status: 'queued' }); break; // offline or Oscar unreachable: try later
+          }
+          if (r.pin === false) { setHistory(s.id, { status: 'queued' }); store.set(PIN_KEY, null); showPin(true); break; }
+          if (r.ok) {
+            await DB.del(s.id);
+            const st = r.status === 'quarantined' || r.status === 'unreadable' ? 'review' : r.status;
+            setHistory(s.id, { status: st, detail: r.message });
+            toast(st === 'review' ? 'Received, needs a look (on the Quarantine tab)' : st === 'duplicate' ? 'Already recorded before (duplicate)' : '✓ Posted to the books', st === 'review');
+          } else if (r.retry) {
+            setHistory(s.id, { status: 'queued', detail: r.error }); break;
+          } else {
+            await DB.del(s.id); setHistory(s.id, { status: 'failed', detail: r.error }); toast('Not sent: ' + r.error, true);
+          }
+        }
+      } finally {
+        sending = false;
+        const left = (await DB.all()).length;
+        $('retryBtn').hidden = !left;
+        clearTimeout(flush.t);
+        if (left) flush.t = setTimeout(flush, RETRY_MS);
+      }
+    }
+
+    // ---------- photo: preview and resize ----------
+    let takenAt = new Date();
+    camera.addEventListener('change', () => {
+      const f = camera.files[0];
+      if (!f) return;
+      $('previewImg').src = URL.createObjectURL(f);
+      $('preview').style.display = 'block';
+      $('cameraLabel').textContent = 'Retake photo';
+      takenAt = new Date();
+    });
+    function resizeToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const img = new Image(), url = URL.createObjectURL(file);
+        img.onload = () => {
+          const k = Math.min(1, MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          resolve(c.toDataURL('image/jpeg', JPEG_QUALITY).split(',')[1]);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read the photo')); };
+        img.src = url;
+      });
+    }
+    const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = camera.files[0];
+      if (!f) { toast('Snap a receipt first', true); return; }
+      saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+      try {
+        const scan = { id: newId(), at: takenAt.toISOString(), note: noteInput.value.trim(), image: await resizeToBase64(f) };
+        await DB.put(scan); // saved on the phone first, so nothing is lost if the signal drops
+        setHistory(scan.id, { at: scan.at, note: scan.note, status: 'queued' });
+        form.reset(); $('preview').style.display = 'none'; $('cameraLabel').textContent = 'Tap to snap a receipt';
+        if (!navigator.onLine) toast('Saved on this phone. It sends when you have signal.');
+        flush();
+      } catch (err) {
+        toast('Could not save that photo. Try taking it again.', true);
+      } finally {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save receipt';
+      }
+    });
+
+    // ---------- PIN ----------
+    function showPin(rejected) {
+      $('pinError').style.display = rejected ? 'block' : 'none';
+      $('pinInput').value = '';
+      form.style.display = 'none'; $('history').style.display = 'none';
+      $('pinCard').style.display = 'flex';
+      $('pinInput').focus();
+    }
+    function showForm() {
+      $('pinCard').style.display = 'none';
+      form.style.display = 'flex'; $('history').style.display = 'flex';
+      $('customerName').textContent = store.get(CUSTOMER_KEY) || 'Receipt scanner';
+    }
+    $('pinSave').addEventListener('click', async () => {
+      const pin = $('pinInput').value.trim();
+      if (!pin) return;
+      const btn = $('pinSave'); btn.disabled = true; btn.textContent = 'Checking…';
+      try {
+        const r = await call({ action: 'hello', pin });
+        if (!r.ok) { showPin(true); return; }
+        store.set(PIN_KEY, pin); store.set(CUSTOMER_KEY, r.customer);
+        showForm(); flush();
+      } catch (err) {
+        toast('No connection. Connect once with signal, then it works offline.', true);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Connect';
+      }
+    });
+    $('pinInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('pinSave').click(); });
+    $('changePin').addEventListener('click', () => showPin(false));
+    $('retryBtn').addEventListener('click', flush);
+
+    // ---------- toast and connection badge ----------
+    let toastT;
+    function toast(msg, isError) {
+      const t = $('toast'); t.textContent = msg; t.className = 'toast ' + (isError ? 'error' : 'ok'); t.style.display = 'block';
+      clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = 'none'; }, isError ? 5000 : 3000);
+    }
+    function net() { const on = navigator.onLine; $('net').textContent = on ? 'Online' : 'Offline'; $('net').classList.toggle('off', !on); if (on) flush(); }
+    window.addEventListener('online', net);
+    window.addEventListener('offline', net);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) flush(); });
+
+    // ---------- start ----------
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+    renderHistory(); net();
+    if (store.get(PIN_KEY)) showForm(); else showPin(false);
+  </script>
+</body>
+</html>
