@@ -22,35 +22,41 @@
       display: flex; flex-direction: column; align-items: center;
       padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
     }
-    .container { width: 100%; max-width: 480px; }
+    .container { width: 100%; max-width: 520px; }
     header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }
     header svg { width: 44px; height: 44px; flex: none; border-radius: 10px; }
     header h1 { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; }
     header p { color: var(--gold); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+    .back { margin-left: auto; color: var(--gold); font-size: .85rem; text-decoration: none; white-space: nowrap; }
     .card { background: var(--card); border: 1px solid var(--hair); border-radius: 1.25rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
     h2 { font-size: 1.1rem; }
-    .muted { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+    .muted { color: var(--muted); font-size: .88rem; line-height: 1.45; }
     .why { color: var(--coral); font-size: .9rem; line-height: 1.45; }
     a { color: var(--gold); }
-    label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; flex-direction: column; gap: .4rem; }
+    label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; flex-direction: column; gap: .35rem; }
     input, select {
-      background: var(--black); border: 1px solid var(--hair); border-radius: .65rem; color: var(--text);
-      padding: .6rem .7rem; font-size: 1rem; font-family: inherit; width: 100%;
+      background: var(--black); border: 1px solid var(--hair); border-radius: .6rem; color: var(--text);
+      padding: .55rem .65rem; font-size: 1rem; font-family: inherit; width: 100%; min-width: 0;
     }
     input:focus, select:focus { border-color: var(--amber); outline: none; }
-    select.missing { border-color: var(--coral); }
-    .items { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
-    .items li { display: grid; grid-template-columns: 1fr auto; gap: .35rem .75rem; padding-bottom: .75rem; border-bottom: 1px solid var(--hair); }
-    .items .name { font-size: .95rem; overflow-wrap: anywhere; }
-    .items .amt { font-variant-numeric: tabular-nums; text-align: right; }
-    .items select, .items .tax { grid-column: 1 / -1; }
-    .items .tax { color: var(--muted); font-size: .85rem; }
+    .missing { border-color: var(--coral) !important; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .lines { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .lines li { display: grid; grid-template-columns: 6.5rem 1fr 2.4rem; grid-template-areas: "name name del" "amt cat del"; gap: .45rem; padding: .7rem; border: 1px solid var(--hair); border-radius: .8rem; background: var(--card-hi); }
+    .lines .name { grid-area: name; }
+    .lines .amt { grid-area: amt; text-align: right; font-variant-numeric: tabular-nums; }
+    .lines select { grid-area: cat; }
+    .lines .del { grid-area: del; align-self: stretch; background: transparent; border: 1px solid var(--hair); border-radius: .6rem; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+    .lines .del:hover { color: var(--coral); border-color: var(--coral); }
+    .sum { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; font-size: .95rem; }
+    .sum.off { color: var(--coral); }
+    .add { background: transparent; border: 1px dashed rgba(217, 119, 6, .5); color: var(--amber); border-radius: .8rem; padding: .7rem; font: inherit; font-weight: 600; cursor: pointer; }
     .buttons { display: flex; gap: .75rem; }
     .btn { flex: 1; background: var(--amber); color: var(--black); font-size: 1rem; font-weight: 700; border: none; border-radius: .8rem; padding: .9rem; cursor: pointer; font-family: inherit; }
     .btn:hover { background: var(--amber-hover); }
     .btn.quiet { background: transparent; color: var(--text); border: 1px solid var(--hair); }
     .btn:disabled { opacity: .6; cursor: wait; }
-    .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .btn:focus-visible, .add:focus-visible, .del:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .msg { font-size: .92rem; line-height: 1.45; }
     .msg.error { color: #FFD9D3; }
     [hidden] { display: none !important; }
@@ -64,36 +70,42 @@
         <h1>Oscar</h1>
         <p id="customer">Fix a receipt</p>
       </div>
+      <a class="back" href="./">← Scanner</a>
     </header>
 
     <div class="card" id="status">
       <h2 id="statusTitle">Loading…</h2>
       <p class="msg" id="statusMsg"></p>
+      <a class="btn" href="./" id="statusBack" hidden style="text-align:center;text-decoration:none">Back to the scanner</a>
     </div>
 
     <form class="card" id="form" hidden novalidate>
-      <div>
-        <h2 id="vendor"></h2>
-        <p class="muted"><span id="total"></span> · <a id="receipt" target="_blank" rel="noopener">View receipt</a></p>
-      </div>
       <p class="why" id="why"></p>
-      <label>Date <input type="date" id="date"></label>
-      <ul class="items" id="items"></ul>
-      <p class="msg error" id="formMsg" hidden></p>
+      <p class="muted"><a id="receipt" target="_blank" rel="noopener">View the receipt photo</a> · fix anything Oscar misread, then Post it.</p>
+      <label>Store <input type="text" id="vendor" maxlength="120" autocomplete="off"></label>
+      <div class="row2">
+        <label>Date <input type="date" id="date"></label>
+        <label>Receipt total <input type="text" id="total" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
+      </div>
+      <ul class="lines" id="lines"></ul>
+      <button type="button" class="add" id="addLine">+ Add a line</button>
+      <p class="sum" id="sum"></p>
+      <p class="msg error" id="formMsg" hidden role="alert"></p>
       <div class="buttons">
         <button type="button" class="btn" id="post">Post it</button>
         <button type="button" class="btn quiet" id="leave">Leave it</button>
       </div>
-      <p class="muted">Post it adds these items to the sheet. Leave it records nothing. Either one closes this link.</p>
+      <p class="muted">Post it adds these lines to the sheet. Leave it records nothing. Either one closes this link. Discounts are lines with a minus amount; sales tax is a line with the category Sales tax.</p>
     </form>
   </div>
 
   <script>
     // The Oscar web app (same address as the scanner). The link's code after # is the only key; it is never stored.
     const ENDPOINT = 'https://script.google.com/macros/s/AKfycby8_2OhLiTulSMDhzm8ppWCQ8UIFdUaW3cn9-K-xjvf8CAfA1YilryvH7C33KY3bpm3/exec';
+    const TAX = 'Tax';
     const token = location.hash.slice(1).toLowerCase();
     const $ = id => document.getElementById(id);
-    let data = null;
+    let categories = [];
 
     async function call(fields) {
       // Form-encoded body keeps this a "simple" request: no CORS preflight (same as the scanner).
@@ -102,75 +114,119 @@
       return res.json();
     }
 
-    function show(title, message, isError) {
+    function show(title, message, isError, done) {
       $('form').hidden = true;
       $('status').hidden = false;
       $('statusTitle').textContent = title;
       $('statusMsg').textContent = message || '';
       $('statusMsg').className = 'msg' + (isError ? ' error' : '');
+      $('statusBack').hidden = !done;
     }
 
     const money = n => (n < 0 ? '−$' : '$') + Math.abs(n).toFixed(2);
+    // "12.5", "$12.50", "-1.13", "−1.13" -> number; '' or junk -> NaN
+    const num = s => { const t = String(s).replace(/[$,\s]/g, '').replace('−', '-'); return !/^-?(\d+\.?\d*|\.\d+)$/.test(t) ? NaN : Math.round(parseFloat(t) * 100) / 100; };
+
+    function addLine(it) {
+      it = it || { name: '', line_total: '', category: '', quantity: 1 };
+      const li = document.createElement('li');
+      li.dataset.qty = it.quantity > 0 ? it.quantity : 1;
+      const name = document.createElement('input');
+      name.type = 'text'; name.className = 'name'; name.maxLength = 120; name.placeholder = 'Item';
+      name.value = it.name;
+      name.setAttribute('aria-label', 'Item name');
+      const amt = document.createElement('input');
+      amt.type = 'text'; amt.className = 'amt'; amt.inputMode = 'decimal'; amt.placeholder = '0.00';
+      amt.value = it.line_total === '' ? '' : Number(it.line_total).toFixed(2);
+      amt.setAttribute('aria-label', 'Amount');
+      const sel = document.createElement('select');
+      sel.setAttribute('aria-label', 'Category');
+      sel.append(new Option('Choose a category…', ''));
+      categories.forEach(c => sel.append(new Option(c, c, false, c === it.category)));
+      sel.append(new Option('Sales tax', TAX, false, it.category === TAX));
+      const del = document.createElement('button');
+      del.type = 'button'; del.className = 'del'; del.textContent = '×';
+      del.setAttribute('aria-label', 'Delete this line');
+      del.addEventListener('click', () => { li.remove(); updateSum(); });
+      [name, amt, sel].forEach(el => el.addEventListener('input', () => { el.classList.remove('missing'); updateSum(); }));
+      if (it.quantity > 1) name.title = 'Quantity ' + it.quantity;
+      li.append(name, amt, sel, del);
+      $('lines').append(li);
+      return li;
+    }
+
+    function readLines() {
+      return [...$('lines').children].map(li => {
+        const [name, amt, sel] = li.querySelectorAll('input, select');
+        return { li, name, amt, sel, value: { name: name.value.trim(), line_total: num(amt.value), category: sel.value, quantity: Number(li.dataset.qty) || 1 } };
+      });
+    }
+
+    function updateSum() {
+      $('formMsg').hidden = true; // an old warning goes away as soon as something is changed
+      const sum = readLines().reduce((s, l) => s + (isNaN(l.value.line_total) ? 0 : l.value.line_total), 0);
+      const total = num($('total').value);
+      const off = isNaN(total) || Math.abs(sum - total) > 0.05;
+      $('sum').textContent = '';
+      const a = document.createElement('span'); a.textContent = 'Lines add up to';
+      const b = document.createElement('b'); b.textContent = money(Math.round(sum * 100) / 100) + (off && !isNaN(total) ? '  (total ' + money(total) + ')' : '');
+      $('sum').append(a, b);
+      $('sum').classList.toggle('off', off);
+    }
 
     function render(d) {
-      data = d;
+      categories = d.categories;
       $('customer').textContent = d.customer;
-      $('vendor').textContent = d.vendor || 'Unknown store';
-      $('total').textContent = 'Total ' + money(d.total);
+      $('vendor').value = d.vendor || '';
       $('receipt').href = d.receipt;
       $('why').textContent = 'Why it was held: ' + d.reasons.join('; ');
       $('date').value = d.date;
-      const list = $('items');
-      list.textContent = '';
-      d.items.forEach((it, i) => {
-        const li = document.createElement('li');
-        const name = document.createElement('span');
-        name.className = 'name';
-        name.textContent = it.name + (it.quantity > 1 ? ' ×' + it.quantity : '');
-        const amt = document.createElement('span');
-        amt.className = 'amt';
-        amt.textContent = money(it.line_total);
-        li.append(name, amt);
-        if (it.tax) {
-          const t = document.createElement('span');
-          t.className = 'tax';
-          t.textContent = 'Tax';
-          li.append(t);
-        } else {
-          const sel = document.createElement('select');
-          sel.id = 'cat_' + i;
-          sel.setAttribute('aria-label', 'Category for ' + it.name);
-          sel.append(new Option('Choose a category…', ''));
-          d.categories.forEach(c => sel.append(new Option(c, c, false, c === it.category)));
-          sel.addEventListener('change', () => sel.classList.toggle('missing', !sel.value));
-          li.append(sel);
-        }
-        list.append(li);
-      });
+      $('total').value = d.total > 0 ? d.total.toFixed(2) : '';
+      $('lines').textContent = '';
+      d.items.forEach(addLine);
+      if (!d.items.length) addLine();
+      updateSum();
       $('status').hidden = true;
       $('form').hidden = false;
+    }
+
+    function problem() {
+      let first = '';
+      const flag = (el, msg) => { el.classList.add('missing'); if (!first) first = msg; };
+      if (!$('vendor').value.trim()) flag($('vendor'), 'Type the store name.');
+      if (!$('date').value) flag($('date'), 'Pick the receipt\'s date.');
+      const total = num($('total').value);
+      if (!(total > 0)) flag($('total'), 'Type the receipt total.');
+      const lines = readLines();
+      if (!lines.length) first = first || 'Add at least one line.';
+      lines.forEach(l => {
+        if (!l.value.name) flag(l.name, 'Every line needs a name.');
+        if (isNaN(l.value.line_total)) flag(l.amt, 'Every line needs an amount, like 4.99 or -1.13.');
+        if (!l.value.category) flag(l.sel, 'Choose a category for ' + (l.value.name || 'every line') + '.');
+      });
+      if (!first && total > 0) {
+        const sum = Math.round(lines.reduce((s, l) => s + l.value.line_total, 0) * 100) / 100;
+        if (Math.abs(sum - total) > 0.05) first = 'The lines add up to ' + money(sum) + ' but the total is ' + money(total) + '. Fix an amount, add the missing line, or delete one.';
+      }
+      return first;
     }
 
     async function send(choice) {
       const fields = { action: 'fixapply', fix: token, choice: choice };
       if (choice === 'post') {
-        const missing = [];
-        data.items.forEach((it, i) => {
-          if (it.tax) return;
-          const sel = $('cat_' + i);
-          sel.classList.toggle('missing', !sel.value);
-          if (!sel.value) missing.push(it.name); else fields['cat_' + i] = sel.value;
-        });
+        const p = problem();
+        if (p) { $('formMsg').textContent = p; $('formMsg').hidden = false; return; }
+        fields.vendor = $('vendor').value.trim();
         fields.date = $('date').value;
-        const problem = !fields.date ? 'Pick the receipt\'s date.' : missing.length ? 'Choose a category for ' + missing.join(', ') + '.' : '';
-        if (problem) { $('formMsg').textContent = problem; $('formMsg').hidden = false; return; }
+        fields.total = String(num($('total').value));
+        fields.items = JSON.stringify(readLines().map(l => l.value));
       }
       $('formMsg').hidden = true;
       $('post').disabled = $('leave').disabled = true;
       try {
         const r = await call(fields);
         if (!r.ok) throw new Error(r.error || 'Oscar had a problem');
-        if (r.done) { show(r.title, r.message); return; }
+        if (r.done) { show(r.title, r.message, false, true); return; }
         $('formMsg').textContent = r.title + ': ' + r.message;
         $('formMsg').hidden = false;
       } catch (e) {
@@ -181,17 +237,19 @@
       }
     }
 
+    $('addLine').addEventListener('click', () => { addLine().querySelector('input').focus(); updateSum(); });
+    ['vendor', 'date', 'total'].forEach(id => $(id).addEventListener('input', () => { $(id).classList.remove('missing'); updateSum(); }));
     $('post').addEventListener('click', () => send('post'));
     $('leave').addEventListener('click', () => send('leave'));
 
     (async () => {
-      if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Open the Fix it link straight from the email; part of it seems to be missing.', true); return; }
+      if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Open the Fix it link straight from the email; part of it seems to be missing.', true, true); return; }
       try {
         const d = await call({ action: 'fixload', fix: token });
-        if (!d.ok) { show('Can\'t fix this one', d.error, true); return; }
+        if (!d.ok) { show('Can\'t fix this one', d.error, true, true); return; }
         render(d);
       } catch (e) {
-        show('Can\'t reach Oscar', 'Check the signal and reload this page. (' + e.message + ')', true);
+        show('Can\'t reach Oscar', 'Check the signal and reload this page. (' + e.message + ')', true, true);
       }
     })();
   </script>
