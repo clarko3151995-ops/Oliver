@@ -42,10 +42,15 @@
     .missing { border-color: var(--coral) !important; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
     .lines { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
-    .lines li { display: grid; grid-template-columns: 6.5rem 1fr 2.4rem; grid-template-areas: "name name del" "amt cat del"; gap: .45rem; padding: .7rem; border: 1px solid var(--hair); border-radius: .8rem; background: var(--card-hi); }
+    .lines li { display: grid; grid-template-columns: 3.6rem 1fr 2.4rem; grid-template-areas: "name name del" "qty amt del" "cat cat del" "lt lt del"; gap: .3rem .45rem; padding: .7rem; border: 1px solid var(--hair); border-radius: .8rem; background: var(--card-hi); }
     .lines .name { grid-area: name; }
+    .lines .qty { grid-area: qty; text-align: center; }
     .lines .amt { grid-area: amt; text-align: right; font-variant-numeric: tabular-nums; }
     .lines select { grid-area: cat; }
+    .lines .lt { grid-area: lt; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .lines .lt b { color: var(--text); font-weight: 600; }
+    .head { display: grid; grid-template-columns: 3.6rem 1fr 2.4rem; gap: .45rem; padding: 0 .7rem; font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .head span:first-child { text-align: center; } .head span:nth-child(2) { text-align: right; }
     .lines .del { grid-area: del; align-self: stretch; background: transparent; border: 1px solid var(--hair); border-radius: .6rem; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
     .lines .del:hover { color: var(--coral); border-color: var(--coral); }
     .sum { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; font-size: .95rem; }
@@ -87,6 +92,7 @@
         <label>Date <input type="date" id="date"></label>
         <label>Receipt total <input type="text" id="total" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
       </div>
+      <div class="head" aria-hidden="true"><span>Qty</span><span>Price each</span><span></span></div>
       <ul class="lines" id="lines"></ul>
       <button type="button" class="add" id="addLine">+ Add a line</button>
       <p class="sum" id="sum"></p>
@@ -128,17 +134,23 @@
     const num = s => { const t = String(s).replace(/[$,\s]/g, '').replace('−', '-'); return !/^-?(\d+\.?\d*|\.\d+)$/.test(t) ? NaN : Math.round(parseFloat(t) * 100) / 100; };
 
     function addLine(it) {
-      it = it || { name: '', line_total: '', category: '', quantity: 1 };
+      it = it || { name: '', unit_price: '', category: '', quantity: 1 };
       const li = document.createElement('li');
-      li.dataset.qty = it.quantity > 0 ? it.quantity : 1;
       const name = document.createElement('input');
       name.type = 'text'; name.className = 'name'; name.maxLength = 120; name.placeholder = 'Item';
       name.value = it.name;
       name.setAttribute('aria-label', 'Item name');
+      const qty = document.createElement('input');
+      qty.type = 'text'; qty.className = 'qty'; qty.inputMode = 'decimal';
+      qty.value = it.quantity > 0 ? String(it.quantity) : '1';
+      qty.setAttribute('aria-label', 'Quantity');
       const amt = document.createElement('input');
       amt.type = 'text'; amt.className = 'amt'; amt.inputMode = 'decimal'; amt.placeholder = '0.00';
-      amt.value = it.line_total === '' ? '' : Number(it.line_total).toFixed(2);
-      amt.setAttribute('aria-label', 'Amount');
+      const unit = it.unit_price !== undefined && it.unit_price !== '' ? it.unit_price : it.line_total;
+      amt.value = unit === '' || unit === undefined ? '' : Number(unit).toFixed(2);
+      amt.setAttribute('aria-label', 'Price each');
+      const lt = document.createElement('span');
+      lt.className = 'lt';
       const sel = document.createElement('select');
       sel.setAttribute('aria-label', 'Category');
       sel.append(new Option('Choose a category…', ''));
@@ -148,23 +160,34 @@
       del.type = 'button'; del.className = 'del'; del.textContent = '×';
       del.setAttribute('aria-label', 'Delete this line');
       del.addEventListener('click', () => { li.remove(); updateSum(); });
-      [name, amt, sel].forEach(el => el.addEventListener('input', () => { el.classList.remove('missing'); updateSum(); }));
-      if (it.quantity > 1) name.title = 'Quantity ' + it.quantity;
-      li.append(name, amt, sel, del);
+      [name, qty, amt, sel].forEach(el => el.addEventListener('input', () => { el.classList.remove('missing'); updateSum(); }));
+      li.append(name, qty, amt, sel, lt, del);
       $('lines').append(li);
       return li;
     }
 
     function readLines() {
       return [...$('lines').children].map(li => {
-        const [name, amt, sel] = li.querySelectorAll('input, select');
-        return { li, name, amt, sel, value: { name: name.value.trim(), line_total: num(amt.value), category: sel.value, quantity: Number(li.dataset.qty) || 1 } };
+        const name = li.querySelector('.name'), qty = li.querySelector('.qty'), amt = li.querySelector('.amt'), sel = li.querySelector('select');
+        const q = num(qty.value), each = num(amt.value);
+        return { li, name, qty, amt, sel, value: { name: name.value.trim(), quantity: q, unit_price: each,
+          line_total: Math.round(q * each * 100) / 100, category: sel.value } };
       });
     }
 
     function updateSum() {
       $('formMsg').hidden = true; // an old warning goes away as soon as something is changed
-      const sum = readLines().reduce((s, l) => s + (isNaN(l.value.line_total) ? 0 : l.value.line_total), 0);
+      const lines = readLines();
+      lines.forEach(l => {
+        // "2 × $9.98 = $19.96" under a line, only when the quantity isn't 1
+        const lt = l.li.querySelector('.lt'), v = l.value;
+        lt.textContent = '';
+        if (!isNaN(v.line_total) && v.quantity !== 1) {
+          const b = document.createElement('b'); b.textContent = money(v.line_total);
+          lt.append(v.quantity + ' × ' + money(v.unit_price) + ' = ', b);
+        }
+      });
+      const sum = lines.reduce((s, l) => s + (isNaN(l.value.line_total) ? 0 : l.value.line_total), 0);
       const total = num($('total').value);
       const off = isNaN(total) || Math.abs(sum - total) > 0.05;
       $('sum').textContent = '';
@@ -201,7 +224,8 @@
       if (!lines.length) first = first || 'Add at least one line.';
       lines.forEach(l => {
         if (!l.value.name) flag(l.name, 'Every line needs a name.');
-        if (isNaN(l.value.line_total)) flag(l.amt, 'Every line needs an amount, like 4.99 or -1.13.');
+        if (!(l.value.quantity > 0)) flag(l.qty, 'Every line needs a quantity of 1 or more, like 2 or 1.5.');
+        if (isNaN(l.value.unit_price)) flag(l.amt, 'Every line needs a price, like 4.99 or -1.13.');
         if (!l.value.category) flag(l.sel, 'Choose a category for ' + (l.value.name || 'every line') + '.');
       });
       if (!first && total > 0) {
