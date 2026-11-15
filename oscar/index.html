@@ -123,12 +123,12 @@
 
     <!-- PIN setup (once per phone) -->
     <div class="card" id="pinCard">
-      <p>Enter your business's Oscar PIN to connect this phone. You only do this once.</p>
+      <p>Type in your business's Oscar PIN to hook up this phone. You only have to do this once.</p>
       <div class="field">
         <label for="pinInput">PIN</label>
         <input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="6 or more digits">
       </div>
-      <span class="pin-error" id="pinError" role="alert">That PIN wasn't recognized. Please try again.</span>
+      <span class="pin-error" id="pinError" role="alert">That PIN didn't work. Check it and try again.</span>
       <button type="button" class="btn" id="pinSave">Connect</button>
     </div>
 
@@ -255,7 +255,7 @@
             await DB.del(s.id);
             const st = r.status === 'quarantined' || r.status === 'unreadable' ? 'review' : r.status;
             setHistory(s.id, { status: st, detail: r.message });
-            toast(st === 'review' ? 'Received, needs a look (on the Quarantine tab)' : st === 'duplicate' ? 'Already recorded before (duplicate)' : '✓ Posted to the books', st === 'review');
+            toast(st === 'review' ? 'Got it, but something needs a look. It\'s on the Quarantine tab.' : st === 'duplicate' ? 'Already have this one, so I skipped it.' : '✓ Got it. It\'s in the books.', st === 'review');
           } else if (r.retry) {
             setHistory(s.id, { status: 'queued', detail: r.error }); break;
           } else {
@@ -321,10 +321,10 @@
         await DB.put(scan); // saved on the phone first, so nothing is lost if the signal drops
         setHistory(scan.id, { at: scan.at, note: scan.note, status: 'queued' });
         form.reset(); $('preview').style.display = 'none'; $('cameraLabel').textContent = 'Tap to snap a receipt';
-        if (!navigator.onLine) toast('Saved on this phone. It sends when you have signal.');
+        if (!navigator.onLine) toast('Saved on your phone. It\'ll send once you have signal.');
         flush();
       } catch (err) {
-        toast('Could not save that photo. Try taking it again.', true);
+        toast('Couldn\'t save that photo. Try taking it again.', true);
       } finally {
         saveBtn.disabled = false; saveBtn.textContent = 'Save receipt';
       }
@@ -353,7 +353,7 @@
         store.set(PIN_KEY, pin); store.set(CUSTOMER_KEY, r.customer);
         showForm(); flush();
       } catch (err) {
-        toast('No connection. Connect once with signal, then it works offline.', true);
+        toast('No signal. Hook it up once while you have signal, and after that it works offline too.', true);
       } finally {
         btn.disabled = false; btn.textContent = 'Connect';
       }
