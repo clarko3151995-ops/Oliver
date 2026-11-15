@@ -86,7 +86,7 @@
 
     <form class="card" id="form" hidden novalidate>
       <p class="why" id="why"></p>
-      <p class="muted"><a id="receipt" target="_blank" rel="noopener">View the receipt photo</a> · fix anything Oscar misread, then Post it.</p>
+      <p class="muted"><a id="receipt" target="_blank" rel="noopener">See the receipt photo</a>, fix anything Oscar got wrong, then tap Post it.</p>
       <label>Store <input type="text" id="vendor" maxlength="120" autocomplete="off"></label>
       <div class="row2">
         <label>Date <input type="date" id="date"></label>
@@ -101,7 +101,8 @@
         <button type="button" class="btn" id="post">Post it</button>
         <button type="button" class="btn quiet" id="leave">Leave it</button>
       </div>
-      <p class="muted">Post it adds these lines to the sheet. Leave it records nothing. Either one closes this link. Discounts are lines with a minus amount; sales tax is a line with the category Sales tax.</p>
+      <p class="muted">Post it puts these lines in your books. Leave it keeps this receipt out. Either way, the link closes after.</p>
+      <p class="muted">Tip: a coupon or discount is a line with a minus price (like -1.00), and tax is its own line set to Sales tax.</p>
     </form>
   </div>
 
@@ -202,7 +203,7 @@
       $('customer').textContent = d.customer;
       $('vendor').value = d.vendor || '';
       $('receipt').href = d.receipt;
-      $('why').textContent = 'Why it was held: ' + d.reasons.join('; ');
+      $('why').textContent = 'Why Oscar held it: ' + d.reasons.join('; ');
       $('date').value = d.date;
       $('total').value = d.total > 0 ? d.total.toFixed(2) : '';
       $('lines').textContent = '';
@@ -254,7 +255,7 @@
         $('formMsg').textContent = r.title + ': ' + r.message;
         $('formMsg').hidden = false;
       } catch (e) {
-        $('formMsg').textContent = 'Not sent: ' + e.message + '. Nothing was changed; try again.';
+        $('formMsg').textContent = 'That didn\'t go through (' + e.message + '). Nothing changed, so give it another try.';
         $('formMsg').hidden = false;
       } finally {
         $('post').disabled = $('leave').disabled = false;
@@ -267,13 +268,13 @@
     $('leave').addEventListener('click', () => send('leave'));
 
     (async () => {
-      if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Open the Fix it link straight from the email; part of it seems to be missing.', true, true); return; }
+      if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Looks like part of the link got cut off. Open it straight from the email.', true, true); return; }
       try {
         const d = await call({ action: 'fixload', fix: token });
         if (!d.ok) { show('Can\'t fix this one', d.error, true, true); return; }
         render(d);
       } catch (e) {
-        show('Can\'t reach Oscar', 'Check the signal and reload this page. (' + e.message + ')', true, true);
+        show('Can\'t reach Oscar', 'Check your signal and reload the page. (' + e.message + ')', true, true);
       }
     })();
   </script>
