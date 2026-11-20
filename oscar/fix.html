@@ -6,18 +6,30 @@
   <meta name="referrer" content="no-referrer">
   <title>Oscar · Fix a receipt</title>
   <link rel="icon" type="image/png" href="icon-192.png">
-  <meta name="theme-color" content="#05080F">
+  <meta name="theme-color" content="#05080F" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F4F6FA" media="(prefers-color-scheme: light)">
   <style>
+    /* Same navy and amber as the scanner; follows the phone's light/dark setting. */
     :root {
-      --black: #05080F; --card: #0D192E; --card-hi: #132340;
-      --amber: #D97706; --amber-hover: #E8850F; --gold: #D6B88D; --tint: rgba(217, 119, 6, .12);
-      --coral: #E05A47; --text: #F7F3EA; --muted: #AEB7CA; --hair: rgba(255, 255, 255, .08);
+      --bg: #05080F; --card: #0D192E; --card-hi: #132340;
+      --amber: #D97706; --amber-hover: #E8850F; --on-amber: #05080F; --accent-text: #F0A43A;
+      --gold: #D6B88D; --tint: rgba(217, 119, 6, .14);
+      --coral: #FF7A66; --coral-tint: rgba(224, 90, 71, .16);
+      --text: #F7F3EA; --muted: #B8C0D2; --hair: rgba(255, 255, 255, .12);
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
       color-scheme: dark; /* dark date picker and dropdowns */
     }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #F4F6FA; --card: #FFFFFF; --card-hi: #EDF1F7; --accent-text: #8A4B00;
+        --gold: #7A5A1E; --coral: #B42318; --coral-tint: rgba(180, 35, 24, .10);
+        --text: #0D192E; --muted: #3F4B60; --hair: rgba(13, 25, 46, .16);
+        color-scheme: light;
+      }
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--black); color: var(--text); min-height: 100vh;
+      background: var(--bg); color: var(--text); min-height: 100vh; font-size: 1rem; line-height: 1.45;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex; flex-direction: column; align-items: center;
       padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
@@ -26,44 +38,54 @@
     header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }
     header svg { width: 44px; height: 44px; flex: none; border-radius: 10px; }
     header h1 { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; }
-    header p { color: var(--gold); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
-    .back { margin-left: auto; color: var(--gold); font-size: .85rem; text-decoration: none; white-space: nowrap; }
+    header p { color: var(--gold); font-size: 1rem; margin-top: 2px; }
+    .back { margin-left: auto; color: var(--gold); font-size: 1rem; font-weight: 600; text-decoration: none; white-space: nowrap; padding: .6rem 0; }
     .card { background: var(--card); border: 1px solid var(--hair); border-radius: 1.25rem; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
-    h2 { font-size: 1.1rem; }
-    .muted { color: var(--muted); font-size: .88rem; line-height: 1.45; }
-    .why { color: var(--coral); font-size: .9rem; line-height: 1.45; }
+    h2 { font-size: 1.15rem; }
+    .muted { color: var(--muted); font-size: 1rem; }
+    .why { color: var(--coral); font-size: 1rem; font-weight: 600; }
     a { color: var(--gold); }
-    label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: flex; flex-direction: column; gap: .35rem; }
+    label { font-size: 1rem; font-weight: 600; color: var(--text); display: flex; flex-direction: column; gap: .35rem; }
     input, select {
-      background: var(--black); border: 1px solid var(--hair); border-radius: .6rem; color: var(--text);
-      padding: .55rem .65rem; font-size: 1rem; font-family: inherit; width: 100%; min-width: 0;
+      background: var(--bg); border: 1px solid var(--hair); border-radius: .6rem; color: var(--text);
+      padding: .7rem .75rem; font-size: 1.05rem; font-family: inherit; width: 100%; min-width: 0; min-height: 48px;
     }
+    ::placeholder { color: var(--muted); opacity: 1; }
     input:focus, select:focus { border-color: var(--amber); outline: none; }
-    .missing { border-color: var(--coral) !important; }
+    /* a missing field gets a thick border and is named in the message under the form, not just colored */
+    .missing { border: 2px solid var(--coral) !important; background: var(--coral-tint); }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    #totalLabel.first { order: -1; }
+    .photo { display: flex; align-items: center; justify-content: center; gap: .5rem; text-align: center; text-decoration: none; font-weight: 700; color: var(--accent-text); border: 2px solid var(--amber); border-radius: .8rem; padding: .85rem; min-height: 52px; }
     .lines { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
-    .lines li { display: grid; grid-template-columns: 3.6rem 1fr 2.4rem; grid-template-areas: "name name del" "qty amt del" "cat cat del" "lt lt del"; gap: .3rem .45rem; padding: .7rem; border: 1px solid var(--hair); border-radius: .8rem; background: var(--card-hi); }
+    .lines li { display: grid; grid-template-columns: 4rem 1fr 2.75rem; grid-template-areas: "name name del" "qty amt amt" "cat cat cat" "lt lt lt"; gap: .4rem .5rem; padding: .75rem; border: 1px solid var(--hair); border-radius: .8rem; background: var(--card-hi); }
     .lines .name { grid-area: name; }
     .lines .qty { grid-area: qty; text-align: center; }
     .lines .amt { grid-area: amt; text-align: right; font-variant-numeric: tabular-nums; }
     .lines select { grid-area: cat; }
-    .lines .lt { grid-area: lt; font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .lines .lt { grid-area: lt; font-size: .95rem; color: var(--muted); font-variant-numeric: tabular-nums; }
     .lines .lt b { color: var(--text); font-weight: 600; }
-    .head { display: grid; grid-template-columns: 3.6rem 1fr 2.4rem; gap: .45rem; padding: 0 .7rem; font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .head { display: grid; grid-template-columns: 4rem 1fr; gap: .5rem; padding: 0 .75rem; font-size: .95rem; font-weight: 600; color: var(--muted); }
     .head span:first-child { text-align: center; } .head span:nth-child(2) { text-align: right; }
-    .lines .del { grid-area: del; align-self: stretch; background: transparent; border: 1px solid var(--hair); border-radius: .6rem; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+    .lines .del { grid-area: del; width: 2.75rem; height: 48px; background: transparent; border: 1px solid var(--hair); border-radius: .6rem; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
     .lines .del:hover { color: var(--coral); border-color: var(--coral); }
-    .sum { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; font-size: .95rem; }
-    .sum.off { color: var(--coral); }
-    .add { background: transparent; border: 1px dashed rgba(217, 119, 6, .5); color: var(--amber); border-radius: .8rem; padding: .7rem; font: inherit; font-weight: 600; cursor: pointer; }
-    .buttons { display: flex; gap: .75rem; }
-    .btn { flex: 1; background: var(--amber); color: var(--black); font-size: 1rem; font-weight: 700; border: none; border-radius: .8rem; padding: .9rem; cursor: pointer; font-family: inherit; }
+    .sum { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; font-size: 1.05rem; }
+    .sum.off { color: var(--coral); font-weight: 600; }
+    .add { background: transparent; border: 2px dashed rgba(217, 119, 6, .6); color: var(--accent-text); border-radius: .8rem; padding: .75rem; min-height: 48px; font: inherit; font-weight: 700; cursor: pointer; }
+    .btn { background: var(--amber); color: var(--on-amber); font-size: 1.1rem; font-weight: 700; border: none; border-radius: .8rem; padding: 1rem; min-height: 52px; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; }
     .btn:hover { background: var(--amber-hover); }
+    .btn:active { transform: scale(.98); }
     .btn.quiet { background: transparent; color: var(--text); border: 1px solid var(--hair); }
     .btn:disabled { opacity: .6; cursor: wait; }
-    .btn:focus-visible, .add:focus-visible, .del:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-    .msg { font-size: .92rem; line-height: 1.45; }
-    .msg.error { color: #FFD9D3; }
+    .btn:focus-visible, .add:focus-visible, .del:focus-visible, .skip:focus-visible, .photo:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    /* keeping a receipt out is rare and can't be undone, so it's a small link well below Post it, with a check first */
+    .skip { background: none; border: none; color: var(--muted); font: inherit; font-size: 1rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; align-self: center; min-height: 44px; padding: 0 .75rem; margin-top: .5rem; }
+    .confirm { border: 2px solid var(--coral); border-radius: .9rem; padding: 1rem; display: flex; flex-direction: column; gap: .75rem; background: var(--coral-tint); }
+    .confirm .buttons { display: flex; gap: .6rem; }
+    .confirm .btn { flex: 1; font-size: 1rem; }
+    .confirm .btn.danger { background: var(--coral); color: #fff; }
+    .msg { font-size: 1rem; }
+    .msg.error { color: var(--coral); font-weight: 600; }
     [hidden] { display: none !important; }
   </style>
 </head>
@@ -81,28 +103,34 @@
     <div class="card" id="status">
       <h2 id="statusTitle">Loading…</h2>
       <p class="msg" id="statusMsg"></p>
-      <a class="btn" href="./" id="statusBack" hidden style="text-align:center;text-decoration:none">Back to the scanner</a>
+      <a class="btn" href="./" id="statusBack" hidden>Back to the scanner</a>
     </div>
 
     <form class="card" id="form" hidden novalidate>
       <p class="why" id="why"></p>
-      <p class="muted"><a id="receipt" target="_blank" rel="noopener">See the receipt photo</a>, fix anything Oscar got wrong, then tap Post it.</p>
+      <!-- shortcut: the photo opens in a new tab; showing it here needs Oscar to send a small copy of it (script change) -->
+      <a class="photo" id="receipt" target="_blank" rel="noopener">Open the receipt photo ↗</a>
+      <p class="muted">Fix anything Oscar got wrong, then tap Post it.</p>
       <label>Store <input type="text" id="vendor" maxlength="120" autocomplete="off"></label>
       <div class="row2">
         <label>Date <input type="date" id="date"></label>
-        <label>Receipt total <input type="text" id="total" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
+        <label id="totalLabel">Receipt total <input type="text" id="total" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
       </div>
-      <div class="head" aria-hidden="true"><span>Qty</span><span>Price each</span><span></span></div>
+      <div class="head" aria-hidden="true"><span>Qty</span><span>Price each</span></div>
       <ul class="lines" id="lines"></ul>
       <button type="button" class="add" id="addLine">+ Add a line</button>
-      <p class="sum" id="sum"></p>
-      <p class="msg error" id="formMsg" hidden role="alert"></p>
-      <div class="buttons">
-        <button type="button" class="btn" id="post">Post it</button>
-        <button type="button" class="btn quiet" id="leave">Leave it</button>
-      </div>
-      <p class="muted">Post it puts these lines in your books. Leave it keeps this receipt out. Either way, the link closes after.</p>
+      <p class="sum" id="sum" aria-live="polite"></p>
       <p class="muted">Tip: a coupon or discount is a line with a minus price (like -1.00), and tax is its own line set to Sales tax.</p>
+      <p class="msg error" id="formMsg" hidden role="alert"></p>
+      <button type="button" class="btn" id="post">Post it to my books</button>
+      <button type="button" class="skip" id="leave">Don't add this receipt</button>
+      <div class="confirm" id="confirm" hidden role="alertdialog" aria-labelledby="confirmText">
+        <p id="confirmText"></p>
+        <div class="buttons">
+          <button type="button" class="btn danger" id="leaveYes">Yes, keep it out</button>
+          <button type="button" class="btn quiet" id="leaveNo">Cancel</button>
+        </div>
+      </div>
     </form>
   </div>
 
@@ -125,7 +153,8 @@
       $('form').hidden = true;
       $('status').hidden = false;
       $('statusTitle').textContent = title;
-      $('statusMsg').textContent = message || '';
+      // Oscar's own wording uses the sheet's tab name; owners know it as "held for a look"
+      $('statusMsg').textContent = String(message || '').replace(/The Quarantine row is marked Fixed\.?/, 'It\'s marked as handled.');
       $('statusMsg').className = 'msg' + (isError ? ' error' : '');
       $('statusBack').hidden = !done;
     }
@@ -138,7 +167,7 @@
       it = it || { name: '', unit_price: '', category: '', quantity: 1 };
       const li = document.createElement('li');
       const name = document.createElement('input');
-      name.type = 'text'; name.className = 'name'; name.maxLength = 120; name.placeholder = 'Item';
+      name.type = 'text'; name.className = 'name'; name.maxLength = 120; name.placeholder = 'Item name';
       name.value = it.name;
       name.setAttribute('aria-label', 'Item name');
       const qty = document.createElement('input');
@@ -161,7 +190,7 @@
       del.type = 'button'; del.className = 'del'; del.textContent = '×';
       del.setAttribute('aria-label', 'Delete this line');
       del.addEventListener('click', () => { li.remove(); updateSum(); });
-      [name, qty, amt, sel].forEach(el => el.addEventListener('input', () => { el.classList.remove('missing'); updateSum(); }));
+      [name, qty, amt, sel].forEach(el => el.addEventListener('input', () => { unflag(el); updateSum(); }));
       li.append(name, qty, amt, sel, lt, del);
       $('lines').append(li);
       return li;
@@ -178,6 +207,7 @@
 
     function updateSum() {
       $('formMsg').hidden = true; // an old warning goes away as soon as something is changed
+      $('confirm').hidden = true;
       const lines = readLines();
       lines.forEach(l => {
         // "2 × $9.98 = $19.96" under a line, only when the quantity isn't 1
@@ -192,7 +222,7 @@
       const total = num($('total').value);
       const off = isNaN(total) || Math.abs(sum - total) > 0.05;
       $('sum').textContent = '';
-      const a = document.createElement('span'); a.textContent = 'Lines add up to';
+      const a = document.createElement('span'); a.textContent = off ? 'Lines add up to' : '✓ Lines match the total';
       const b = document.createElement('b'); b.textContent = money(Math.round(sum * 100) / 100) + (off && !isNaN(total) ? '  (total ' + money(total) + ')' : '');
       $('sum').append(a, b);
       $('sum').classList.toggle('off', off);
@@ -206,17 +236,22 @@
       $('why').textContent = 'Why Oscar held it: ' + d.reasons.join('; ');
       $('date').value = d.date;
       $('total').value = d.total > 0 ? d.total.toFixed(2) : '';
+      // the email asks for the total when it's missing, so put that box first
+      $('totalLabel').classList.toggle('first', !(d.total > 0));
       $('lines').textContent = '';
       d.items.forEach(addLine);
       if (!d.items.length) addLine();
       updateSum();
       $('status').hidden = true;
       $('form').hidden = false;
+      if (!(d.total > 0)) $('total').focus();
     }
 
+    function unflag(el) { el.classList.remove('missing'); el.removeAttribute('aria-invalid'); }
+
     function problem() {
-      let first = '';
-      const flag = (el, msg) => { el.classList.add('missing'); if (!first) first = msg; };
+      let first = '', count = 0;
+      const flag = (el, msg) => { el.classList.add('missing'); el.setAttribute('aria-invalid', 'true'); count++; if (!first) first = msg; };
       if (!$('vendor').value.trim()) flag($('vendor'), 'Type the store name.');
       if (!$('date').value) flag($('date'), 'Pick the receipt\'s date.');
       const total = num($('total').value);
@@ -229,6 +264,7 @@
         if (isNaN(l.value.unit_price)) flag(l.amt, 'Every line needs a price, like 4.99 or -1.13.');
         if (!l.value.category) flag(l.sel, 'Choose a category for ' + (l.value.name || 'every line') + '.');
       });
+      if (count > 1) first += ' (' + count + ' boxes are marked.)';
       if (!first && total > 0) {
         const sum = Math.round(lines.reduce((s, l) => s + l.value.line_total, 0) * 100) / 100;
         if (Math.abs(sum - total) > 0.05) first = 'The lines add up to ' + money(sum) + ' but the total is ' + money(total) + '. Fix an amount, add the missing line, or delete one.';
@@ -240,13 +276,13 @@
       const fields = { action: 'fixapply', fix: token, choice: choice };
       if (choice === 'post') {
         const p = problem();
-        if (p) { $('formMsg').textContent = p; $('formMsg').hidden = false; return; }
+        if (p) { $('formMsg').textContent = p; $('formMsg').hidden = false; (document.querySelector('.missing') || $('formMsg')).focus(); return; }
         fields.vendor = $('vendor').value.trim();
         fields.date = $('date').value;
         fields.total = String(num($('total').value));
         fields.items = JSON.stringify(readLines().map(l => l.value));
       }
-      $('formMsg').hidden = true;
+      $('formMsg').hidden = true; $('confirm').hidden = true;
       $('post').disabled = $('leave').disabled = true;
       try {
         const r = await call(fields);
@@ -263,9 +299,16 @@
     }
 
     $('addLine').addEventListener('click', () => { addLine().querySelector('input').focus(); updateSum(); });
-    ['vendor', 'date', 'total'].forEach(id => $(id).addEventListener('input', () => { $(id).classList.remove('missing'); updateSum(); }));
+    ['vendor', 'date', 'total'].forEach(id => $(id).addEventListener('input', () => { unflag($(id)); updateSum(); }));
     $('post').addEventListener('click', () => send('post'));
-    $('leave').addEventListener('click', () => send('leave'));
+    // "Don't add" asks first, naming the receipt, because it can't be undone
+    $('leave').addEventListener('click', () => {
+      const store = $('vendor').value.trim() || 'this receipt', total = num($('total').value);
+      $('confirmText').textContent = 'Keep ' + store + (total > 0 ? ' (' + money(total) + ')' : '') + ' out of your books? This can\'t be undone, and the link closes.';
+      $('confirm').hidden = false; $('leaveNo').focus();
+    });
+    $('leaveNo').addEventListener('click', () => { $('confirm').hidden = true; $('leave').focus(); });
+    $('leaveYes').addEventListener('click', () => send('leave'));
 
     (async () => {
       if (!/^[a-f0-9]{64}$/.test(token)) { show('Link not complete', 'Looks like part of the link got cut off. Open it straight from the email.', true, true); return; }
