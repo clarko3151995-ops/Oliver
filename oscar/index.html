@@ -13,27 +13,41 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#05080F">
+  <meta name="theme-color" content="#05080F" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#F4F6FA" media="(prefers-color-scheme: light)">
 
   <style>
+    /* Navy and amber. Follows the phone's light/dark setting: light mode reads better in a sunny parking lot. */
     :root {
-      --black: #05080F;
+      --bg: #05080F;
       --card: #0D192E;
       --card-hi: #132340;
       --amber: #D97706;
       --amber-hover: #E8850F;
+      --on-amber: #05080F;
+      --accent-text: #F0A43A;
       --gold: #D6B88D;
-      --tint: rgba(217, 119, 6, .12);
-      --coral: #E05A47;
-      --ok: #3DBB72;
+      --tint: rgba(217, 119, 6, .14);
+      --coral: #FF7A66;
+      --coral-tint: rgba(224, 90, 71, .16);
       --text: #F7F3EA;
-      --muted: #AEB7CA;
-      --hair: rgba(255, 255, 255, .08);
+      --muted: #B8C0D2;
+      --hair: rgba(255, 255, 255, .12);
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+      color-scheme: dark;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #F4F6FA; --card: #FFFFFF; --card-hi: #EDF1F7;
+        --accent-text: #8A4B00; --gold: #7A5A1E; --tint: rgba(217, 119, 6, .14);
+        --coral: #B42318; --coral-tint: rgba(180, 35, 24, .10);
+        --text: #0D192E; --muted: #3F4B60; --hair: rgba(13, 25, 46, .16);
+        color-scheme: light;
+      }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--black); color: var(--text); min-height: 100vh;
+      background: var(--bg); color: var(--text); min-height: 100vh; font-size: 1rem; line-height: 1.45;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex; flex-direction: column; align-items: center;
       padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
@@ -44,69 +58,79 @@
     header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }
     header svg { width: 44px; height: 44px; flex: none; border-radius: 10px; }
     header h1 { font-family: var(--serif); font-weight: 500; font-size: 1.6rem; line-height: 1.1; letter-spacing: -.01em; }
-    header p { color: var(--gold); font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
-    .net { margin-left: auto; font-size: .72rem; padding: 2px 10px; border-radius: 99px; background: var(--tint); color: var(--amber); white-space: nowrap; }
-    .net.off { background: rgba(224, 90, 71, .14); color: var(--coral); }
+    header p { color: var(--gold); font-size: 1rem; margin-top: 2px; }
+    .net { margin-left: auto; font-size: .9rem; font-weight: 600; padding: 4px 12px; border-radius: 99px; background: var(--coral-tint); color: var(--coral); white-space: nowrap; }
 
     .card {
       background: var(--card); border: 1px solid var(--hair); border-radius: 1.25rem;
       padding: 1.25rem; display: flex; flex-direction: column; gap: 1.1rem;
     }
     .camera {
-      position: relative; border: 2px dashed rgba(217, 119, 6, .45); border-radius: 1rem;
-      padding: 2rem 1rem; text-align: center; background: var(--black);
+      position: relative; border: 2px dashed rgba(217, 119, 6, .55); border-radius: 1rem;
+      padding: 1.75rem 1rem; text-align: center; background: var(--bg);
       display: flex; flex-direction: column; align-items: center;
     }
     .camera:active { border-color: var(--amber); background: var(--card-hi); }
     .camera svg { width: 56px; height: 56px; fill: none; stroke: var(--amber); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; margin-bottom: .6rem; }
-    .camera b { font-size: 1.05rem; }
-    .camera span { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+    .camera b { font-size: 1.15rem; }
+    .camera span { font-size: 1rem; color: var(--muted); margin-top: 4px; }
     #receiptImage { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+    .pick { position: relative; align-self: center; display: inline-flex; align-items: center; }
+    .pick input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
 
-    .preview { display: none; height: 190px; border-radius: .75rem; overflow: hidden; border: 1px solid var(--hair); }
-    .preview img { width: 100%; height: 100%; object-fit: cover; }
+    /* contain, not cover: the whole receipt shows, so you can check it's readable before sending */
+    .preview { display: none; height: 260px; border-radius: .75rem; overflow: hidden; border: 1px solid var(--hair); background: var(--bg); }
+    .preview img { width: 100%; height: 100%; object-fit: contain; }
 
     .field { display: flex; flex-direction: column; gap: .45rem; }
-    label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    label { font-size: 1rem; font-weight: 600; color: var(--text); }
     input[type="password"], input[type="text"], textarea {
-      background: var(--black); border: 1px solid var(--hair); border-radius: .65rem;
-      color: var(--text); padding: .75rem 1rem; font-size: 1rem; outline: none; width: 100%; font-family: inherit;
+      background: var(--bg); border: 1px solid var(--hair); border-radius: .65rem;
+      color: var(--text); padding: .8rem 1rem; font-size: 1.05rem; outline: none; width: 100%; font-family: inherit;
     }
+    ::placeholder { color: var(--muted); opacity: 1; }
     input:focus, textarea:focus { border-color: var(--amber); }
-    textarea { resize: none; height: 64px; }
+    textarea { resize: none; height: 72px; }
 
     .btn {
-      background: var(--amber); color: var(--black); font-size: 1.02rem; font-weight: 700;
-      border: none; border-radius: .8rem; padding: .95rem; cursor: pointer; font-family: inherit;
+      background: var(--amber); color: var(--on-amber); font-size: 1.1rem; font-weight: 700;
+      border: none; border-radius: .8rem; padding: 1rem; cursor: pointer; font-family: inherit; min-height: 52px;
     }
     .btn:hover { background: var(--amber-hover); }
+    .btn:active { transform: scale(.98); background: var(--amber-hover); }
     .btn:disabled { opacity: .6; cursor: wait; }
-    .btn:focus-visible, .link:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-    .link { background: none; border: none; color: var(--gold); font-size: .82rem; cursor: pointer; align-self: center; font-family: inherit; }
+    .btn:focus-visible, .link:focus-visible, .mini:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .link { background: none; border: none; color: var(--gold); font-size: 1rem; font-weight: 600; cursor: pointer; align-self: center; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; padding: 0 .75rem; }
+    .help { color: var(--muted); font-size: .95rem; text-align: center; }
 
     #pinCard { display: none; }
-    #pinCard p { color: var(--muted); font-size: .9rem; line-height: 1.45; }
-    .pin-error { color: var(--coral); font-size: .85rem; display: none; }
+    #pinCard p { color: var(--muted); font-size: 1rem; }
+    .pin-error { color: var(--coral); font-size: 1rem; display: none; }
 
     .toast {
       display: none; position: fixed; bottom: max(1.5rem, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
-      max-width: calc(100% - 2rem); text-align: center; background: var(--card-hi); color: var(--text);
-      border: 1px solid var(--hair); padding: .75rem 1.25rem; border-radius: 1rem; font-weight: 600; font-size: .92rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+      width: max-content; max-width: calc(100% - 2rem); text-align: center; background: var(--card-hi); color: var(--text);
+      border: 2px solid var(--amber); padding: .85rem 1.25rem; border-radius: 1rem; font-weight: 600; font-size: 1rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .35);
     }
-    .toast.ok { border-color: rgba(217, 119, 6, .5); }
-    .toast.error { border-color: var(--coral); color: #FFD9D3; }
+    .toast.error { border-color: var(--coral); }
 
     .history { display: none; margin-top: 1rem; }
-    .history h2 { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
-    .history ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
-    .history li { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; font-size: .88rem; }
-    .h-note { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .h-status { flex: none; font-weight: 600; font-size: .8rem; padding: 1px 9px; border-radius: 99px; background: var(--tint); color: var(--amber); }
-    .h-status.queued { background: rgba(255, 255, 255, .06); color: var(--gold); }
-    .h-status.review, .h-status.failed { background: rgba(224, 90, 71, .14); color: var(--coral); }
-    .h-empty { color: var(--muted); font-size: .88rem; }
+    .history h2 { font-size: 1.05rem; font-weight: 700; }
+    .history ul { list-style: none; display: flex; flex-direction: column; gap: .85rem; }
+    .history li { display: flex; flex-direction: column; gap: .35rem; }
+    .h-row { display: flex; justify-content: space-between; align-items: baseline; gap: .75rem; }
+    .h-note { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .h-what { color: var(--muted); font-size: .95rem; }
+    .h-detail { color: var(--coral); font-size: .95rem; }
+    .h-status { flex: none; font-weight: 700; font-size: .9rem; padding: 2px 10px; border-radius: 99px; background: var(--tint); color: var(--accent-text); }
+    .h-status.queued, .h-status.duplicate, .h-status.sending { background: var(--card-hi); color: var(--muted); }
+    .h-status.review, .h-status.failed { background: var(--coral-tint); color: var(--coral); }
+    .h-actions { display: flex; gap: .5rem; }
+    .mini { background: var(--card-hi); color: var(--text); border: 1px solid var(--hair); border-radius: .6rem; font: inherit; font-weight: 600; font-size: .95rem; padding: 0 1rem; min-height: 44px; cursor: pointer; }
+    .h-empty { color: var(--muted); }
     .h-head { display: flex; justify-content: space-between; align-items: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -118,7 +142,8 @@
         <h1>Oscar</h1>
         <p id="customerName">Receipt scanner</p>
       </div>
-      <span class="net" id="net" aria-live="polite">Online</span>
+      <!-- shown only with no signal, so it says something when it's there -->
+      <span class="net" id="net" role="status" hidden>No signal</span>
     </header>
 
     <!-- PIN setup (once per phone) -->
@@ -130,6 +155,7 @@
       </div>
       <span class="pin-error" id="pinError" role="alert">That PIN didn't work. Check it and try again.</span>
       <button type="button" class="btn" id="pinSave">Connect</button>
+      <button type="button" class="link" id="pinCancel" hidden>Cancel, keep the PIN I have</button>
     </div>
 
     <form class="card" id="scanForm" style="display:none">
@@ -140,17 +166,20 @@
         <!-- capture="environment" opens the back camera on phones -->
         <input type="file" id="receiptImage" accept="image/*" capture="environment" aria-label="Take a photo of the receipt">
       </div>
-      <div class="preview" id="preview"><img id="previewImg" alt="Receipt preview"></div>
+      <!-- a receipt already in the phone's photos (a screenshot, an earlier picture) -->
+      <span class="pick link">Or choose a photo you already took<input type="file" id="receiptPick" accept="image/*" aria-label="Choose a receipt photo from your phone"></span>
+      <div class="preview" id="preview"><img id="previewImg" alt="The receipt you picked"></div>
       <div class="field">
         <label for="note">Note (optional)</label>
-        <textarea id="note" maxlength="200" placeholder="e.g. what it was for"></textarea>
+        <textarea id="note" maxlength="200" placeholder="What it was for"></textarea>
       </div>
-      <button type="submit" class="btn" id="saveBtn">Save receipt</button>
+      <button type="submit" class="btn" id="saveBtn">Send to Oscar</button>
+      <p class="help">Oscar reads it and adds it to your books. If anything looks off, you'll get an email with a link to fix it.</p>
       <button type="button" class="link" id="changePin">Change PIN</button>
     </form>
 
     <section class="card history" id="history">
-      <div class="h-head"><h2>Recent on this phone</h2><button type="button" class="link" id="retryBtn" hidden>Send now</button></div>
+      <div class="h-head"><h2>Recent on this phone</h2><button type="button" class="mini" id="retryBtn" hidden>Send now</button></div>
       <ul id="historyList"></ul>
       <p class="h-empty" id="historyEmpty">Nothing sent yet.</p>
     </section>
@@ -165,16 +194,18 @@
     const PIN_KEY = 'oscarPin';
     const CUSTOMER_KEY = 'oscarCustomer';
     const HISTORY_KEY = 'oscarHistory';
+    const NOTE_KEY = 'oscarNoteDraft';
     const HISTORY_MAX = 12;
     const MAX_SIDE = 1600;      // longest edge in pixels after resizing
     const JPEG_QUALITY = 0.82;
     const RETRY_MS = 60000;     // while scans wait, try again every minute
 
     const $ = (id) => document.getElementById(id);
-    const form = $('scanForm'), camera = $('receiptImage'), noteInput = $('note'), saveBtn = $('saveBtn');
+    const form = $('scanForm'), camera = $('receiptImage'), picker = $('receiptPick'), noteInput = $('note'), saveBtn = $('saveBtn');
     let memory = {};
+    let photo = null; // the file from the camera or the photo picker
 
-    // ---------- small storage (PIN, customer name, history) ----------
+    // ---------- small storage (PIN, customer name, history, unsent note) ----------
     const store = {
       get(k) { try { const v = localStorage.getItem(k); return v === null ? memory[k] : v; } catch (e) { return memory[k]; } },
       set(k, v) { memory[k] = v; try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} },
@@ -200,11 +231,23 @@
         put: (s) => tx('readwrite', (q) => q.put(s)).catch(() => { mem.set(s.id, s); }),
         del: (id) => tx('readwrite', (q) => q.delete(id)).catch(() => { mem.delete(id); }),
         all: () => tx('readonly', (q) => q.getAll()).then((a) => (a || []).concat([...mem.values()])).catch(() => [...mem.values()]),
+        get: (id) => tx('readonly', (q) => q.get(id)).catch(() => mem.get(id)),
       };
     })();
 
+    // ---------- what Oscar said, in plain words ----------
+    // Oscar answers like "Posted 4 items, Harbor Hardware 2026-11-16 $50.35 (Claude)" or "Quarantined: Total is missing or zero".
+    function readOut(msg) {
+      const m = /^Posted [^,]*, (.+) \d{4}-\d{2}-\d{2} \$(-?[\d.,]+)/.exec(String(msg || ''));
+      return m ? m[1] + ' · $' + m[2] : '';
+    }
+    function heldWhy(msg) {
+      const m = /^(?:Quarantined|Unreadable|Held)[^:]*:\s*(.+)$/i.exec(String(msg || ''));
+      return m ? m[1] : '';
+    }
+
     // ---------- history (newest first, on this phone only) ----------
-    const LABELS = { queued: 'Waiting', sending: 'Sending…', posted: '✓ Posted', duplicate: 'Duplicate', review: 'Needs review', fixed: '✓ Fixed', already: '✓ Posted', failed: 'Not sent' };
+    const LABELS = { queued: 'Waiting', sending: 'Sending…', posted: '✓ In the books', duplicate: 'Already had it', review: 'Needs a look', fixed: '✓ Fixed', already: '✓ In the books', failed: 'Not sent' };
     function history() { try { return JSON.parse(store.get(HISTORY_KEY) || '[]'); } catch (e) { return []; } }
     function setHistory(id, patch) {
       let list = history();
@@ -213,17 +256,33 @@
       store.set(HISTORY_KEY, JSON.stringify(list.slice(0, HISTORY_MAX)));
       renderHistory();
     }
+    function dropHistory(id) { store.set(HISTORY_KEY, JSON.stringify(history().filter((h) => h.id !== id))); renderHistory(); }
     function renderHistory() {
       const list = history();
       $('historyList').replaceChildren(...list.map((h) => {
         const li = document.createElement('li');
+        const row = document.createElement('div'); row.className = 'h-row';
         const d = new Date(h.at);
         const n = document.createElement('span'); n.className = 'h-note';
         // textContent (not innerHTML) so a note can never inject HTML
         n.textContent = d.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + (h.note ? ' · ' + h.note : '');
-        if (h.detail) n.title = h.detail;
         const s = document.createElement('span'); s.className = 'h-status ' + h.status; s.textContent = LABELS[h.status] || h.status;
-        li.append(n, s); return li;
+        row.append(n, s); li.append(row);
+        // what Oscar recorded, so a misread total gets caught right away
+        const what = h.status === 'posted' || h.status === 'already' || h.status === 'fixed' ? readOut(h.detail) : '';
+        if (what) { const w = document.createElement('span'); w.className = 'h-what'; w.textContent = what; li.append(w); }
+        // why it's held or not sent, written out (phones never show hover text)
+        const why = h.status === 'review' ? heldWhy(h.detail) : h.status === 'failed' ? h.detail : '';
+        if (why) { const w = document.createElement('span'); w.className = 'h-detail'; w.textContent = why; li.append(w); }
+        if (h.status === 'failed') {
+          const acts = document.createElement('div'); acts.className = 'h-actions';
+          const again = document.createElement('button'); again.type = 'button'; again.className = 'mini'; again.textContent = 'Try again';
+          again.addEventListener('click', () => retryOne(h.id));
+          const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'mini'; rm.textContent = 'Remove';
+          rm.addEventListener('click', async () => { await DB.del(h.id); dropHistory(h.id); });
+          acts.append(again, rm); li.append(acts);
+        }
+        return li;
       }));
       $('historyEmpty').style.display = list.length ? 'none' : 'block';
     }
@@ -241,7 +300,8 @@
       if (sending || !navigator.onLine || !store.get(PIN_KEY) || ENDPOINT.indexOf('https://') !== 0) return;
       sending = true;
       try {
-        const waiting = (await DB.all()).sort((a, b) => a.at.localeCompare(b.at));
+        // a scan Oscar turned down waits for "Try again" instead of being sent over and over
+        const waiting = (await DB.all()).filter((s) => !s.failed).sort((a, b) => a.at.localeCompare(b.at));
         for (const s of waiting) {
           setHistory(s.id, { status: 'sending', at: s.at, note: s.note });
           let r;
@@ -255,23 +315,43 @@
             await DB.del(s.id);
             const st = r.status === 'quarantined' || r.status === 'unreadable' ? 'review' : r.status;
             setHistory(s.id, { status: st, detail: r.message });
-            toast(st === 'review' ? 'Got it, but something needs a look. It\'s on the Quarantine tab.' : st === 'duplicate' ? 'Already have this one, so I skipped it.' : '✓ Got it. It\'s in the books.', st === 'review');
+            if (st === 'review') {
+              const why = heldWhy(r.message);
+              toast('Got it, but it needs a look' + (why ? ': ' + why : '') + '. You\'ll get an email with a link to fix it.', true);
+            } else if (st === 'duplicate') {
+              toast('Already have this one, so I skipped it.');
+            } else {
+              const what = readOut(r.message);
+              toast(what ? '✓ In the books: ' + what : '✓ Got it. It\'s in the books.');
+            }
           } else if (r.retry) {
             setHistory(s.id, { status: 'queued', detail: r.error }); break;
           } else {
-            await DB.del(s.id); setHistory(s.id, { status: 'failed', detail: r.error }); toast('Not sent: ' + r.error, true);
+            // keep the photo: mark it, show why, and let the person try again or remove it
+            s.failed = true; s.error = r.error || 'Oscar turned it down.';
+            await DB.put(s);
+            setHistory(s.id, { status: 'failed', detail: s.error });
+            toast('Not sent: ' + s.error, true);
           }
         }
       } finally {
         sending = false;
-        const left = (await DB.all()).length;
+        const left = (await DB.all()).filter((s) => !s.failed).length;
         $('retryBtn').hidden = !left;
         clearTimeout(flush.t);
         if (left) flush.t = setTimeout(flush, RETRY_MS);
       }
     }
+    async function retryOne(id) {
+      const s = await DB.get(id);
+      if (!s) { dropHistory(id); toast('That photo is no longer on this phone. Take it again.', true); return; }
+      delete s.failed; delete s.error;
+      await DB.put(s);
+      setHistory(id, { status: 'queued', detail: '' });
+      flush();
+    }
 
-    // "Needs review" turns into "Fixed" once the receipt is fixed (email link, or Status = Fixed in the sheet).
+    // "Needs a look" turns into "Fixed" once the receipt is fixed (email link, or Status = Fixed in the sheet).
     let refreshing = false;
     async function refreshReview() {
       const ids = history().filter((h) => h.status === 'review').map((h) => h.id);
@@ -286,14 +366,17 @@
 
     // ---------- photo: preview and resize ----------
     let takenAt = new Date();
-    camera.addEventListener('change', () => {
-      const f = camera.files[0];
+    function usePhoto(input) {
+      const f = input.files[0];
       if (!f) return;
+      photo = f;
       $('previewImg').src = URL.createObjectURL(f);
       $('preview').style.display = 'block';
       $('cameraLabel').textContent = 'Retake photo';
       takenAt = new Date();
-    });
+    }
+    camera.addEventListener('change', () => usePhoto(camera));
+    picker.addEventListener('change', () => usePhoto(picker));
     function resizeToBase64(file) {
       return new Promise((resolve, reject) => {
         const img = new Image(), url = URL.createObjectURL(file);
@@ -311,22 +394,26 @@
     }
     const newId = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12));
 
+    // keep a half-typed note if the app gets closed before sending
+    noteInput.value = store.get(NOTE_KEY) || '';
+    noteInput.addEventListener('input', () => store.set(NOTE_KEY, noteInput.value || null));
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const f = camera.files[0];
-      if (!f) { toast('Snap a receipt first', true); return; }
+      if (!photo) { toast('Snap a receipt first', true); return; }
       saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
       try {
-        const scan = { id: newId(), at: takenAt.toISOString(), note: noteInput.value.trim(), image: await resizeToBase64(f) };
+        const scan = { id: newId(), at: takenAt.toISOString(), note: noteInput.value.trim(), image: await resizeToBase64(photo) };
         await DB.put(scan); // saved on the phone first, so nothing is lost if the signal drops
         setHistory(scan.id, { at: scan.at, note: scan.note, status: 'queued' });
-        form.reset(); $('preview').style.display = 'none'; $('cameraLabel').textContent = 'Tap to snap a receipt';
+        form.reset(); photo = null; store.set(NOTE_KEY, null);
+        $('preview').style.display = 'none'; $('cameraLabel').textContent = 'Tap to snap a receipt';
         if (!navigator.onLine) toast('Saved on your phone. It\'ll send once you have signal.');
         flush();
       } catch (err) {
         toast('Couldn\'t save that photo. Try taking it again.', true);
       } finally {
-        saveBtn.disabled = false; saveBtn.textContent = 'Save receipt';
+        saveBtn.disabled = false; saveBtn.textContent = 'Send to Oscar';
       }
     });
 
@@ -334,6 +421,7 @@
     function showPin(rejected) {
       $('pinError').style.display = rejected ? 'block' : 'none';
       $('pinInput').value = '';
+      $('pinCancel').hidden = !store.get(PIN_KEY); // a way back when changing a PIN that works
       form.style.display = 'none'; $('history').style.display = 'none';
       $('pinCard').style.display = 'flex';
       $('pinInput').focus();
@@ -359,16 +447,18 @@
       }
     });
     $('pinInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('pinSave').click(); });
+    $('pinCancel').addEventListener('click', showForm);
     $('changePin').addEventListener('click', () => showPin(false));
     $('retryBtn').addEventListener('click', flush);
 
     // ---------- toast and connection badge ----------
     let toastT;
     function toast(msg, isError) {
-      const t = $('toast'); t.textContent = msg; t.className = 'toast ' + (isError ? 'error' : 'ok'); t.style.display = 'block';
-      clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = 'none'; }, isError ? 5000 : 3000);
+      const t = $('toast'); t.textContent = msg; t.className = 'toast' + (isError ? ' error' : ''); t.style.display = 'block';
+      // long enough to read a store name and total
+      clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = 'none'; }, isError ? 7000 : 5000);
     }
-    function net() { const on = navigator.onLine; $('net').textContent = on ? 'Online' : 'Offline'; $('net').classList.toggle('off', !on); if (on) { flush(); refreshReview(); } }
+    function net() { const on = navigator.onLine; $('net').hidden = on; if (on) { flush(); refreshReview(); } }
     window.addEventListener('online', net);
     window.addEventListener('offline', net);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) { flush(); refreshReview(); } });
