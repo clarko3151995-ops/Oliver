@@ -1,0 +1,106 @@
+# Relic detail checklist
+
+Legend: [x] detail screenshot received · [ ] still needed · (owned) = has a level / highlighted in its set.
+Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counter in game: 43/70.
+
+## Verdantglade (Sylvan Relics) — 70 relics
+
+### Mythic (10) — 10/10 detailed
+- [x] Enlightenment's Fruit
+- [x] Horn of Abundance (owned, +14)
+- [x] Avarice Jug
+- [x] Blight Casket
+- [x] Lunar Pursuit Bow
+- [x] Stormcaller's Lyre
+- [x] Nymph's Sword Hilt
+- [x] Aquaborn Cradle
+- [x] Hellbloom Delusion
+- [x] Dragonheart Inferno
+
+### Legendary (20) — 20/20 detailed
+- [x] Flawless Band (owned, +14)
+- [x] Golden Monarch's Axe
+- [x] Exalted Queen (owned, +14)
+- [x] Thunderbolt Halberd
+- [x] Obsidian Key
+- [x] Trickster's Dice
+- [x] Night's Vanity Mirror (owned, +14)
+- [x] Imp's Statuette (owned, +14)
+- [x] Truestrike Arrow
+- [x] Windscape Reverie
+- [x] Zephyr Headband
+- [x] Chronoflute (owned, +14)
+- [x] Stillwater Vambrace
+- [x] Twilight Teacup (owned, +14)
+- [x] Pisces Earrings
+- [x] Alchemist's Perfume (owned, +14)
+- [x] Phantomfire Chain (owned, +14)
+- [x] Wildfire Horn
+- [x] Ashen Hoop (owned, +14)
+- [x] Burst Arrow
+
+### Epic (20) — 0/20 detailed
+- [ ] Mystic Scarab
+- [ ] Dawn's Scroll
+- [ ] Glowshroom Cap
+- [ ] Prismwing
+- [ ] Spiderweb Eyepatch
+- [ ] Crystal of Phantasma
+- [ ] Scorpion Tail Brooch
+- [ ] Crown of Tendrils
+- [ ] Fox Hunter's Claw
+- [ ] Windrunner's Sling
+- [ ] Windwhisper's Flute
+- [ ] Scout's Whistle
+- [ ] Waterflow Veil
+- [ ] Lucky Dewdrop Vial
+- [ ] Hunter's Requiem
+- [ ] Bubble Tube
+- [ ] Flame Dancer
+- [ ] Fire Serpent Belt
+- [ ] Spark Boomerang
+- [ ] Mirage Tinder Box
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Luminous Silhouette
+- [ ] Star Ladybug
+- [ ] Lunaglow Pendant
+- [ ] Explorer's Lens
+- [ ] Goblin's Fang
+- [ ] Goblin's Wig
+- [ ] Goblin Bone Armor
+- [ ] Goblin's Whiskers
+- [ ] Fruit of Retribution
+- [ ] Whispers of the Wind
+- [ ] Wreath of Peace
+- [ ] Leaf Windmill
+- [ ] Pearl Bracelet
+- [ ] Ripple Stone
+- [ ] Drifting Bottle
+- [ ] Crystal Leaf
+- [ ] Muddy Wax Seal
+- [ ] Charstnut
+- [ ] Firebird Quill
+- [ ] Mystic Firestone
+
+## Other regions (gallery tabs seen: Cinder Ridge, Aqualis, Loong Ha... and more)
+Gallery screenshots not sent yet, so full lists are unknown. Relics seen only by name inside Verdantglade set lists
+(they belong to other tabs) — need detail cards:
+- [ ] Pinnacle Radiance (owned; Crit DMG per guide) — Elysian Radiance set
+- [ ] Prime Dynamo — Elysian Radiance set
+- [ ] Doomsday Chronometer (owned) — Eternal Darkness set
+- [ ] Clockwork Arcanum — Eternal Darkness set
+- [ ] Everburn Throne — Pyre of Dooming World set
+- [ ] Ignis Oculus — Pyre of Dooming World set
+- [ ] Genesis Dew — Spring of Life's Flux set
+- [ ] Sandfall Sarcophagus — Spring of Life's Flux set
+- [ ] Scales of Order — Wind of Unchained Horizons set
+- [ ] Eternal Gale Wheel — Wind of Unchained Horizons set
+- [ ] Gallery overview: Cinder Ridge (Machina Trove)
+- [ ] Gallery overview: Aqualis (Ukiyo Tales)
+- [ ] Gallery overview: Loong Ha… (Celestial Cra…) and any tabs further right
+
+## Other open data
+- [ ] Relic slot count
+- [ ] What Affinity / Aegis do (stat description)
+- [ ] Character stats screen
