@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arcanist Build Sim</title>
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--ink:#1d1b2e;--mute:#6b6880;--line:#e2dff0;--acc:#6d3fd6;--acc2:#2a9d8f;--warn:#b45309;--warnbg:#fef3c7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14121f;--card:#1e1b2e;--ink:#ece9fa;--mute:#9a96b5;--line:#322e48;--acc:#a78bfa;--acc2:#5eead4;--warn:#fcd34d;--warnbg:#3a2f0b}}
+:root[data-theme="dark"]{--bg:#14121f;--card:#1e1b2e;--ink:#ece9fa;--mute:#9a96b5;--line:#322e48;--acc:#a78bfa;--acc2:#5eead4;--warn:#fcd34d;--warnbg:#3a2f0b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding:16px;max-width:900px;margin-inline:auto}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:10px;margin-bottom:14px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+label{display:block;font-size:12px;color:var(--mute)}
+input[type=number]{width:100%;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:14px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+td input[type=number]{width:70px}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button{color:#14121f}}
+:root[data-theme="dark"] button{color:#14121f}
+button:disabled{opacity:.5}
+.bar{height:8px;background:var(--acc2);border-radius:4px}
+.pill{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 8px;margin:1px;font-size:12px}
+.rank{font-weight:700;color:var(--acc)}
+.small{font-size:12px;color:var(--mute)}
+</style>
+</head>
+<body>
+<h1>Arcanist Build Sim</h1>
+<p class="sub">Sword x Staff · Sage → Arcanist (Erosion / Dark DoT) · finds the best skill, charm and relic combo for your stats</p>
+
+<div class="warn"><b>Read first:</b> skill cooldowns, damage %, relic and charm numbers below are <b>my estimates</b>. The guides I could reach name the skills and what they do but don't publish exact values. Overwrite the numbers with what you see in-game (tap a skill/relic to read it) and re-run. The ranking is only as good as these inputs.</div>
+
+<div class="card"><h2>Your stats &amp; fight</h2>
+<div class="grid" id="stats"></div></div>
+
+<div class="card"><h2>Skills <span class="small">(tick = in the pool)</span></h2>
+<div class="scroll"><table id="skills"></table></div>
+<p class="small">Kinds: direct = hit, detonate = Shadow of Termination style (cashes in all remaining Erosion ticks at once; Extra = bonus % on the cashed damage, my guess), amp = target takes more damage, summon = damage each turn. "Stacks" = Erosion stacks applied per cast; "Apply%" = base chance, scaled by Effect Hit Rate.</p></div>
+
+<div class="card"><h2>Relics &amp; charms <span class="small">(tick = owned)</span></h2>
+<div class="scroll"><table id="gear"></table></div></div>
+
+<div class="card"><h2>Search</h2>
+<div class="grid" id="slots"></div><br>
+<button id="go">Find best build</button> <span id="prog" class="small"></span></div>
+
+<div class="card" id="out" hidden><h2>Results</h2><div id="res"></div></div>
+
+<div class="card"><h2>How it works</h2>
+<p class="small">Turn-based fight of N turns. Each turn the sim casts the ready skill with the best value (damage now + Erosion damage it will add later). Erosion stacks tick each turn and last 3 turns; the detonate skill cashes remaining ticks at once. Crits, Erosion application and gear are sampled with the same random seeds for every build, so comparisons are fair. Search: all skill combos are scored first, the top ones are then crossed with every relic/charm combo, and the winner gets a "what if I remove this" table.</p>
+<p class="small">Classes: Sage → Arcanist (Tier 3) → Dominator (Tier 4, unlocks ~Lv 106; one source says "Controller"). If you're already Tier 4, tell me and I'll model Dominator.</p>
+<p class="small">Sources: prydwen.gg Arcanist/Sage build guides, bluestacks and allthings.how class/skill guides, allclash Arcanist build, sword-x-staff.wiki. Skill names, Erosion mechanics, charm names, stat priority (Effect Hit Rate ≥ Elemental Mastery ≥ ATK &gt; SPD) come from them; numbers do not.</p></div>
+
+<script>
+const STATS=[["atk","ATK",1000],["cr","Crit rate %",20],["cd","Crit dmg %",150],["ehr","Effect hit rate %",50],["em","Elemental mastery",100],["turns","Fight turns",10],["enemies","Enemies",1]];
+// name, kind, power%, cd, aoe, stacks, apply%, extra, pool
+const SKILLS=[
+["Mana Blast","direct",120,0,0,0,0,0,1],
+["Dark Bullet","direct",160,1,0,1,70,0,1],
+["Abyssal Hand","direct",90,2,0,2,80,0,1],
+["Shadow of Termination","detonate",60,3,0,0,0,100,1],
+["Shadow Impact","direct",100,2,1,1,70,0,1],
+["Curse Resonance","direct",110,2,0,1,70,15,1],
+["Weakening Hex","amp",0,4,0,1,80,20,1],
+["Flame Wolf Summon","summon",70,5,0,0,0,4,1]
+];
+// name, atk%, cr, cd, ehr, em, eroDmg%, eroChance%
+const GEAR=[
+["Nyph's Sword Hilt (relic)","relic",0,8,0,0,0,0,0,1],
+["Pinnacle Radiance (relic)","relic",0,0,20,0,0,0,0,1],
+["Phantomfire Chain (relic)","relic",0,0,0,15,0,0,0,1],
+["Generic ATK relic","relic",10,0,0,0,0,0,0,1],
+["Generic Mastery relic","relic",0,0,0,0,20,0,0,1],
+["Shadow Erosion (charm)","charm",0,0,0,0,0,25,0,1],
+["Linked Misfortune (charm)","charm",0,0,0,0,0,0,15,1],
+["Night's Blessing (charm)","charm",0,0,0,10,0,0,0,1],
+["Shadow Vengeance (charm)","charm",0,0,0,0,0,0,0,1]
+];
+const GH=["","type","ATK%","Crit%","CritDmg%","EHR","Mastery","Erosion dmg%","Erosion chance%"];
+const $=id=>document.getElementById(id);
+$("stats").innerHTML=STATS.map(([k,l,v])=>`<div><label>${l}</label><input type=number id="s_${k}" value="${v}"></div>`).join("");
+$("skills").innerHTML="<tr><th>In</th><th>Skill</th><th>Kind</th><th>Power%</th><th>CD</th><th>AoE</th><th>Stacks</th><th>Apply%</th><th>Extra</th></tr>"+
+SKILLS.map((s,i)=>`<tr><td><input type=checkbox id="k${i}" ${s[8]?"checked":""}></td><td>${s[0]}</td><td>${s[1]}</td>`+
+[2,3,4,5,6,7].map(j=>`<td><input type=number id="k${i}_${j}" value="${s[j]}"></td>`).join("")+"</tr>").join("");
+$("gear").innerHTML="<tr><th>Own</th><th>Name</th>"+GH.slice(2).map(h=>`<th>${h}</th>`).join("")+"</tr>"+
+GEAR.map((g,i)=>`<tr><td><input type=checkbox id="g${i}" ${g[9]?"checked":""}></td><td>${g[0]}</td>`+
+[2,3,4,5,6,7,8].map(j=>`<td><input type=number id="g${i}_${j}" value="${g[j]}"></td>`).join("")+"</tr>").join("");
+$("slots").innerHTML=`<div><label>Skill slots</label><input type=number id="n_sk" value=4></div><div><label>Relic slots</label><input type=number id="n_rl" value=3></div><div><label>Charm slots</label><input type=number id="n_ch" value=2></div><div><label>Sim runs (accuracy)</label><input type=number id="n_runs" value=200></div>`;
+
+const num=id=>+$(id).value||0;
+function rngf(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const D=3, DOT=25; // erosion duration, dot % ATK per stack per turn
+
+function simulate(skills,base,gear,seed){
+  const st={...base};let atkP=0;
+  let eroDmg=0,eroCh=0;
+  for(const g of gear){atkP+=g.atk;st.cr+=g.cr;st.cd+=g.cdm;st.ehr+=g.ehr;st.em+=g.em;eroDmg+=g.ed;eroCh+=g.ec}
+  const atk=st.atk*(1+atkP/100),cr=Math.min(1,st.cr/100),cdm=st.cd/100;
+  const emM=1+st.em/200, T=st.turns, E=st.enemies, r=rngf(seed);
+  const dot=atk*DOT/100*emM*(1+eroDmg/100);
+  const chanceMul=1+st.ehr/100;
+  const stacks=Array.from({length:E},()=>[]);
+  const ready=skills.map(()=>0), summons=[];
+  let ampUntil=-1,ampPct=0,total=0;
+  const critEV=1+cr*(cdm-1);
+  const live=(e,t)=>stacks[e].filter(x=>x>t);
+  for(let t=0;t<T;t++){
+    const amp=t<ampUntil?1+ampPct/100:1;
+    for(let e=0;e<E;e++){stacks[e]=live(e,t-1+0);total+=stacks[e].filter(x=>x>t).length*dot*amp}
+    for(const s of summons){if(s.until>t)total+=s.dmg*amp}
+    // choose
+    let best=-1,bv=-1;
+    const remain=T-t-1;
+    skills.forEach((s,i)=>{
+      if(ready[i]>t)return;
+      const hits=s.aoe?E:1;
+      const pc=Math.min(1,(s.apply/100+eroCh/100)*chanceMul);
+      let v=0;
+      if(s.kind==="direct"){
+        const sb=1+(s.extra/100)*live(0,t).length;
+        v=hits*atk*s.power/100*emM*critEV*sb*amp+hits*pc*s.stacks*dot*Math.min(D,remain+1)*amp;
+      }else if(s.kind==="detonate"){
+        let rem=0;for(let e=0;e<(s.aoe?E:1);e++)for(const x of live(e,t))rem+=(x-t)*dot;
+        v=(rem*(1+s.extra/100)+atk*s.power/100*emM*critEV)*amp*(rem>0?1:.3);
+      }else if(s.kind==="amp"){
+        const dur=Math.min(3,remain+1);
+        v=(s.extra/100)*atk*1.2*emM*critEV*dur*E+hits*pc*s.stacks*dot*Math.min(D,remain+1);
+      }else if(s.kind==="summon"){
+        v=atk*s.power/100*emM*critEV*Math.min(s.extra,remain+1)*amp;
+      }
+      if(v>bv){bv=v;best=i}
+    });
+    if(best<0){total+=atk*0.6*emM*critEV*amp;continue}
+    const s=skills[best];ready[best]=t+s.cd+1;
+    const hits=s.aoe?E:1;
+    const crit=()=>r()<cr?cdm:1;
+    if(s.kind==="direct"){
+      for(let e=0;e<hits;e++){
+        const sb=1+(s.extra/100)*live(e,t).length;
+        total+=atk*s.power/100*emM*crit()*sb*amp;
+        const pc=Math.min(1,(s.apply/100+eroCh/100)*chanceMul);
+        for(let k=0;k<s.stacks;k++)if(r()<pc)stacks[e].push(t+D+1);
+      }
+    }else if(s.kind==="detonate"){
+      for(let e=0;e<hits;e++){
+        for(const x of live(e,t))total+=(x-t)*dot*(1+s.extra/100)*amp;
+        stacks[e]=[];
+        total+=atk*s.power/100*emM*crit()*amp;
+      }
+    }else if(s.kind==="amp"){
+      ampUntil=t+4;ampPct=Math.max(ampPct,s.extra);
+      const pc=Math.min(1,(s.apply/100+eroCh/100)*chanceMul);
+      for(let e=0;e<hits;e++)for(let k=0;k<s.stacks;k++)if(r()<pc)stacks[e].push(t+D+1);
+    }else if(s.kind==="summon"){
+      summons.push({until:t+1+s.extra,dmg:atk*s.power/100*emM*critEV});
+    }
+  }
+  return total;
+}
+function score(skills,base,gear,runs){let a=0;for(let i=0;i<runs;i++)a+=simulate(skills,base,gear,1000+i);return a/runs}
+function combos(arr,k){const out=[];(function f(s,c){if(c.length===k){out.push(c.slice());return}for(let i=s;i<arr.length;i++){c.push(arr[i]);f(i+1,c);c.pop()}})(0,[]);return out}
+const tick=()=>new Promise(r=>setTimeout(r,0));
+
+$("go").onclick=async()=>{
+  const btn=$("go");btn.disabled=true;
+  const base={};STATS.forEach(([k])=>base[k]=num("s_"+k));
+  const pool=[];SKILLS.forEach((s,i)=>{if($("k"+i).checked)pool.push({name:s[0],kind:s[1],power:num(`k${i}_2`),cd:num(`k${i}_3`),aoe:num(`k${i}_4`),stacks:num(`k${i}_5`),apply:num(`k${i}_6`),extra:num(`k${i}_7`)})});
+  const gp=[];GEAR.forEach((g,i)=>{if($("g"+i).checked){const f=j=>num(`g${i}_${j}`);gp.push({name:g[0],type:g[1],atk:f(2),cr:f(3),cdm:f(4),ehr:f(5),em:f(6),ed:f(7),ec:f(8)})}});
+  const nS=Math.min(num("n_sk"),pool.length),nR=num("n_rl"),nC=num("n_ch"),runs=Math.max(30,num("n_runs"));
+  const relics=gp.filter(g=>g.type==="relic"),charms=gp.filter(g=>g.type==="charm");
+  // stage 1: skill combos with best-case gear (all owned up to slots)
+  const stage1Gear=[...relics.slice(0,nR),...charms.slice(0,nC)];
+  const sc=combos(pool,nS);const scored=[];
+  for(let i=0;i<sc.length;i++){scored.push({sk:sc[i],v:score(sc[i],base,stage1Gear,Math.min(runs,80))});if(i%10===0){$("prog").textContent=`Skills ${i}/${sc.length}`;await tick()}}
+  scored.sort((a,b)=>b.v-a.v);const top=scored.slice(0,6);
+  // stage 2: gear combos
+  const rc=combos(relics,Math.min(nR,relics.length)),cc=combos(charms,Math.min(nC,charms.length));
+  const results=[];let n=0;const tot=top.length*rc.length*cc.length;
+  for(const t of top)for(const r of rc)for(const c of cc){
+    const g=[...r,...c];results.push({sk:t.sk,g,v:score(t.sk,base,g,runs)});
+    if(++n%20===0){$("prog").textContent=`Gear ${n}/${tot}`;await tick()}
+  }
+  results.sort((a,b)=>b.v-a.v);
+  const win=results[0],best=win.v;
+  // marginal
+  const marg=[];
+  win.sk.forEach((s,i)=>{const rest=win.sk.filter((_,j)=>j!==i);marg.push([s.name,best-score(rest,base,win.g,runs)])});
+  win.g.forEach((g,i)=>{const rest=win.g.filter((_,j)=>j!==i);marg.push([g.name,best-score(win.sk,base,rest,runs)])});
+  marg.sort((a,b)=>b[1]-a[1]);
+  const uniq=[];for(const r of results){const l=uniq[uniq.length-1];if(l&&Math.abs(l.v-r.v)<1e-6*best){l.ties=(l.ties||0)+1}else uniq.push(r)}
+  const mx=Math.max(...uniq.slice(0,8).map(r=>r.v));
+  const fmt=v=>Math.round(v).toLocaleString();
+  $("res").innerHTML=`<p><b>Best build</b> — about <b>${fmt(best)}</b> total damage over ${base.turns} turns</p>`+
+  uniq.slice(0,8).map((r,i)=>`<div style="margin-bottom:10px"><span class="rank">#${i+1}</span> ${fmt(r.v)} <span class="small">(${(100*r.v/best).toFixed(1)}% of best${r.ties?`, +${r.ties} identical-scoring variants (the swapped pieces do nothing)`:""})</span><div class="bar" style="width:${100*r.v/mx}%"></div>`+
+  r.sk.map(s=>`<span class="pill">${s.name}</span>`).join("")+" "+r.g.map(g=>`<span class="pill" style="border-color:var(--acc2)">${g.name}</span>`).join("")+"</div>").join("")+
+  `<h2 style="margin-top:14px">What each piece is worth (damage lost if removed from #1)</h2><table>`+marg.map(m=>`<tr><td>${m[0]}</td><td>${fmt(m[1])}</td><td>${(100*m[1]/best).toFixed(1)}%</td></tr>`).join("")+"</table>"+
+  `<p class="small">Pieces worth ~0% can be swapped for survival (heal/shield/cheat-death charm) at no damage cost.</p>`;
+  $("out").hidden=false;$("prog").textContent="Done";btn.disabled=false;
+  $("out").scrollIntoView({behavior:"smooth"});
+};
+</script>
+</body>
+</html>
