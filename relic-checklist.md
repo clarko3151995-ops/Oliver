@@ -61,7 +61,7 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 - [x] Spark Boomerang (owned, +14)
 - [x] Mirage Tinder Box
 
-### Rare (20) — 18/20 detailed (low priority)
+### Rare (20) — 20/20 detailed
 - [x] Luminous Silhouette (owned, +14)
 - [x] Star Ladybug (owned, +14)
 - [x] Lunaglow Pendant
@@ -80,8 +80,8 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 - [x] Crystal Leaf (owned, +14)
 - [x] Muddy Wax Seal (owned, +14)
 - [x] Charstnut (owned, +14)
-- [ ] Firebird Quill (owned per Searing Marks 4/4 — card still needed)
-- [ ] Mystic Firestone (owned per Searing Marks 4/4 — card still needed)
+- [x] Firebird Quill (owned, +14)
+- [x] Mystic Firestone (owned, +14)
 
 ## Other regions (gallery tabs seen: Cinder Ridge, Aqualis, Loong Ha... and more)
 Gallery screenshots not sent yet, so full lists are unknown. Relics seen only by name inside Verdantglade set lists
