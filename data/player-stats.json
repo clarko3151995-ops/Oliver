@@ -179,18 +179,74 @@
   "fantomon_rules": "1 main (100% stats), 3 sub (50%), undeployed (20%); Fantasmia +50 per turn end, +6 per 1% max HP lost",
   "displayed_relics_seen": {
     "Light": [
-      "Horn of Abundance (+ others)"
+      "winged chest",
+      "crystal on cloud",
+      "Horn of Abundance",
+      "golden wings"
     ],
     "Dark": [
-      "Night's Vanity Mirror",
-      "Doomsday Chronometer"
+      "Doomsday Chronometer",
+      "purple crystal (unseen card)",
+      "purple armor (unseen card)",
+      "Night's Vanity Mirror"
     ],
-    "Fire": [
-      "Phantomfire Chain"
+    "Wind": [
+      "jade gauntlet",
+      "jade dragon",
+      "crescent weapon",
+      "jade bag (Mythic)"
     ],
     "Water": [
-      "Blue Enigma"
+      "water splash",
+      "blue egg (Mythic)",
+      "Blue Enigma",
+      "shell/turtle (Mythic)"
+    ],
+    "Fire": [
+      "basket (Mythic)",
+      "axe-dagger",
+      "dragon helmet",
+      "Phantomfire Chain"
     ]
   },
-  "displayed_relics_note": "Inferred from +20% marks on relic cards; full per-element displays still to be confirmed by screenshots."
+  "displayed_relics_note": "Identified from the Relic display tabs; names without a card are icon descriptions only (Aqualis/Loong Ha relics not yet sent).",
+  "relic_elements": {
+    "Light": {
+      "count": "61/280",
+      "affinity": 9240,
+      "aegis": 6480,
+      "resonance_level": 14
+    },
+    "Dark": {
+      "count": "61/271",
+      "affinity": 6050,
+      "aegis": 8830,
+      "resonance_level": 14
+    },
+    "Wind": {
+      "count": "53/277",
+      "affinity": 5820,
+      "aegis": 5810,
+      "resonance_level": 14
+    },
+    "Water": {
+      "count": "61/278",
+      "affinity": 7700,
+      "aegis": 5860,
+      "resonance_level": 14
+    },
+    "Fire": {
+      "count": "58/276",
+      "affinity": 7490,
+      "aegis": 6660,
+      "resonance_level": 14
+    },
+    "other_tabs": "2 more tabs (puzzle icon + one more) not yet seen"
+  },
+  "relic_scaling_observed": {
+    "level_multiplier": "element stat at +14 = 2.625x base at +0 for every rarity (Mythic 200->525, Legendary 120->315, Epic 80->210, Rare 40->105). Approx 1 + 0.116*level.",
+    "star_bonus": "each awakened star adds about +10% to element stat (Legendary 315 -> 346 at 1 star; Rare 105 -> 115 -> 126).",
+    "display_bonus": "+20% on displayed relic's element stat and effects",
+    "implication": "+1 slot level on all 4 slots of an element raises every relic of that element by ~4.4% at level 14"
+  }
 }
