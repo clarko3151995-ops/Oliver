@@ -61,27 +61,27 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 - [x] Spark Boomerang (owned, +14)
 - [x] Mirage Tinder Box
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Luminous Silhouette
-- [ ] Star Ladybug
-- [ ] Lunaglow Pendant
-- [ ] Explorer's Lens
-- [ ] Goblin's Fang
-- [ ] Goblin's Wig
-- [ ] Goblin Bone Armor
-- [ ] Goblin's Whiskers
-- [ ] Fruit of Retribution
-- [ ] Whispers of the Wind
-- [ ] Wreath of Peace
-- [ ] Leaf Windmill
-- [ ] Pearl Bracelet
-- [ ] Ripple Stone
-- [ ] Drifting Bottle
-- [ ] Crystal Leaf
-- [ ] Muddy Wax Seal
-- [ ] Charstnut
-- [ ] Firebird Quill
-- [ ] Mystic Firestone
+### Rare (20) — 18/20 detailed (low priority)
+- [x] Luminous Silhouette (owned, +14)
+- [x] Star Ladybug (owned, +14)
+- [x] Lunaglow Pendant
+- [x] Explorer's Lens (owned, +14)
+- [x] Goblin's Fang (owned, +14)
+- [x] Goblin's Wig (owned, +14)
+- [x] Goblin Bone Armor (owned, +14)
+- [x] Goblin's Whiskers
+- [x] Fruit of Retribution (owned, +14)
+- [x] Whispers of the Wind (owned, +14)
+- [x] Wreath of Peace (owned, +14)
+- [x] Leaf Windmill (owned, +14)
+- [x] Pearl Bracelet
+- [x] Ripple Stone (owned, +14)
+- [x] Drifting Bottle (owned, +14)
+- [x] Crystal Leaf (owned, +14)
+- [x] Muddy Wax Seal (owned, +14)
+- [x] Charstnut (owned, +14)
+- [ ] Firebird Quill (owned per Searing Marks 4/4 — card still needed)
+- [ ] Mystic Firestone (owned per Searing Marks 4/4 — card still needed)
 
 ## Other regions (gallery tabs seen: Cinder Ridge, Aqualis, Loong Ha... and more)
 Gallery screenshots not sent yet, so full lists are unknown. Relics seen only by name inside Verdantglade set lists
