@@ -86,17 +86,17 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 ## Cinder Ridge (Machina Trove) — 70 relics, gallery counter 40/70
 Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantglade set lists). Others unknown until detail cards arrive.
 
-### Mythic (10) — 0/10 detailed — send these first
-- [ ] Prime Dynamo
-- [ ] Pinnacle Radiance
-- [ ] Doomsday Chronometer
-- [ ] Clockwork Arcanum
-- [ ] Scales of Order
-- [ ] Eternal Gale Wheel
-- [ ] Sandfall Sarcophagus
-- [ ] Genesis Dew
-- [ ] Everburn Throne
-- [ ] Ignis Oculus
+### Mythic (10) — 10/10 detailed
+- [x] Prime Dynamo
+- [x] Pinnacle Radiance (owned, +14)
+- [x] Doomsday Chronometer (owned, +14, slotted)
+- [x] Clockwork Arcanum
+- [x] Scales of Order
+- [x] Eternal Gale Wheel
+- [x] Sandfall Sarcophagus
+- [x] Genesis Dew
+- [x] Everburn Throne
+- [x] Ignis Oculus
 
 ### Legendary (20) — 0/20 detailed
 - [ ] Crown of Unbinding

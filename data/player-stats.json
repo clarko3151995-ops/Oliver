@@ -1,35 +1,184 @@
 {
   "_note": "Captured from the in-game Character Stats screen (General + Details tabs). No name/ID. Class: Dominator (Tier 4), Class Lv 192, char Lv 135. Tier 5 unlock expected soon.",
   "totals": {
-    "ATK": 489000, "DEF": 480000, "HP": 2680000, "SPD": 405000,
-    "CritRatePct": 22.9, "CritDMGPct": 70.2, "CritRESPct": 31.8,
-    "BlockRatePct": 18.3, "BlockEfficiencyPct": 106.2, "AccuracyPct": 25,
-    "DMGBoostPct": 42.6, "DMGRESPct": 32.1, "HealingBoostPct": 22.8,
-    "PvEBonusDMGPct": 12.5, "PvEDMGRESPct": 11.5,
-    "EffectHitRate": 14900, "EffectRES": 18300,
-    "ElementalMastery": 31700, "ElementalRES": 6270,
-    "PhysicalMastery": 15600, "PhysicalRES": 36100,
-    "Affinity": {"Wind": 5820, "Water": 7700, "Fire": 7490, "Light": 9240, "Dark": 6050},
-    "Aegis": {"Wind": 5810, "Water": 5860, "Fire": 6660, "Light": 6480, "Dark": 8830}
+    "ATK": 489000,
+    "DEF": 480000,
+    "HP": 2680000,
+    "SPD": 405000,
+    "CritRatePct": 22.9,
+    "CritDMGPct": 70.2,
+    "CritRESPct": 31.8,
+    "BlockRatePct": 18.3,
+    "BlockEfficiencyPct": 106.2,
+    "AccuracyPct": 25,
+    "DMGBoostPct": 42.6,
+    "DMGRESPct": 32.1,
+    "HealingBoostPct": 22.8,
+    "PvEBonusDMGPct": 12.5,
+    "PvEDMGRESPct": 11.5,
+    "EffectHitRate": 14900,
+    "EffectRES": 18300,
+    "ElementalMastery": 31700,
+    "ElementalRES": 6270,
+    "PhysicalMastery": 15600,
+    "PhysicalRES": 36100,
+    "Affinity": {
+      "Wind": 5820,
+      "Water": 7700,
+      "Fire": 7490,
+      "Light": 9240,
+      "Dark": 6050
+    },
+    "Aegis": {
+      "Wind": 5810,
+      "Water": 5860,
+      "Fire": 6660,
+      "Light": 6480,
+      "Dark": 8830
+    }
   },
   "sources": {
-    "character_base": {"ATK": 23700, "DEF": 23700, "HP": 118000, "SPD": 18900, "CritDMGPct": 50, "BlockEfficiencyPct": 100},
-    "class": {"ATK": 18600, "DEF": 18400, "HP": 92400, "SPD": 13800, "CritRESPct": 10, "HealingBoostPct": 20},
-    "companion": {"ATK": 56500, "DEF": 54900, "HP": 298000, "SPD": 55700, "CritRatePct": 5, "CritRESPct": 5, "BlockRatePct": 3, "AccuracyPct": 4, "DMGBoostPct": 22, "DMGRESPct": 18},
-    "gear": {"ATK": 86400, "DEF": 71700, "HP": 665000, "SPD": 85200, "EffectHitRate": 2960, "EffectRES": 5360, "CritDMGPct": 11.2, "BlockRatePct": 4.16, "BlockEfficiencyPct": 6.24, "AccuracyPct": 4.62, "ElementalMastery": 28900, "ElementalRES": 3420, "PhysicalMastery": 3420, "PhysicalRES": 31400},
-    "relics": {"ATK": 146000, "DEF": 147000, "HP": 781000, "SPD": 136000, "EffectHitRate": 12000, "EffectRES": 12900, "CritRatePct": 6, "CritDMGPct": 9, "CritRESPct": 9.6, "BlockRatePct": 9, "AccuracyPct": 11.6, "DMGBoostPct": 12, "DMGRESPct": 8.7, "ElementalMastery": 2850, "ElementalRES": 2850, "PhysicalMastery": 12100, "PhysicalRES": 4760, "AffinityAegis": "same as totals above (relics are the only source)"},
-    "inlay": {"ATK": 48800, "DEF": 48800, "HP": 182000, "SPD": 6680, "DMGBoostPct": 0.8, "DMGRESPct": 0.8, "HealingBoostPct": 2.8},
-    "dish": {"ATK": 9200, "DEF": 15300, "HP": 67300, "SPD": 10100},
-    "map_exploration": {"ATK": 9390, "DEF": 9510, "HP": 47100, "SPD": 8020, "CritRatePct": 5.6, "CritRESPct": 5.6, "PvEBonusDMGPct": 8, "PvEDMGRESPct": 8},
-    "fantomon": {"ATK": 79800, "DEF": 80900, "HP": 381000, "SPD": 62200, "CritRatePct": 4.8, "CritRESPct": 1.1, "BlockRatePct": 2.2, "AccuracyPct": 4.8, "DMGBoostPct": 2.3, "DMGRESPct": 1.1},
-    "guild": {"ATK": 2780, "DEF": 2780, "HP": 10800, "SPD": 2720, "CritRatePct": 1.5, "CritRESPct": 0.5, "DMGBoostPct": 1.5, "DMGRESPct": 1.5, "PvEBonusDMGPct": 1.5, "PvEDMGRESPct": 1.5},
-    "visage": {"ATK": 1850, "DEF": 1850, "HP": 9280, "SPD": 1480, "PvEBonusDMGPct": 3, "PvEDMGRESPct": 2},
-    "astral_destiny": {"ATK": 5260, "DEF": 5260, "HP": 24700, "SPD": 3960, "DMGBoostPct": 4, "DMGRESPct": 2}
+    "character_base": {
+      "ATK": 23700,
+      "DEF": 23700,
+      "HP": 118000,
+      "SPD": 18900,
+      "CritDMGPct": 50,
+      "BlockEfficiencyPct": 100
+    },
+    "class": {
+      "ATK": 18600,
+      "DEF": 18400,
+      "HP": 92400,
+      "SPD": 13800,
+      "CritRESPct": 10,
+      "HealingBoostPct": 20
+    },
+    "companion": {
+      "ATK": 56500,
+      "DEF": 54900,
+      "HP": 298000,
+      "SPD": 55700,
+      "CritRatePct": 5,
+      "CritRESPct": 5,
+      "BlockRatePct": 3,
+      "AccuracyPct": 4,
+      "DMGBoostPct": 22,
+      "DMGRESPct": 18
+    },
+    "gear": {
+      "ATK": 86400,
+      "DEF": 71700,
+      "HP": 665000,
+      "SPD": 85200,
+      "EffectHitRate": 2960,
+      "EffectRES": 5360,
+      "CritDMGPct": 11.2,
+      "BlockRatePct": 4.16,
+      "BlockEfficiencyPct": 6.24,
+      "AccuracyPct": 4.62,
+      "ElementalMastery": 28900,
+      "ElementalRES": 3420,
+      "PhysicalMastery": 3420,
+      "PhysicalRES": 31400
+    },
+    "relics": {
+      "ATK": 146000,
+      "DEF": 147000,
+      "HP": 781000,
+      "SPD": 136000,
+      "EffectHitRate": 12000,
+      "EffectRES": 12900,
+      "CritRatePct": 6,
+      "CritDMGPct": 9,
+      "CritRESPct": 9.6,
+      "BlockRatePct": 9,
+      "AccuracyPct": 11.6,
+      "DMGBoostPct": 12,
+      "DMGRESPct": 8.7,
+      "ElementalMastery": 2850,
+      "ElementalRES": 2850,
+      "PhysicalMastery": 12100,
+      "PhysicalRES": 4760,
+      "AffinityAegis": "same as totals above (relics are the only source)"
+    },
+    "inlay": {
+      "ATK": 48800,
+      "DEF": 48800,
+      "HP": 182000,
+      "SPD": 6680,
+      "DMGBoostPct": 0.8,
+      "DMGRESPct": 0.8,
+      "HealingBoostPct": 2.8
+    },
+    "dish": {
+      "ATK": 9200,
+      "DEF": 15300,
+      "HP": 67300,
+      "SPD": 10100
+    },
+    "map_exploration": {
+      "ATK": 9390,
+      "DEF": 9510,
+      "HP": 47100,
+      "SPD": 8020,
+      "CritRatePct": 5.6,
+      "CritRESPct": 5.6,
+      "PvEBonusDMGPct": 8,
+      "PvEDMGRESPct": 8
+    },
+    "fantomon": {
+      "ATK": 79800,
+      "DEF": 80900,
+      "HP": 381000,
+      "SPD": 62200,
+      "CritRatePct": 4.8,
+      "CritRESPct": 1.1,
+      "BlockRatePct": 2.2,
+      "AccuracyPct": 4.8,
+      "DMGBoostPct": 2.3,
+      "DMGRESPct": 1.1
+    },
+    "guild": {
+      "ATK": 2780,
+      "DEF": 2780,
+      "HP": 10800,
+      "SPD": 2720,
+      "CritRatePct": 1.5,
+      "CritRESPct": 0.5,
+      "DMGBoostPct": 1.5,
+      "DMGRESPct": 1.5,
+      "PvEBonusDMGPct": 1.5,
+      "PvEDMGRESPct": 1.5
+    },
+    "visage": {
+      "ATK": 1850,
+      "DEF": 1850,
+      "HP": 9280,
+      "SPD": 1480,
+      "PvEBonusDMGPct": 3,
+      "PvEDMGRESPct": 2
+    },
+    "astral_destiny": {
+      "ATK": 5260,
+      "DEF": 5260,
+      "HP": 24700,
+      "SPD": 3960,
+      "DMGBoostPct": 4,
+      "DMGRESPct": 2
+    }
   },
   "game_rules_from_player": {
     "relic_slots": 4,
     "slotted_relic_bonus": "+20% of that relic's own stats (incl. Affinity/Aegis)",
     "owned_relics": "every owned relic gives its flat stats whether slotted or not"
   },
-  "fantomon_rules": "1 main (100% stats), 3 sub (50%), undeployed (20%); Fantasmia +50 per turn end, +6 per 1% max HP lost"
+  "fantomon_rules": "1 main (100% stats), 3 sub (50%), undeployed (20%); Fantasmia +50 per turn end, +6 per 1% max HP lost",
+  "slotted_relics_inferred": [
+    "Horn of Abundance",
+    "Phantomfire Chain",
+    "Night's Vanity Mirror",
+    "Doomsday Chronometer"
+  ],
+  "slotted_relics_note": "Inferred from orange +20% marks on the relic cards; confirm with player."
 }
