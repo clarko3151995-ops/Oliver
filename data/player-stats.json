@@ -169,17 +169,28 @@
     }
   },
   "game_rules_from_player": {
-    "relic_slots": 4,
-    "slotted_relic_bonus": "+20% of that relic's own stats (incl. Affinity/Aegis)",
-    "owned_relics": "every owned relic gives its flat stats whether slotted or not"
+    "relic_display_slots": "4 slots PER ELEMENT tab (tabs seen: Light, Dark, Wind, Water, Fire + 2 more). Resonance Level = lowest slot level in that element (currently 14 on Light).",
+    "display_bonus": "Elemental stats and effects of relics on display (slotted) get +20%.",
+    "owned_relics": "Every owned relic gives its flat stats whether displayed or not (collection-based).",
+    "unslotted_level": "Unslotted relics take the lowest slot level of their element.",
+    "affinity": "Per Prydwen beginner guide: Elemental Affinity improves damage of that element together with Mastery; each Affinity also slightly raises Physical Mastery. Aegis presumably defensive (unconfirmed).",
+    "season": "Relic slot levels above the season threshold reset at new season (guide: +10 older text / 10% of account-level threshold)."
   },
   "fantomon_rules": "1 main (100% stats), 3 sub (50%), undeployed (20%); Fantasmia +50 per turn end, +6 per 1% max HP lost",
-  "slotted_relics_inferred": [
-    "Horn of Abundance",
-    "Phantomfire Chain",
-    "Night's Vanity Mirror",
-    "Doomsday Chronometer",
-    "Blue Enigma"
-  ],
-  "slotted_relics_note": "Five relics show orange +20% marks but player says 4 slots. Needs confirmation (maybe 5 slots or one +20% has another source)."
+  "displayed_relics_seen": {
+    "Light": [
+      "Horn of Abundance (+ others)"
+    ],
+    "Dark": [
+      "Night's Vanity Mirror",
+      "Doomsday Chronometer"
+    ],
+    "Fire": [
+      "Phantomfire Chain"
+    ],
+    "Water": [
+      "Blue Enigma"
+    ]
+  },
+  "displayed_relics_note": "Inferred from +20% marks on relic cards; full per-element displays still to be confirmed by screenshots."
 }
