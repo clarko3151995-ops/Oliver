@@ -39,27 +39,27 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 - [x] Ashen Hoop (owned, +14)
 - [x] Burst Arrow
 
-### Epic (20) — 0/20 detailed
-- [ ] Mystic Scarab
-- [ ] Dawn's Scroll
-- [ ] Glowshroom Cap
-- [ ] Prismwing
-- [ ] Spiderweb Eyepatch
-- [ ] Crystal of Phantasma
-- [ ] Scorpion Tail Brooch
-- [ ] Crown of Tendrils
-- [ ] Fox Hunter's Claw
-- [ ] Windrunner's Sling
-- [ ] Windwhisper's Flute
-- [ ] Scout's Whistle
-- [ ] Waterflow Veil
-- [ ] Lucky Dewdrop Vial
-- [ ] Hunter's Requiem
-- [ ] Bubble Tube
-- [ ] Flame Dancer
-- [ ] Fire Serpent Belt
-- [ ] Spark Boomerang
-- [ ] Mirage Tinder Box
+### Epic (20) — 20/20 detailed
+- [x] Mystic Scarab (owned, +14)
+- [x] Dawn's Scroll
+- [x] Glowshroom Cap (owned, +14)
+- [x] Prismwing
+- [x] Spiderweb Eyepatch (owned, +14)
+- [x] Crystal of Phantasma (owned, +14)
+- [x] Scorpion Tail Brooch (owned, +14)
+- [x] Crown of Tendrils (owned, +14)
+- [x] Fox Hunter's Claw (owned, +14)
+- [x] Windrunner's Sling (owned, +14)
+- [x] Windwhisper's Flute (owned, +14)
+- [x] Scout's Whistle (owned, +14)
+- [x] Waterflow Veil (owned, +14)
+- [x] Lucky Dewdrop Vial (owned, +14)
+- [x] Hunter's Requiem (owned, +14)
+- [x] Bubble Tube (owned, +14)
+- [x] Flame Dancer (owned, +14)
+- [x] Fire Serpent Belt
+- [x] Spark Boomerang (owned, +14)
+- [x] Mirage Tinder Box
 
 ### Rare (20) — 0/20 detailed (low priority)
 - [ ] Luminous Silhouette
