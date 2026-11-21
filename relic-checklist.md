@@ -83,20 +83,88 @@ Source: relic gallery screenshots (Verdantglade tab = 70 relics). Gallery counte
 - [x] Firebird Quill (owned, +14)
 - [x] Mystic Firestone (owned, +14)
 
-## Other regions (gallery tabs seen: Cinder Ridge, Aqualis, Loong Ha... and more)
-Gallery screenshots not sent yet, so full lists are unknown. Relics seen only by name inside Verdantglade set lists
-(they belong to other tabs) — need detail cards:
-- [ ] Pinnacle Radiance (owned; Crit DMG per guide) — Elysian Radiance set
-- [ ] Prime Dynamo — Elysian Radiance set
-- [ ] Doomsday Chronometer (owned) — Eternal Darkness set
-- [ ] Clockwork Arcanum — Eternal Darkness set
-- [ ] Everburn Throne — Pyre of Dooming World set
-- [ ] Ignis Oculus — Pyre of Dooming World set
-- [ ] Genesis Dew — Spring of Life's Flux set
-- [ ] Sandfall Sarcophagus — Spring of Life's Flux set
-- [ ] Scales of Order — Wind of Unchained Horizons set
-- [ ] Eternal Gale Wheel — Wind of Unchained Horizons set
-- [ ] Gallery overview: Cinder Ridge (Machina Trove)
+## Cinder Ridge (Machina Trove) — 70 relics, gallery counter 40/70
+Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantglade set lists). Others unknown until detail cards arrive.
+
+### Mythic (10) — 0/10 detailed — send these first
+- [ ] Prime Dynamo
+- [ ] Pinnacle Radiance
+- [ ] Doomsday Chronometer
+- [ ] Clockwork Arcanum
+- [ ] Scales of Order
+- [ ] Eternal Gale Wheel
+- [ ] Sandfall Sarcophagus
+- [ ] Genesis Dew
+- [ ] Everburn Throne
+- [ ] Ignis Oculus
+
+### Legendary (20) — 0/20 detailed
+- [ ] Crown of Unbinding
+- [ ] Omniscient Satchel
+- [ ] Astral Gauntlets
+- [ ] Luminous Edict
+- [ ] Pandemonium Ingot
+- [ ] Phantom Hourglass
+- [ ] Eclipse Mirror
+- [ ] Abyssal Glyph Whip
+- [ ] Fate's Grand Banner
+- [ ] Stormswallow Medal
+- [ ] Frostbite Lance
+- [ ] Heat Propulsor
+- [ ] Blue Enigma
+- [ ] Mirror of Reflections
+- [ ] Waterfowl Charm
+- [ ] Frost Casket
+- [ ] Starcleaver
+- [ ] Geocore Tablet
+- [ ] Ouroboros Charm
+- [ ] Carapace Flamethrower
+
+### Epic (20) — 0/20 detailed
+- [ ] Thunderbolt Maul
+- [ ] Gold Seeker
+- [ ] Warm Lantern
+- [ ] Luminbomb
+- [ ] Exile's Shackles
+- [ ] Cogwork Blocks
+- [ ] Arcane Doll
+- [ ] Spellblade Fetters
+- [ ] Mechanical Arrow
+- [ ] Windrend Shell
+- [ ] Megastinger
+- [ ] Awakening Hammer
+- [ ] Dunescale
+- [ ] Sand Ship Model
+- [ ] Shellhaven
+- [ ] Sage Jellyfish Helm
+- [ ] Quake Pick
+- [ ] Pyrecrown
+- [ ] Ignic Loop
+- [ ] Blade Saw
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Lunaglow Beacon
+- [ ] Golden Ox Necklace
+- [ ] Starlight Quill
+- [ ] Radiant Orb
+- [ ] Dark Gold Lockpick
+- [ ] Mecha Wraith Drill
+- [ ] Runic Wheel
+- [ ] Golem's Broken Arm
+- [ ] Storm Leaf
+- [ ] Traveler's Timepiece
+- [ ] Windemon Graver
+- [ ] Windchaser's Wings
+- [ ] Mithril Flask
+- [ ] Hot Spring Crab Shell
+- [ ] Crystal Spiral Conch
+- [ ] Oasis Pass
+- [ ] Searing Volcano
+- [ ] Silence Bullet
+- [ ] Ancient Beast Fossil
+- [ ] Shattered Gear
+
+## Other regions still to send
 - [ ] Gallery overview: Aqualis (Ukiyo Tales)
 - [ ] Gallery overview: Loong Ha… (Celestial Cra…) and any tabs further right
 
