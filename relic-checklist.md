@@ -98,27 +98,27 @@ Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantgl
 - [x] Everburn Throne
 - [x] Ignis Oculus
 
-### Legendary (20) — 0/20 detailed
-- [ ] Crown of Unbinding
-- [ ] Omniscient Satchel
-- [ ] Astral Gauntlets
-- [ ] Luminous Edict
-- [ ] Pandemonium Ingot
-- [ ] Phantom Hourglass
-- [ ] Eclipse Mirror
-- [ ] Abyssal Glyph Whip
-- [ ] Fate's Grand Banner
-- [ ] Stormswallow Medal
-- [ ] Frostbite Lance
-- [ ] Heat Propulsor
-- [ ] Blue Enigma
-- [ ] Mirror of Reflections
-- [ ] Waterfowl Charm
-- [ ] Frost Casket
-- [ ] Starcleaver
-- [ ] Geocore Tablet
-- [ ] Ouroboros Charm
-- [ ] Carapace Flamethrower
+### Legendary (20) — 20/20 detailed
+- [x] Crown of Unbinding
+- [x] Omniscient Satchel
+- [x] Astral Gauntlets
+- [x] Luminous Edict
+- [x] Pandemonium Ingot (owned, +14)
+- [x] Phantom Hourglass (owned, +14)
+- [x] Eclipse Mirror
+- [x] Abyssal Glyph Whip
+- [x] Fate's Grand Banner
+- [x] Stormswallow Medal
+- [x] Frostbite Lance
+- [x] Heat Propulsor (owned, +14)
+- [x] Blue Enigma (owned, +14, shows +20% marks)
+- [x] Mirror of Reflections
+- [x] Waterfowl Charm
+- [x] Frost Casket
+- [x] Starcleaver
+- [x] Geocore Tablet (owned, +14)
+- [x] Ouroboros Charm
+- [x] Carapace Flamethrower (owned, +14)
 
 ### Epic (20) — 0/20 detailed
 - [ ] Thunderbolt Maul
