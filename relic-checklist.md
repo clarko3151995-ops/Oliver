@@ -292,27 +292,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Qilin Jade (owned, +14)
 - [x] Mountsplitter (owned, +14)
 
-### Epic (20) — 0/20 detailed
-- [ ] Thunderpulse Drum
-- [ ] Rooster of Dawn
-- [ ] Jade Chime
-- [ ] Jade in Gold
-- [ ] White Lotus Ocarina
-- [ ] Spirit Ward Mask
-- [ ] Coiled Serpent
-- [ ] Shaman's Vessel
-- [ ] Boshan Censer
-- [ ] Moon Pipa
-- [ ] Wind Whisk
-- [ ] Divine Banner
-- [ ] Pisces Pendant
-- [ ] Water Gourd
-- [ ] Floodtamer's Codex
-- [ ] Tidebreaker Rule
-- [ ] Fire Spirit Flute
-- [ ] Scorched Tail Qin
-- [ ] Ox Lantern
-- [ ] Fire Beacon
+### Epic (20) — 20/20 detailed (all owned)
+- [x] Thunderpulse Drum (owned, +14)
+- [x] Rooster of Dawn (owned, +14)
+- [x] Jade Chime (owned, +14)
+- [x] Jade in Gold (owned, +14)
+- [x] White Lotus Ocarina (owned, +14)
+- [x] Spirit Ward Mask (owned, +14)
+- [x] Coiled Serpent (owned, +14)
+- [x] Shaman's Vessel (owned, +14)
+- [x] Boshan Censer (owned, +14)
+- [x] Moon Pipa (owned, +14)
+- [x] Wind Whisk (owned, +14)
+- [x] Divine Banner (owned, +14)
+- [x] Pisces Pendant (owned, +14)
+- [x] Water Gourd (owned, +14)
+- [x] Floodtamer's Codex (owned, +14)
+- [x] Tidebreaker Rule (owned, +14)
+- [x] Fire Spirit Flute (owned, +14)
+- [x] Scorched Tail Qin (owned, +14)
+- [x] Ox Lantern (owned, +14)
+- [x] Fire Beacon (owned, +14)
 
 ### Rare (20) — 0/20 detailed (low priority)
 - [ ] Nightshine
