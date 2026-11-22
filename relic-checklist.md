@@ -142,27 +142,27 @@ Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantgl
 - [x] Ignic Loop
 - [x] Blade Saw
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Lunaglow Beacon
-- [ ] Golden Ox Necklace
-- [ ] Starlight Quill
-- [ ] Radiant Orb
-- [ ] Dark Gold Lockpick
-- [ ] Mecha Wraith Drill
-- [ ] Runic Wheel
-- [ ] Golem's Broken Arm
-- [ ] Storm Leaf
-- [ ] Traveler's Timepiece
-- [ ] Windemon Graver
-- [ ] Windchaser's Wings
-- [ ] Mithril Flask
-- [ ] Hot Spring Crab Shell
-- [ ] Crystal Spiral Conch
-- [ ] Oasis Pass
-- [ ] Searing Volcano
-- [ ] Silence Bullet
-- [ ] Ancient Beast Fossil
-- [ ] Shattered Gear
+### Rare (20) — 20/20 detailed
+- [x] Lunaglow Beacon (owned, +14)
+- [x] Golden Ox Necklace (owned, +14)
+- [x] Starlight Quill (owned, +14)
+- [x] Radiant Orb (owned, +14)
+- [x] Dark Gold Lockpick (owned, +14)
+- [x] Mecha Wraith Drill (owned, +14)
+- [x] Runic Wheel (owned, +14)
+- [x] Golem's Broken Arm (owned, +14)
+- [x] Storm Leaf (owned, +14)
+- [x] Traveler's Timepiece (owned, +14)
+- [x] Windemon Graver (owned, +14)
+- [x] Windchaser's Wings
+- [x] Mithril Flask (owned, +14)
+- [x] Hot Spring Crab Shell (owned, +14)
+- [x] Crystal Spiral Conch (owned, +14)
+- [x] Oasis Pass (owned, +14)
+- [x] Searing Volcano (owned, +14)
+- [x] Silence Bullet (owned, +14)
+- [x] Ancient Beast Fossil (owned, +14)
+- [x] Shattered Gear (owned, +14)
 
 ## Aqualis (Ukiyo Tales) — 70 relics, gallery counter 59/70
 Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display (Soulkeeper's Armor, Yomi Fang?) likely live here.
