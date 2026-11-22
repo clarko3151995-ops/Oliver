@@ -120,27 +120,27 @@ Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantgl
 - [x] Ouroboros Charm
 - [x] Carapace Flamethrower (owned, +14)
 
-### Epic (20) — 0/20 detailed
-- [ ] Thunderbolt Maul
-- [ ] Gold Seeker
-- [ ] Warm Lantern
-- [ ] Luminbomb
-- [ ] Exile's Shackles
-- [ ] Cogwork Blocks
-- [ ] Arcane Doll
-- [ ] Spellblade Fetters
-- [ ] Mechanical Arrow
-- [ ] Windrend Shell
-- [ ] Megastinger
-- [ ] Awakening Hammer
-- [ ] Dunescale
-- [ ] Sand Ship Model
-- [ ] Shellhaven
-- [ ] Sage Jellyfish Helm
-- [ ] Quake Pick
-- [ ] Pyrecrown
-- [ ] Ignic Loop
-- [ ] Blade Saw
+### Epic (20) — 20/20 detailed
+- [x] Thunderbolt Maul (owned, +14)
+- [x] Gold Seeker (owned, +14)
+- [x] Warm Lantern (owned, +14)
+- [x] Luminbomb (owned, +14)
+- [x] Exile's Shackles
+- [x] Cogwork Blocks (owned, +14)
+- [x] Arcane Doll (owned, +14)
+- [x] Spellblade Fetters (owned, +14)
+- [x] Mechanical Arrow
+- [x] Windrend Shell (owned, +14)
+- [x] Megastinger
+- [x] Awakening Hammer
+- [x] Dunescale (owned, +14)
+- [x] Sand Ship Model (owned, +14)
+- [x] Shellhaven (owned, +14)
+- [x] Sage Jellyfish Helm (owned, +14)
+- [x] Quake Pick (owned, +14)
+- [x] Pyrecrown
+- [x] Ignic Loop
+- [x] Blade Saw
 
 ### Rare (20) — 0/20 detailed (low priority)
 - [ ] Lunaglow Beacon
