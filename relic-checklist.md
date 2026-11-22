@@ -450,27 +450,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [ ] Ashen Wrath
 - [ ] Ode of the Doomed
 
-### Legendary (20) — 0/20 detailed
-- [ ] Holy Grail
-- [ ] Golden Messenger
-- [ ] Guiding Beacon
-- [ ] Fate Dice
-- [ ] Black Cleaver
-- [ ] Smoky Pot
-- [ ] Darkmoon Candlestick
-- [ ] Shadebound Blocks
-- [ ] Tempest Eye
-- [ ] Wind's Edict
-- [ ] Auroral Casket
-- [ ] Supportive Mecha
-- [ ] Frostbite Dagger
-- [ ] Thalasson Hatchling
-- [ ] Raging Arcane Cannon
-- [ ] Frigid Bow
-- [ ] Scorching Sands
-- [ ] Firewyrm Saddle
-- [ ] Fiery Rose
-- [ ] Flame Conqueror
+### Legendary (20) — 20/20 detailed (7 owned)
+- [x] Holy Grail (owned, +14)
+- [x] Golden Messenger
+- [x] Guiding Beacon (owned, +14)
+- [x] Fate Dice
+- [x] Black Cleaver (owned, +14)
+- [x] Smoky Pot
+- [x] Darkmoon Candlestick (owned, +14)
+- [x] Shadebound Blocks
+- [x] Tempest Eye (owned, +14)
+- [x] Wind's Edict
+- [x] Auroral Casket
+- [x] Supportive Mecha
+- [x] Frostbite Dagger
+- [x] Thalasson Hatchling (owned, +14)
+- [x] Raging Arcane Cannon
+- [x] Frigid Bow
+- [x] Scorching Sands
+- [x] Firewyrm Saddle
+- [x] Fiery Rose (owned, +14)
+- [x] Flame Conqueror
 
 ### Epic (20) — 0/20 detailed
 - [ ] Lion Key
