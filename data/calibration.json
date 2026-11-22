@@ -35,5 +35,14 @@
   "active_buffs": [
     "Mantra of Blessings: +21% DMG Bonus (Mythic 5-star, Lv 136), applied to highest-ATK ally = the player"
   ],
-  "residual_defense_and_affinity_factor": 0.763
+  "residual_defense_and_affinity_factor": 0.763,
+  "dummy_test": {
+    "setting": "In-game Test: Minion Monster Master 01, HP unlimited, monster damage extremely low, same stat monster as the Dark Bullet hit",
+    "rounds": 10,
+    "character_action_turns": 12,
+    "total_damage": 24700000,
+    "avg_damage_per_turn": 2060000,
+    "loadout": "'Support' preset (4 techniques + 4 charms + Nyxarchon); exact names not yet confirmed",
+    "note": "Master 01 rank implies hidden divisors Base Elemental Add 9,819 and Base Elemental Mastery 195,002 (wiki table, Master I level 140)."
+  }
 }

@@ -145,7 +145,7 @@ const SUMMON={
 const STAT_FIELDS=[['ATK','ATK',511000],['dmg','DMG Boost %',42.6],['cr','Crit Rate %',22.9],['cd','Crit DMG %',70.2],['ehr','Effect Hit Rate',14900],['em','Elemental Mastery',31800],['pm','Physical Mastery',15600],
  ['aD','Dark Affinity',6370],['aF','Fire Affinity',7590],['aW','Water Affinity',7700],['aI','Wind Affinity',5840],['aL','Light Affinity',9240]];
 const FIGHT_FIELDS=[['rounds','Rounds',10],['apr','Player actions / round',1],['enemies','Enemies hit by area skills',1],['K','Residual (calibrated)',0.763],['dres','Enemy DMG RES %',21.4],['eres','Enemy Effect RES',8290],
- ['B','Affinity divisor (guess)',13000],['M','Mastery divisor (guess)',731000],['ramp','Soul Reap/Nightshade ramp %',25],['vuln','Vulnerability dmg %',10],['defg','Dmg gain per DEF-down stack %',3],
+ ['B','Affinity divisor (Master I = 9819)',9819],['M','Mastery divisor (Master I = 195002)',195002],['ramp','Soul Reap/Nightshade ramp %',25],['vuln','Vulnerability dmg %',10],['defg','Dmg gain per DEF-down stack %',3],
  ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['petassist','Pet assist skill uptime (0-1)',0.5],['petf','Pet hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
 
 /* ---------- ENGINE (expected-value simulation) ---------- */
@@ -306,7 +306,7 @@ function poolHTML(){let h='';
 $('pool').innerHTML=poolHTML();
 $('assume').innerHTML=[
  'Damage per hit = (% × ATK + flat) × Residual(0.763) × (1 + DMG Boost + buffs) × (1 − enemy DMG RES) × crit. Residual measured from one Dark Bullet; it folds in enemy DEF and the Affinity ratio.',
- 'Non-Dark elements: scaled by the ratio of your Affinity for that element to Dark, using the wiki formula with a guessed divisor (editable). Unconfirmed.',
+ 'Non-Dark elements: scaled by the ratio of your Affinity for that element to Dark, using the wiki formula with the divisors for the monster's rank (Master I, from the in-game test screen). The formula itself is from a community wiki, not confirmed by the developers.',
  'Card "% + flat" on DMG Bonus / ATK Boost charms: I use only the % and ignore the flat part. Damage cards add the flat amount per hit; it is verified only for Dark Bullet (small flat). Higher-tier cards have much bigger flats (Chaos Rune +913K), so use the Flat-amount scale to correct it once you measure one more hit.',
  'Erosion lasts 3 rounds and ticks once per round; Linked Misfortune and Shadow Erosion add stacks with their own tick values. Effect-hit chance = base chance × your Effect Hit Rate ÷ enemy Effect RES (capped at 100%).',
  'Cooldown "CD n" means n rounds off after a cast. One enemy by default; area skills hit the number of enemies you set.',
