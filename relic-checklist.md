@@ -164,8 +164,88 @@ Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantgl
 - [ ] Ancient Beast Fossil
 - [ ] Shattered Gear
 
+## Aqualis (Ukiyo Tales) — 70 relics, gallery counter 59/70
+Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display (Soulkeeper's Armor, Yomi Fang?) likely live here.
+
+### Mythic (10) — 0/10 detailed — send first
+- [ ] Divine Codex Vault
+- [ ] Yata Luminary Mirror
+- [ ] Soulkeeper's Armor
+- [ ] Yomi Fang
+- [ ] Wind Pouch
+- [ ] Skywisp Blade
+- [ ] Elder Tortoise Charm
+- [ ] Maelstrom Core
+- [ ] Sunblade
+- [ ] Pyrocycle Sigil
+
+### Legendary (20) — 0/20 detailed
+- [ ] Thunder Wraith
+- [ ] Celestial Chime
+- [ ] Mirage Musicbox
+- [ ] Dawnstone Beacon
+- [ ] Netherbloom
+- [ ] Abyssal Obsidian
+- [ ] Shadow Banner
+- [ ] Demon Scroll
+- [ ] Banebreaker Arrow
+- [ ] Cyclone Shuriken
+- [ ] Skyhawk Gauntlet
+- [ ] Tengu's Feather Fan
+- [ ] Celestial Haori
+- [ ] Cascade Kingblade
+- [ ] Aqua Scepter
+- [ ] Kami's Elixir
+- [ ] Crimson Agate
+- [ ] Scorching Scales
+- [ ] Flame Spear
+- [ ] Scarlet Cannon
+
+### Epic (20) — 0/20 detailed
+- [ ] Hawkeye Spyglass
+- [ ] Daruma's Balance
+- [ ] Thunderbolt Sigil
+- [ ] Spiritforge Alloy
+- [ ] Tome of Oddities
+- [ ] Soulwail Stone
+- [ ] Oni Mask
+- [ ] Moonlit Hat
+- [ ] Ritual Catalpa Bow
+- [ ] Gale Shuriken
+- [ ] Windwalker's Geta
+- [ ] Arrow Talisman
+- [ ] Hexbane Urn
+- [ ] Memory Shell
+- [ ] Tsukumogami Umbrella
+- [ ] Water Strider
+- [ ] Flame Crest Charm
+- [ ] Triad Flame
+- [ ] Flameman's Mask
+- [ ] Ghostfire Lantern
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Wealth Hoard
+- [ ] Paper Puppet
+- [ ] Master's Drum
+- [ ] Lunaglow Stone
+- [ ] Noh Mask
+- [ ] Raven Feather
+- [ ] Rusted Chainblade
+- [ ] Centipede Charm
+- [ ] Flashing Kunai
+- [ ] Bathhouse Cloth
+- [ ] Pinwheel
+- [ ] Bamboo Dragonfly
+- [ ] Aqua Purse
+- [ ] Shishi Odoshi
+- [ ] Embroidered Ball
+- [ ] Whetstone
+- [ ] Explosive Charm
+- [ ] Firework Fan
+- [ ] Firework Tube
+- [ ] Flint Stone
+
 ## Other regions still to send
-- [ ] Gallery overview: Aqualis (Ukiyo Tales)
 - [ ] Gallery overview: Loong Ha… (Celestial Cra…) and any tabs further right
 
 ## Other open data
