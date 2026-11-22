@@ -179,27 +179,27 @@ Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display 
 - [x] Sunblade
 - [x] Pyrocycle Sigil (owned, +14)
 
-### Legendary (20) — 0/20 detailed
-- [ ] Thunder Wraith
-- [ ] Celestial Chime
-- [ ] Mirage Musicbox
-- [ ] Dawnstone Beacon
-- [ ] Netherbloom
-- [ ] Abyssal Obsidian
-- [ ] Shadow Banner
-- [ ] Demon Scroll
-- [ ] Banebreaker Arrow
-- [ ] Cyclone Shuriken
-- [ ] Skyhawk Gauntlet
-- [ ] Tengu's Feather Fan
-- [ ] Celestial Haori
-- [ ] Cascade Kingblade
-- [ ] Aqua Scepter
-- [ ] Kami's Elixir
-- [ ] Crimson Agate
-- [ ] Scorching Scales
-- [ ] Flame Spear
-- [ ] Scarlet Cannon
+### Legendary (20) — 20/20 detailed
+- [x] Thunder Wraith (owned, +14)
+- [x] Celestial Chime
+- [x] Mirage Musicbox (owned, +14)
+- [x] Dawnstone Beacon (owned, +14)
+- [x] Netherbloom (owned, +14)
+- [x] Abyssal Obsidian (owned, +14)
+- [x] Shadow Banner
+- [x] Demon Scroll (owned, +14)
+- [x] Banebreaker Arrow
+- [x] Cyclone Shuriken (owned, +14)
+- [x] Skyhawk Gauntlet (owned, +14)
+- [x] Tengu's Feather Fan (owned, +14)
+- [x] Celestial Haori
+- [x] Cascade Kingblade (owned, +14)
+- [x] Aqua Scepter
+- [x] Kami's Elixir (owned, +14)
+- [x] Crimson Agate
+- [x] Scorching Scales (owned, +14)
+- [x] Flame Spear (owned, +14)
+- [x] Scarlet Cannon (owned, +14)
 
 ### Epic (20) — 0/20 detailed
 - [ ] Hawkeye Spyglass
