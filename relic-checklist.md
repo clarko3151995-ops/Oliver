@@ -167,17 +167,17 @@ Owned: Pinnacle Radiance and Doomsday Chronometer (seen highlighted in Verdantgl
 ## Aqualis (Ukiyo Tales) — 70 relics, gallery counter 59/70
 Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display (Soulkeeper's Armor, Yomi Fang?) likely live here.
 
-### Mythic (10) — 0/10 detailed — send first
-- [ ] Divine Codex Vault
-- [ ] Yata Luminary Mirror
-- [ ] Soulkeeper's Armor
-- [ ] Yomi Fang
-- [ ] Wind Pouch
-- [ ] Skywisp Blade
-- [ ] Elder Tortoise Charm
-- [ ] Maelstrom Core
-- [ ] Sunblade
-- [ ] Pyrocycle Sigil
+### Mythic (10) — 10/10 detailed
+- [x] Divine Codex Vault
+- [x] Yata Luminary Mirror (owned, +14)
+- [x] Soulkeeper's Armor (owned, +14)
+- [x] Yomi Fang
+- [x] Wind Pouch (owned, +14)
+- [x] Skywisp Blade
+- [x] Elder Tortoise Charm (owned, +14)
+- [x] Maelstrom Core
+- [x] Sunblade
+- [x] Pyrocycle Sigil (owned, +14)
 
 ### Legendary (20) — 0/20 detailed
 - [ ] Thunder Wraith
