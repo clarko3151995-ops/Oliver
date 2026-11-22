@@ -404,27 +404,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Fire Rabbit (owned, +14)
 - [x] Forsaken Sword (owned, +14)
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Copper Lock
-- [ ] Nightwatch Gong
-- [ ] Wooden Horse
-- [ ] Burr Puzzle
-- [ ] Bamboo Tube
-- [ ] Eyebrow Pencil
-- [ ] Dustveil
-- [ ] Wooden Fish
-- [ ] Soothing Plant
-- [ ] Exotic Stone
-- [ ] Herb Grinder
-- [ ] Porcelain Cup
-- [ ] Oil-Paper Umbrella
-- [ ] Steel Fork
-- [ ] Bamboo Fish Basket
-- [ ] Sheepskin Water Bag
-- [ ] Caltrop
-- [ ] Field Cauldron
-- [ ] Royal Chef's Ladle
-- [ ] Auspicious Knot
+### Rare (20) — 20/20 detailed (all owned)
+- [x] Copper Lock (owned, +14)
+- [x] Nightwatch Gong (owned, +14)
+- [x] Wooden Horse (owned, +14)
+- [x] Burr Puzzle (owned, +14)
+- [x] Bamboo Tube (owned, +14)
+- [x] Eyebrow Pencil (owned, +14)
+- [x] Dustveil (owned, +14)
+- [x] Wooden Fish (owned, +14)
+- [x] Soothing Plant (owned, +14)
+- [x] Exotic Stone (owned, +14)
+- [x] Herb Grinder (owned, +14)
+- [x] Porcelain Cup (owned, +14)
+- [x] Oil-Paper Umbrella (owned, +14)
+- [x] Steel Fork (owned, +14)
+- [x] Bamboo Fish Basket (owned, +14)
+- [x] Sheepskin Water Bag (owned, +14)
+- [x] Caltrop (owned, +14)
+- [x] Field Cauldron (owned, +14)
+- [x] Royal Chef's Ladle (owned, +14)
+- [x] Auspicious Knot (owned, +14)
 
 ## Other regions still to send
 - [ ] Gallery overview: Aethyris (Aurora Pact)
