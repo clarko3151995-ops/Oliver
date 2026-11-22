@@ -426,9 +426,98 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Royal Chef's Ladle (owned, +14)
 - [x] Auspicious Knot (owned, +14)
 
+## Aethyris (Aurora Pact) — 80 relics, gallery counter 34/80
+
+### Mythic (20) — 0/20 detailed — send first
+- [ ] Thunderblast Hammer
+- [ ] Fallen Spear
+- [ ] Divine Grimoire
+- [ ] Eternal Sun
+- [ ] Midnight Feathers
+- [ ] Auroral Veil
+- [ ] Astral Zenith
+- [ ] Void Moon
+- [ ] Stormbringer's Sin
+- [ ] Ark of Origins
+- [ ] Aeolus's Gaze
+- [ ] Cosmic Star
+- [ ] Abyssal Crown
+- [ ] Life Elixir
+- [ ] Fountain of Fate
+- [ ] Cosmic Nexus
+- [ ] Ember Edge
+- [ ] Firewing Seal
+- [ ] Ashen Wrath
+- [ ] Ode of the Doomed
+
+### Legendary (20) — 0/20 detailed
+- [ ] Holy Grail
+- [ ] Golden Messenger
+- [ ] Guiding Beacon
+- [ ] Fate Dice
+- [ ] Black Cleaver
+- [ ] Smoky Pot
+- [ ] Darkmoon Candlestick
+- [ ] Shadebound Blocks
+- [ ] Tempest Eye
+- [ ] Wind's Edict
+- [ ] Auroral Casket
+- [ ] Supportive Mecha
+- [ ] Frostbite Dagger
+- [ ] Thalasson Hatchling
+- [ ] Raging Arcane Cannon
+- [ ] Frigid Bow
+- [ ] Scorching Sands
+- [ ] Firewyrm Saddle
+- [ ] Fiery Rose
+- [ ] Flame Conqueror
+
+### Epic (20) — 0/20 detailed
+- [ ] Lion Key
+- [ ] Starstone Plate
+- [ ] Gleaming Mask
+- [ ] Celestial Pointer
+- [ ] Nocturnal Horn
+- [ ] Alchemist's Belt
+- [ ] Gloom Charm
+- [ ] Caged Lantern
+- [ ] Gale Talon
+- [ ] Windrite Pot
+- [ ] Whistling Cicada
+- [ ] Wind Whisperer
+- [ ] Dreamcatcher
+- [ ] Crystal Pot
+- [ ] Seacaller Bell
+- [ ] Eco Orb
+- [ ] Infernal Essence
+- [ ] Undying Lamp
+- [ ] Searing Flask
+- [ ] Lava Goggles
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Ancient Core
+- [ ] Wingborn Fossil
+- [ ] Spiral Sapling
+- [ ] Rabbit's Foot
+- [ ] Midnight Horn
+- [ ] Starlit Silk
+- [ ] Alchemical Creation #8
+- [ ] Sand of Stars
+- [ ] Fey Amber
+- [ ] Breezy Bracelet
+- [ ] Campanula
+- [ ] Verdant Meteor
+- [ ] Aquamarine Earrings
+- [ ] Cloudew Coral
+- [ ] Star Conch
+- [ ] Frost Dew
+- [ ] Fire Tongs
+- [ ] Pyro Orb
+- [ ] Lava Fish
+- [ ] Spark Butterfly
+
 ## Other regions still to send
-- [ ] Gallery overview: Aethyris (Aurora Pact)
-- [ ] Gallery overview: one more tab to the right of Aethyris (name cut off, starts with "C") and any beyond it
+- [ ] Gallery overview: the "Other" tab (last tab seen in the strip) and any tabs beyond it
 
 ## Other open data
 - [ ] Relic slot count
