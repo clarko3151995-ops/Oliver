@@ -1,11 +1,39 @@
 {
- "_note": "One real fight reading: Dark Bullet (Lv 136) plus the Nyxarchon pet's hit, round 1/10, on the monster below. Player stats at the time: snapshot_2 (ATK 511K, Dark Affinity 6.37K, DMG Boost 42.6%, Crit 22.9%/70.2%).",
- "monster": {"ATK":191000,"DEF":310000,"HP":3130000,"SPD":182000,"CritRatePct":33.2,"CritDMGPct":50,"CritRESPct":17.4,"BlockRatePct":26.9,"AccuracyPct":13.4,"DMGBoostPct":22.4,"DMGRESPct":21.4,"EffectHitRate":8290,"EffectRES":8290,"ElementalMastery":10300,"ElementalRES":10300,"PhysicalMastery":10300,"PhysicalRES":10300,"Affinity_each":4790,"Aegis_each":4790,"level_shown":130},
- "observed_hits": [368285, 272923],
- "assumption": "Larger number = Dark Bullet, smaller = pet hit. Neither flagged as crit.",
- "dark_bullet_raw": "0.634*511000+51500 = 375,474",
- "net_multiplier_for_dark_bullet": 0.981,
- "decomposition": "Player DMG Boost (1.426) x monster DMG RES (0.786) = 1.121; remaining 0.875 must come from monster DEF and the Affinity/Mastery ratio together.",
- "pet_hit_ratio_vs_raw": 0.727,
- "use": "Simulator: damage = (pct*ATK + flat) * 0.98 non-crit on this monster; crit hits multiply by 1.702; expected factor with crit 22.9% = 1.161. Changes to Affinity/ATK/crit/DMG Boost are applied as ratios against this calibrated baseline."
+  "_note": "One real fight reading: Dark Bullet (Lv 136) plus the Nyxarchon pet's hit, round 1/10, on the monster below. Player stats at the time: snapshot_2 (ATK 511K, Dark Affinity 6.37K, DMG Boost 42.6%, Crit 22.9%/70.2%).",
+  "monster": {
+    "ATK": 191000,
+    "DEF": 310000,
+    "HP": 3130000,
+    "SPD": 182000,
+    "CritRatePct": 33.2,
+    "CritDMGPct": 50,
+    "CritRESPct": 17.4,
+    "BlockRatePct": 26.9,
+    "AccuracyPct": 13.4,
+    "DMGBoostPct": 22.4,
+    "DMGRESPct": 21.4,
+    "EffectHitRate": 8290,
+    "EffectRES": 8290,
+    "ElementalMastery": 10300,
+    "ElementalRES": 10300,
+    "PhysicalMastery": 10300,
+    "PhysicalRES": 10300,
+    "Affinity_each": 4790,
+    "Aegis_each": 4790,
+    "level_shown": 130
+  },
+  "observed_hits": [
+    368285,
+    272923
+  ],
+  "assumption": "Larger number (368,285) = Dark Bullet, no crit (player-confirmed). Smaller = pet hit. Mantra of Blessings (DMG Bonus 21%) was active on the player.",
+  "dark_bullet_raw": "0.634*511000+51500 = 375,474",
+  "net_multiplier_for_dark_bullet": 0.981,
+  "decomposition": "Player DMG Boost 42.6% + Mantra 21% = 63.6% (x1.636) against monster DMG RES 21.4% (x0.786) = x1.286. Net measured x0.981, so the remaining factor from monster DEF and the Affinity/Mastery ratio together is about x0.763.",
+  "pet_hit_ratio_vs_raw": 0.727,
+  "use": "Simulator: damage = (pct*ATK + flat) * 0.763 * (1 + DMGBoost) * (1 - 0.214) for non-crit on this monster; DMG Boost 42.6% already includes everything except Mantra (+21% when equipped). Crit multiplies by 1.702. Affinity/DEF changes are applied as ratios against the 0.763 residual.",
+  "active_buffs": [
+    "Mantra of Blessings: +21% DMG Bonus (Mythic 5-star, Lv 136), applied to highest-ATK ally = the player"
+  ],
+  "residual_defense_and_affinity_factor": 0.763
 }
