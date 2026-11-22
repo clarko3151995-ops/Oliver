@@ -382,27 +382,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Tome of Battles
 - [x] Firewyrm Breaker (owned, +14)
 
-### Epic (20) — 0/20 detailed
-- [ ] Lightweave Drum
-- [ ] Lucky Tiger Doll
-- [ ] Copper Coin String
-- [ ] Baguenaudier
-- [ ] Darkwolf Fang
-- [ ] Beast-Faced Knocker
-- [ ] Backscratcher
-- [ ] Shadowrap
-- [ ] Folding Screen
-- [ ] Milewalker
-- [ ] Cerulean Plate
-- [ ] Auric Sachet
-- [ ] Precious Waterwheel
-- [ ] Interwoven Chainmail
-- [ ] Water Rake
-- [ ] Glass Cup
-- [ ] Gourd Flute
-- [ ] Tiger-Head Hat
-- [ ] Fire Rabbit
-- [ ] Forsaken Sword
+### Epic (20) — 20/20 detailed (15 owned)
+- [x] Lightweave Drum (owned, +14)
+- [x] Lucky Tiger Doll
+- [x] Copper Coin String (owned, +14)
+- [x] Baguenaudier
+- [x] Darkwolf Fang (owned, +14)
+- [x] Beast-Faced Knocker
+- [x] Backscratcher (owned, +14)
+- [x] Shadowrap
+- [x] Folding Screen
+- [x] Milewalker (owned, +14)
+- [x] Cerulean Plate (owned, +14)
+- [x] Auric Sachet (owned, +14)
+- [x] Precious Waterwheel (owned, +14)
+- [x] Interwoven Chainmail (owned, +14)
+- [x] Water Rake (owned, +14)
+- [x] Glass Cup (owned, +14)
+- [x] Gourd Flute (owned, +14)
+- [x] Tiger-Head Hat (owned, +14)
+- [x] Fire Rabbit (owned, +14)
+- [x] Forsaken Sword (owned, +14)
 
 ### Rare (20) — 0/20 detailed (low priority)
 - [ ] Copper Lock
