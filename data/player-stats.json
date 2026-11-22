@@ -248,5 +248,15 @@
     "star_bonus": "each awakened star adds about +10% to element stat (Legendary 315 -> 346 at 1 star; Rare 105 -> 115 -> 126).",
     "display_bonus": "+20% on displayed relic's element stat and effects",
     "implication": "+1 slot level on all 4 slots of an element raises every relic of that element by ~4.4% at level 14"
+  },
+  "search_assumptions": {
+    "skill_pool": "All techniques and charms from Tiers 1 to 5 are treated as available (player decision). Guild version will have a tick box per item.",
+    "slots": {
+      "techniques": 4,
+      "charms": 4,
+      "relic_display_per_element": 4
+    },
+    "tier": "Dominator (Tier 4) now; Tier 5 Prophet expected soon. Any tier at or below current can be equipped.",
+    "equipped_loadout_needed": false
   }
 }
