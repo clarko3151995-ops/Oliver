@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dark Build Sim</title>
+<style>
+:root{--bg:#f6f5fb;--card:#fff;--ink:#1d1b2e;--mute:#5f5c75;--line:#dcd8ee;--acc:#5b2fc9;--acc2:#0f7d72;--warn:#8a4b05;--warnbg:#fdf0c8;--bar:#14a698}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14121f;--card:#1e1b2e;--ink:#ece9fa;--mute:#a7a3c2;--line:#352f4d;--acc:#b39cff;--acc2:#5eead4;--warn:#fcd34d;--warnbg:#3a2f0b;--bar:#2dd4bf}}
+:root[data-theme="dark"]{--bg:#14121f;--card:#1e1b2e;--ink:#ece9fa;--mute:#a7a3c2;--line:#352f4d;--acc:#b39cff;--acc2:#5eead4;--warn:#fcd34d;--warnbg:#3a2f0b;--bar:#2dd4bf}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif;padding:16px;max-width:980px;margin-inline:auto}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:10px;margin-bottom:14px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:8px}
+label{display:block;font-size:12px;color:var(--mute)}
+input[type=number]{width:100%;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:14px}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:600;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button{color:#14121f}}
+:root[data-theme="dark"] button{color:#14121f}
+button.sec{background:var(--bg);color:var(--ink);border:1px solid var(--line);font-weight:500;padding:6px 10px;font-size:13px}
+button:disabled{opacity:.5}
+details{margin:6px 0}summary{cursor:pointer;font-weight:600}
+.pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 10px;margin-top:6px}
+.pool label{color:var(--ink);font-size:13px;display:flex;gap:6px;align-items:flex-start}
+.tag{font-size:10px;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:0 6px;color:var(--mute)}
+.est{color:var(--warn)}
+.pill{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 9px;margin:2px;font-size:12px}
+.pill.c{border-color:var(--acc2)}
+.bar{height:8px;border-radius:4px;background:var(--bar)}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left}
+.small{font-size:12px;color:var(--mute)}
+.rank{font-weight:700;color:var(--acc)}
+.bk{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0}
+textarea{width:100%;min-height:80px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<h1>Dark Build Sim</h1>
+<p class="sub">Sword x Staff · finds the best 4 techniques + 4 charms from every tier, with Fantomon and summon effects</p>
+<div class="warn"><b>How far to trust it:</b> technique and charm numbers are the Level 136 values read from the cards. The damage multiplier is calibrated on <b>one</b> Dark Bullet hit. Summons, the pet's assist skills, Erosion timing and effect-hit chance are <b>assumptions</b> (see the panel below); change them and re-run. Results show relative ranking, not exact damage.</div>
+
+<div class="card"><h2>Your stats</h2><div class="grid" id="stats"></div></div>
+<div class="card"><h2>Fight &amp; assumptions</h2><div class="grid" id="fight"></div>
+<p class="small">Calibration: damage = (% × ATK + flat) × <b>Residual</b> × (1 + DMG Boost + buffs) × (1 − enemy DMG RES) × crit. Residual 0.763 was measured: one Dark Bullet = 368,285 with Mantra of Blessings active.</p></div>
+<div class="card"><h2>Pool <span class="small">(tick what you own / want considered)</span></h2><div class="row"><label style="display:flex;gap:6px;color:var(--ink)"><input type="checkbox" id="prophet" checked> Prophet (Tier 5) unlocked</label><label style="display:flex;gap:6px;color:var(--ink)"><input type="checkbox" id="pet" checked> Nyxarchon is my main Fantomon</label></div>
+<div id="pool"></div></div>
+<div class="card"><div class="row"><button id="go">Find the best build</button><span id="prog" class="small"></span></div></div>
+<div class="card" id="out" hidden><h2>Best builds</h2><div id="res"></div><h2 style="margin-top:14px">What would improve it (best build)</h2><div id="what"></div></div>
+<div class="card"><h2>Assumptions &amp; unknowns</h2><ul class="small" id="assume"></ul>
+<details><summary>Save / load my settings</summary><textarea id="json" placeholder="Click Export, copy the text; paste a friend's text here and click Import."></textarea><div class="row"><button class="sec" id="exp">Export</button><button class="sec" id="imp">Import</button></div></details></div>
+
+<script>
+/* ---------- DATA (Level 136 cards; pct is % of ATK, flat is added) ---------- */
+const T=(o)=>Object.assign({type:'hit',hits:1,aoe:false,cd:1,own:true},o);
+const TECH=[
+ // Tier 5
+ T({id:'desperate',name:'Desperate Shadow',tier:5,el:'Dark',cd:1,pct:158.6,flat:475000,aoe:true,deb:[['Weakened',1/3,2,.7],['ArmorBreak',1/3,2,.7],['Slow',1/3,2,.7]]}),
+ T({id:'soulreap',name:'Soul Reap',tier:5,el:'Dark',cd:2,hits:2,pct:156.8,flat:411000,ramp:true}),
+ T({id:'hexed',name:'Hexed Blast',tier:5,el:'Dark',cd:1,pct:87.9,flat:246000,aoe:true,extra:{pct:39,flat:109000,max:3}}),
+ T({id:'voidchant',name:'Void Chant',tier:5,el:'Dark',cd:2,type:'rune',pct:56,flat:104000}),
+ T({id:'thalasson',name:'Thalasson Summon',tier:5,type:'summon',cd:99,summon:'Thalasson'}),
+ T({id:'radrhythm',name:'Radiant Rhythm',tier:5,type:'support'}),
+ // Tier 4
+ T({id:'chaos',name:'Chaos Rune',tier:4,el:'Dark',cd:2,pct:284.4,flat:913000,deb:[['Frenzy',1,1,.4]]}),
+ T({id:'starburst',name:'Dark Starburst',tier:4,el:'Dark',cd:1,hits:3,pct:76.5,flat:245000}),
+ T({id:'decoy',name:'Decoy Clone',tier:4,type:'support'}),
+ T({id:'rockrex',name:'Rock Rex Summon',tier:4,type:'summon',cd:99,summon:'RockRex'}),
+ T({id:'rejrain',name:'Rejuvenating Rain',tier:4,type:'support'}),
+ T({id:'spiritaegis',name:'Spirit Aegis',tier:4,type:'support'}),
+ // Tier 3
+ T({id:'termination',name:'Shadow of Termination',tier:3,el:'Dark',cd:2,pct:280.3,flat:754000,trig:1}),
+ T({id:'manablast',name:'Mana Blast',tier:3,el:'Dark',cd:1,pct:73.5,flat:214000,aoe:true,ero:{base:.5,pct:13.2,flat:38400}}),
+ T({id:'abyssal',name:'Abyssal Hand',tier:3,el:'Dark',cd:1,pct:93.9,flat:250000,aoe:true,deb:[['Slow',1,2,.5]]}),
+ T({id:'totem',name:'Frenzy Totem',tier:3,type:'summon',cd:4,summon:'Totem'}),
+ T({id:'waterling',name:'Waterling Summon',tier:3,type:'summon',cd:3,summon:'Waterling'}),
+ // Tier 2
+ T({id:'impact',name:'Shadow Impact',tier:2,el:'Dark',cd:1,pct:76.8,flat:68000,aoe:true,trig:2}),
+ T({id:'bullet',name:'Dark Bullet',tier:2,el:'Dark',cd:1,pct:63.4,flat:51500,ero:{base:.5,pct:11.3,flat:9220}}),
+ T({id:'hex',name:'Weakening Hex',tier:2,el:'Dark',cd:1,pct:70.1,flat:56800,aoe:true,deb:[['Weakened',1,2,.5]]}),
+ T({id:'flamewolf',name:'Flame Wolf Summon',tier:2,type:'summon',cd:2,summon:'FlameWolf'}),
+ T({id:'treant',name:'Treantling Summon',tier:2,type:'summon',cd:3,summon:'Treantling'}),
+ T({id:'radrest',name:'Radiant Restoration',tier:2,type:'support'}),
+ // Tier 1 (non-Dark)
+ T({id:'wassault',name:'Water Assault',tier:1,el:'Water',cd:1,pct:69.8,flat:64400,aoe:true}),
+ T({id:'bfring',name:'Blazing Fire Ring',tier:1,el:'Fire',cd:1,pct:85.9,flat:57000,aoe:true}),
+ T({id:'wdelight',name:"Wind's Delight",tier:1,el:'Wind',cd:1,hits:2.6,pct:40.4,flat:23800,aoe:true}),
+ T({id:'tempest',name:'Tempest Sphere',tier:1,el:'Wind',cd:1,hits:5,pct:26.8,flat:21700}),
+ T({id:'cyclone',name:'Cyclone',tier:1,el:'Wind',cd:1,pct:47.7,flat:42200,aoe:true}),
+ T({id:'fireball',name:'Fireball',tier:1,el:'Fire',cd:1,pct:80.5,flat:71200,aoe:true}),
+ T({id:'wshot',name:'Water Shot',tier:1,el:'Water',cd:1,pct:77.8,flat:63100}),
+ T({id:'ironthorn',name:'Iron Thorn',tier:1,el:'Wind',cd:1,pct:91.8,flat:74500,aoe:true,deb:[['Immobilize',1,1,.3]]}),
+ T({id:'icespike',name:'Ice Spike',tier:1,el:'Water',cd:1,pct:85.4,flat:69300,aoe:true,deb:[['Frozen',1,1,.4]]}),
+ T({id:'flamejet',name:'Flame Jet',tier:1,el:'Fire',cd:1,hits:3,pct:42.5,flat:34500,aoe:true}),
+ T({id:'stonechief',name:'Stonechief Summon',tier:1,type:'summon',cd:5,summon:'Stonechief'}),
+ T({id:'healtouch',name:'Healing Touch',tier:1,type:'support'}),
+ T({id:'voidbless',name:'Void Blessing',tier:1,type:'support'}),
+];
+const C=(o)=>Object.assign({own:true,est:false,dmg:true},o);
+const CHARM=[
+ C({id:'shadowy',name:'Shadowy Current',tier:5,note:'+2,000 Dark Affinity'}),
+ C({id:'cursedarmor',name:'Cursed Armor',tier:5,note:'50% Erosion on attacker (29.4% + 55K)'}),
+ C({id:'omen',name:'Ring of Omen',tier:5,note:'Effect RES -2.54K, 50% Vulnerability'}),
+ C({id:'soulweave',name:'Soulweave',tier:5,note:'3 summons gone -> Infernal Fiend'}),
+ C({id:'pact',name:'Summoning Pact',tier:5,dmg:false,note:'summon HP'}),
+ C({id:'elixir',name:'Rejuvenating Elixir',tier:5,dmg:false,note:'heal'}),
+ C({id:'mantra',name:'Mantra of Blessings',tier:4,note:'+21% DMG Boost'}),
+ C({id:'soulpactres',name:'Soul Pact Resonance',tier:4,note:'+28% ATK while a summon is out'}),
+ C({id:'fallingstar',name:'Falling Dark Star',tier:4,note:'random buff each turn (1/3 ATK +17.5%)'}),
+ C({id:'phantom',name:'Phantom Light',tier:4,dmg:false}),
+ C({id:'aberrancy',name:'Aberrancy',tier:4,dmg:false}),
+ C({id:'soulbond',name:'Soulbond Restoration',tier:4,dmg:false}),
+ C({id:'linked',name:'Linked Misfortune',tier:3,note:'60% to re-inflict Erosion (63.2% + 170K)'}),
+ C({id:'vengeance',name:'Shadow Vengeance',tier:3,dmg:false,note:'cheat death'}),
+ C({id:'overheal',name:'Overhealing',tier:3,dmg:false}),
+ C({id:'nights',name:"Night's Blessing",tier:3,est:true,note:'est. +15% Dark DMG'}),
+ C({id:'summfrenzy',name:"Summoner's Frenzy",tier:3,est:true,note:'est. +45% summon ATK'}),
+ C({id:'sheros',name:'Shadow Erosion',tier:2,note:'40% Erosion on each Dark hit (40.8% + 30.1K)'}),
+ C({id:'soulimpact',name:'Soul Impact',tier:2,note:'Dark hit when a summon expires'}),
+ C({id:'soulspark',name:'Soul Spark',tier:2,note:'summon ATK +45%, duration -2'}),
+ C({id:'resurrection',name:'Resurrection',tier:2,dmg:false}),
+ C({id:'curse',name:'Curse Resonance',tier:1,note:'+7.5% DMG per debuff (max 3)'}),
+ C({id:'watertoice',name:'Water to Ice',tier:1,note:'50% extra hit on Water damage'}),
+ C({id:'flamingpath',name:'Flaming Path',tier:1,note:'30%/turn Fire burn'}),
+ C({id:'unstable',name:'Unstable Aura',tier:1,note:'25% extra Wind hit'}),
+ C({id:'galeshield',name:'Gale Shield',tier:1,dmg:false}),
+ C({id:'insight',name:'Insight',tier:1,est:true,note:'est. +3K Effect Hit Rate'}),
+ C({id:'manasurge',name:'Mana Surge',tier:1,est:true,note:'est. +5% Crit Rate'}),
+ C({id:'elemmystery',name:'Elemental Mystery',tier:1,est:true,note:'est. +10K Elemental Mastery'}),
+];
+// summons: listed ATK (% of caster ATK + flat) or HP-only (ATK assumed), dur turns, skills = [pct list per act, element, aoe]
+const SUMMON={
+ Thalasson:{n:1,atk:[300,227000],dur:5,el:'Water',acts:[{p:90,aoe:true}],note:'Giant Shark'},
+ FlameWolf:{n:2,atk:[86.9,94600],dur:2,el:'Fire',acts:[{p:56.9},{p:42.4,aoe:true}],note:'Blazing Claw / Incinerating Wolf'},
+ Treantling:{n:1,atk:[104.4,87100],dur:5,el:'Wind',acts:[{p:103.4}],note:'Leaf Arrow'},
+ Stonechief:{n:1,atk:null,dur:5,el:'Physical',acts:[{p:62.8,aoe:true}],entry:{p:85.6},note:'Earthquake (+Crag Collapse on entry)'},
+ Fiend:{n:1,atk:[350,229000],dur:5,el:'Fire',acts:[{p:120,aoe:true}],note:'Punch'},
+ Waterling:{n:1,atk:null,dur:5,el:'Water',acts:[],note:'heals only'},
+ Totem:{n:1,atk:null,dur:5,el:'Dark',acts:[],note:'skills unread'},
+ RockRex:{n:1,atk:null,dur:99,el:'Physical',acts:[],note:'skills unread'},
+};
+const STAT_FIELDS=[['ATK','ATK',511000],['dmg','DMG Boost %',42.6],['cr','Crit Rate %',22.9],['cd','Crit DMG %',70.2],['ehr','Effect Hit Rate',14900],['em','Elemental Mastery',31800],['pm','Physical Mastery',15600],
+ ['aD','Dark Affinity',6370],['aF','Fire Affinity',7590],['aW','Water Affinity',7700],['aI','Wind Affinity',5840],['aL','Light Affinity',9240]];
+const FIGHT_FIELDS=[['rounds','Rounds',10],['apr','Player actions / round',1],['enemies','Enemies hit by area skills',1],['K','Residual (calibrated)',0.763],['dres','Enemy DMG RES %',21.4],['eres','Enemy Effect RES',8290],
+ ['B','Affinity divisor (guess)',13000],['M','Mastery divisor (guess)',731000],['ramp','Soul Reap/Nightshade ramp %',25],['vuln','Vulnerability dmg %',10],['defg','Dmg gain per DEF-down stack %',3],
+ ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['petassist','Pet assist skill uptime (0-1)',0.5],['petf','Pet hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
+
+/* ---------- ENGINE (expected-value simulation) ---------- */
+function sim(cfg,build,wantLog){
+  const R=cfg.rounds,A=cfg.apr;
+  const ch=new Set(build.charms),has=id=>ch.has(id);
+  const techs=build.tech.map(id=>TECHMAP[id]);
+  const bucket={direct:0,erosion:0,summon:0,pet:0,procs:0,rune:0};
+  const log=[];
+  let used=new Set(),cds={},apps={},stacks=[],summ=[],expired=0,weave=false,runes=[],reqRound=-1;
+  const scale=()=>Math.min(3,cfg.ehr/Math.max(1,cfg.eres-(has('omen')?2540:0)))+0; // effect-hit multiplier
+  const eff=b=>Math.min(1,b*scale());
+  const off=a=>1+a/cfg.B+cfg.em/cfg.M;
+  const base=off(cfg.aD0);
+  const avgA=(cfg.aD+cfg.aF+cfg.aW+cfg.aI+cfg.aL)/5;
+  const elemR=el=>{let a;
+    if(el==='Dark')a=cfg.aD+(has('shadowy')?2000:0);else if(el==='Fire')a=cfg.aF;else if(el==='Water')a=cfg.aW;else if(el==='Wind')a=cfg.aI;else if(el==='Light')a=cfg.aL;
+    if(el==='Physical')return (1+avgA/cfg.B+cfg.pm/cfg.M)/base;
+    return off(a)/base;};
+  const pAct=(type,t)=>{const a=apps[type];if(!a)return 0;let pr=1;for(const x of a)if(x.until>t)pr*=1-x.p;return 1-pr;};
+  const eroP=t=>{let pr=1;for(const s of stacks)if(s.until>t)pr*=1-s.p;return 1-pr;};
+  const distinct=t=>Math.min(3,eroP(t)+['Slow','Weakened','ArmorBreak','Frenzy','Vuln','DefRed','Immobilize','Frozen'].reduce((s,k)=>s+pAct(k,t),0));
+  const defStacks=t=>{let s=0;for(const k of ['DefRed','ArmorBreak']){const a=apps[k];if(a)for(const x of a)if(x.until>t)s+=x.p;}return Math.min(3,s);};
+  const summonAlive=t=>summ.some(s=>s.until>t);
+  const atkNow=t=>cfg.ATK*(1+(has('fallingstar')?.175/3:0)+(has('soulpactres')&&summonAlive(t)?.28:0));
+  const critEV=1+Math.min(1,cfg.cr/100+(has('manasurge')?.05:0))*(cfg.cd/100);
+  const addApp=(type,p,dur,t)=>{(apps[type]=apps[type]||[]).push({p,until:t+dur});};
+  const mult=(el,t,o)=>{o=o||{};
+    let boost=cfg.dmg/100+(o.player!==false&&has('mantra')?.21:0)+(o.player!==false&&has('nights')&&el==='Dark'?.15:0)+(o.curse?.075*distinct(t):0);
+    let m=cfg.K*elemR(el)*(1+boost)*(1-cfg.dres/100)*(1+pAct('Vuln',t)*cfg.vuln/100)*(1+defStacks(t)*cfg.defg/100);
+    if(o.crit!==false)m*=critEV; return m;};
+  const hit=(pct,flat,el,t,o)=>(pct/100*atkNow(t)+flat*cfg.flats)*mult(el,t,o);
+  const addEro=(p0,pct,flat,t)=>{const p=eff(p0);stacks.push({p,until:t+3,pct,flat});
+    if(has('linked'))stacks.push({p:p*.6,until:t+3,pct:63.2,flat:170000});};
+  const capF=t=>{let P=0;for(const x of stacks)if(x.until>t)P+=x.p;return P>cfg.ecap?cfg.ecap/P:1;};
+  const stackVal=(s,t)=>s.p*((s.pct/100)*atkNow(t)+s.flat*cfg.flats)*mult('Dark',t,{crit:false})*cfg.escale;
+  const eroTrigger=(k,t)=>{let s=0;for(const x of stacks)if(x.until>t)s+=stackVal(x,t);return s*k*capF(t);};
+  const dmgProcs=(inst,el,t)=>{ // per damage instance procs
+    if(el==='Dark'&&has('sheros'))addEro(.4*inst,40.8,30100,t); // 40% per instance (approx)
+    if(has('unstable'))bucket.procs+=inst*.25*hit(39.3,31900,'Wind',t);
+    if(el==='Water'&&has('watertoice'))bucket.procs+=inst*.5*hit(34.1,27600,'Water',t);};
+  const spawn=(id,t,fromWeave)=>{const S=SUMMON[id];let atk=0;
+    if(S.atk)atk=S.atk[0]/100*cfg.ATK+S.atk[1];else atk=cfg.hpatk/100*cfg.ATK;
+    let m=cfg.sstr;if(has('soulspark'))m*=1.45;if(has('summfrenzy'))m*=1.45;
+    let dur=S.dur;if(has('soulspark')&&dur<99)dur=Math.max(1,dur-2);
+    summ.push({id,n:S.n,atk:atk*m,start:t,until:t+dur,S});
+    if(S.entry)bucket.summon+=S.n*(S.entry.p/100)*atk*m*mult(S.el,t,{player:false})*cfg.enemies;
+  };
+  // pet passive
+  const petOn=cfg.pet;
+  const requiem=t=>{ if(!petOn||reqRound===t)return; reqRound=t;
+    bucket.pet+=((56.9/100)*atkNow(t)+87200)*cfg.petf; addApp('DefRed',1,2,t); };
+  const estimate=(tech,t)=>{
+    const rem=R-t;
+    if(tech.type==='support')return 0;
+    if(tech.type==='summon'){const S=SUMMON[tech.summon];if(!S||!S.acts.length)return .1;let atk=S.atk?S.atk[0]/100*cfg.ATK+S.atk[1]:cfg.hpatk/100*cfg.ATK;
+      const per=S.acts.reduce((m,a)=>Math.max(m,a.p/100*atk*cfg.sstr*mult(S.el,t,{player:false})*(a.aoe?cfg.enemies:1)),0)*S.n;return per*Math.min(rem,S.dur);}
+    if(tech.type==='rune'){return 2*(hit(tech.pct,tech.flat,'Dark',t)+eroTrigger(1,t))*cfg.ecast;}
+    const n=tech.aoe?cfg.enemies:1;
+    let v=tech.hits*n*hit(tech.pct,tech.flat,tech.el,t,{curse:has('curse')})*(tech.ramp?1+cfg.ramp/100:1);
+    if(tech.extra)v+=Math.min(tech.extra.max,distinct(t))*hit(tech.extra.pct,tech.extra.flat,'Dark',t);
+    if(tech.ero){const p=eff(tech.ero.base);v+=p*3*((tech.ero.pct/100)*atkNow(t)+tech.ero.flat)*mult('Dark',t,{crit:false})*cfg.escale;}
+    if(tech.trig)v+=eroTrigger(tech.trig,t);
+    if(tech.deb)for(const d of tech.deb)v+=0.04*hit(tech.pct,tech.flat,tech.el,t)*(has('curse')||has('hexed')?3:1)*Math.min(1,d[3]*scale())*d[1]*2;
+    if(has('sheros')&&tech.el==='Dark')v+=eff(.4)*tech.hits*2*((40.8/100)*atkNow(t)+30100)*mult('Dark',t,{crit:false})*cfg.escale;
+    return v;};
+  const cast=(tech,t)=>{
+    if(tech.type==='summon'){spawn(tech.summon,t);return;}
+    if(tech.type==='rune'){runes.push({until:t+2,tech});return;}
+    const n=tech.aoe?cfg.enemies:1;
+    let d=tech.hits*n*hit(tech.pct,tech.flat,tech.el,t,{curse:has('curse')})*(tech.ramp?1+cfg.ramp/100:1);
+    bucket.direct+=d;
+    if(tech.extra){bucket.direct+=Math.min(tech.extra.max,distinct(t))*hit(tech.extra.pct,tech.extra.flat,'Dark',t);}
+    if(tech.ero)addEro(tech.ero.base,tech.ero.pct,tech.ero.flat,t);
+    if(tech.deb)for(const [type,share,dur,b] of tech.deb)addApp(type,Math.min(1,b*scale())*share,dur,t);
+    dmgProcs(tech.hits,tech.el,t);
+    if(tech.trig)bucket.erosion+=eroTrigger(tech.trig,t);
+    requiem(t);
+  };
+  for(let t=0;t<R;t++){
+    // ring of omen
+    if(has('omen'))addApp('Vuln',Math.min(1,.5*scale()),1,t);
+    // summon expiry
+    for(const s of summ){if(!s.done&&s.until<=t&&s.until<99){s.done=true;for(let i=0;i<s.n;i++){expired++;
+        if(has('soulimpact'))bucket.procs+=hit(65.6,48300,'Dark',t,{player:false})*cfg.enemies;}
+      if(has('soulweave')&&!weave&&expired>=3){weave=true;spawn('Fiend',t);}}}
+    let acted=[];
+    for(let a=0;a<A;a++){
+      const tick=t*A+a;
+      let best=null,bv=-1;
+      for(const tech of techs){ if((cds[tech.id]||0)>tick)continue; if(tech.type==='summon'&&cds[tech.id]!==undefined&&tech.cd>=99)continue;
+        const v=estimate(tech,t); if(v>bv){bv=v;best=tech;} }
+      if(!best||bv<=0){ const bd=cfg.basic/100*atkNow(t)*mult('Physical',t); bucket.direct+=bd; acted.push('basic'); requiem(t); continue; }
+      cast(best,t);used.add(best.id);cds[best.id]=tick+best.cd+1;acted.push(best.name);
+    }
+    // summons act
+    for(const s of summ){ if(s.start>t||s.until<=t)continue; const S=s.S;
+      if(!S.acts.length)continue;
+      let bestd=0;for(const act of S.acts){const dd=act.p/100*s.atk*mult(S.el,t,{player:false})*(act.aoe?cfg.enemies:1);if(dd>bestd)bestd=dd;}
+      bucket.summon+=bestd*S.n; if(S.acts.length)requiem(t); }
+    // pet assist skills
+    if(petOn&&cfg.petassist>0){const ns=(t%3===0)?340.2/100*atkNow(t)*(1+cfg.ramp/100):105.7/100*atkNow(t);bucket.pet+=ns*cfg.petf*cfg.petassist;}
+    // enemy phase
+    let ticks=0;for(const s of stacks)if(s.until>t)ticks+=stackVal(s,t);
+    bucket.erosion+=ticks*capF(t);
+    for(const r of runes)if(r.until>t){const ev=cfg.ecast;bucket.rune+=ev*(hit(r.tech.pct,r.tech.flat,'Dark',t)+eroTrigger(1,t));}
+    if(has('cursedarmor')){const p=eff(.5)*cfg.ecast;bucket.erosion+=0; stacks.push({p,until:t+3,pct:29.4,flat:55000});if(has('linked'))stacks.push({p:p*.6,until:t+3,pct:63.2,flat:170000});}
+    if(has('flamingpath'))bucket.procs+=.3*hit(52.5,42500,'Fire',t);
+    if(wantLog)log.push(`R${t+1}: ${acted.join(', ')}`);
+  }
+  const total=Object.values(bucket).reduce((a,b)=>a+b,0);
+  return {total,bucket,log,used:[...used]};
+}
+const TECHMAP=Object.fromEntries(TECH.map(t=>[t.id,t]));
+const CHMAP=Object.fromEntries(CHARM.map(c=>[c.id,c]));
+
+/* ---------- SEARCH ---------- */
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function applyEstimates(cfg,build){ // estimated unread charms that alter stats
+  const c=Object.assign({},cfg);const has=id=>build.charms.includes(id);
+  if(has('insight'))c.ehr+=3000; if(has('elemmystery'))c.em+=10000; return c;}
+const cache=new Map();
+function score(cfg,build){const key=JSON.stringify([build.tech.slice().sort(),build.charms.slice().sort(),cfg._k]);let r=cache.get(key);if(!r){r=sim(applyEstimates(cfg,build),build,false);cache.set(key,r);}return r;}
+async function search(cfg,pt,pc,progress){
+  const rnd=mulberry(7);const results=new Map();
+  const nt=Math.min(4,pt.length),nc=Math.min(4,pc.length);
+  const pick=(pool,k)=>{const a=pool.slice();const o=[];while(o.length<k&&a.length)o.push(a.splice(Math.floor(rnd()*a.length),1)[0]);return o;};
+  const starts=60;
+  for(let s=0;s<starts;s++){
+    let b={tech:pick(pt,nt),charms:pick(pc,nc)};let cur=score(cfg,b).total;
+    for(let it=0;it<12;it++){
+      let bestB=null,bestV=cur;
+      for(let i=0;i<b.tech.length;i++)for(const x of pt){if(b.tech.includes(x))continue;const nb={tech:b.tech.slice(),charms:b.charms};nb.tech[i]=x;const v=score(cfg,nb).total;if(v>bestV+1e-6){bestV=v;bestB=nb;}}
+      for(let i=0;i<b.charms.length;i++)for(const x of pc){if(b.charms.includes(x))continue;const nb={tech:b.tech,charms:b.charms.slice()};nb.charms[i]=x;const v=score(cfg,nb).total;if(v>bestV+1e-6){bestV=v;bestB=nb;}}
+      if(!bestB)break;b=bestB;cur=bestV;
+    }
+    results.set(JSON.stringify([b.tech.slice().sort(),b.charms.slice().sort()]),{b,v:cur});
+    progress(s+1,starts);await new Promise(r=>setTimeout(r,0));
+  }
+  return [...results.values()].sort((a,b)=>b.v-a.v);
+}
+
+/* ---------- UI ---------- */
+const $=id=>document.getElementById(id);
+const fmt=v=>v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':Math.round(v);
+$('stats').innerHTML=STAT_FIELDS.map(([k,l,v])=>`<div><label>${l}</label><input type=number id="s_${k}" value="${v}"></div>`).join('');
+$('fight').innerHTML=FIGHT_FIELDS.map(([k,l,v])=>`<div><label>${l}</label><input type=number step="any" id="f_${k}" value="${v}"></div>`).join('');
+function poolHTML(){let h='';
+ for(const [title,arr,pref,kind] of [['Techniques',TECH,'t','tech'],['Charms',CHARM,'c','charm']]){
+  h+=`<details open><summary>${title}</summary>`;
+  for(let tier=5;tier>=1;tier--){const items=arr.filter(x=>x.tier===tier);if(!items.length)continue;
+   h+=`<div class="small" style="margin-top:6px">Tier ${tier}</div><div class="pool">`+items.map(x=>{
+    const dmg=kind==='tech'?(x.type!=='support'):x.dmg;const on=dmg&&!x.est;
+    const note=kind==='charm'&&x.note?`<span class="small ${x.est?'est':''}"> ${x.note}</span>`:(kind==='tech'&&x.type==='summon'?'<span class="tag">summon</span>':(kind==='tech'&&x.type==='support'?'<span class="tag">no damage</span>':(kind==='tech'?`<span class="tag">${x.el}${x.cd?` · CD${x.cd}`:''}</span>`:'')));
+    return `<label><input type=checkbox id="${pref}_${x.id}" ${on?'checked':''}><span>${x.name} ${note}</span></label>`;}).join('')+`</div>`;}
+  h+='</details>';}
+ return h;}
+$('pool').innerHTML=poolHTML();
+$('assume').innerHTML=[
+ 'Damage per hit = (% × ATK + flat) × Residual(0.763) × (1 + DMG Boost + buffs) × (1 − enemy DMG RES) × crit. Residual measured from one Dark Bullet; it folds in enemy DEF and the Affinity ratio.',
+ 'Non-Dark elements: scaled by the ratio of your Affinity for that element to Dark, using the wiki formula with a guessed divisor (editable). Unconfirmed.',
+ 'Card "% + flat" on DMG Bonus / ATK Boost charms: I use only the % and ignore the flat part. Damage cards add the flat amount per hit; it is verified only for Dark Bullet (small flat). Higher-tier cards have much bigger flats (Chaos Rune +913K), so use the Flat-amount scale to correct it once you measure one more hit.',
+ 'Erosion lasts 3 rounds and ticks once per round; Linked Misfortune and Shadow Erosion add stacks with their own tick values. Effect-hit chance = base chance × your Effect Hit Rate ÷ enemy Effect RES (capped at 100%).',
+ 'Cooldown "CD n" means n rounds off after a cast. One enemy by default; area skills hit the number of enemies you set.',
+ 'Summons: ATK = Summon strength × (listed % × your ATK + flat). HP-only summons use the "HP-only summon ATK %" guess. Summon skill damage uses the player\'s crit and DMG Boost. Frenzy Totem and Rock Rex have unread skills (counted as 0).',
+ 'Nyxarchon: Requiem Blast fires once per round when you cast a damaging skill and applies a 10% DEF-down stack. Its hit uses a measured factor (0.722 of raw). Assist skills (Nightshade Blast, Shadow Sweep) fire at the uptime you set (unknown).',
+ 'Mantra of Blessings and Night\'s Blessing apply to you, not to summons. Soul Pact Resonance gives you +28% ATK while any summon is out. Soulweave and Soul Impact count each wolf separately.',
+ 'Charms marked est. (Night\'s Blessing, Summoner\'s Frenzy, Insight, Mana Surge, Elemental Mystery) were not readable; their numbers are my guesses and they are unticked by default.'].map(s=>`<li>${s}</li>`).join('');
+function readCfg(){const c={};
+ for(const [k] of STAT_FIELDS)c[k]=+$('s_'+k).value;
+ for(const [k] of FIGHT_FIELDS)c[k]=+$('f_'+k).value;
+ c.pet=$('pet').checked;c.aD0=c.aD;c.rounds=Math.max(1,c.rounds|0);c.apr=Math.max(1,c.apr|0);c.enemies=Math.max(1,c.enemies);
+ c._k=JSON.stringify(Object.values(c));
+ return c;}
+function readPool(){const prophet=$('prophet').checked;
+ const pt=TECH.filter(x=>$('t_'+x.id).checked&&(prophet||x.tier<5)).map(x=>x.id);
+ const pc=CHARM.filter(x=>$('c_'+x.id).checked&&(prophet||x.tier<5)).map(x=>x.id);return {pt,pc};}
+const SCEN=[
+ ['+1 level on all 4 Dark relic slots (+4.4% Dark Affinity)',c=>{c.aD*=1.044;}],
+ ['Ashen Wrath relic (+5% Crit Rate)',c=>{c.cr+=5;}],
+ ['Divine Grimoire relic (+5% Crit Rate)',c=>{c.cr+=5;}],
+ ["Nymph's Sword Hilt (+5% Crit Rate)",c=>{c.cr+=5;}],
+ ['Cosmic Nexus or Ode of the Doomed (+7.5% Crit DMG)',c=>{c.cd+=7.5;}],
+ ['Primordial Skybreaker or Martial Sovereign (+7.5% Crit DMG)',c=>{c.cd+=7.5;}],
+ ['Demon Crucible (+2.5% DMG Boost, +200 Dark Affinity)',c=>{c.dmg+=2.5;c.aD+=200;}],
+ ['+1,000 Dark Affinity',c=>{c.aD+=1000;}],
+ ['+10% ATK (e.g. Mythic gear upgrade)',c=>{c.ATK*=1.10;}],
+ ['+5,000 Effect Hit Rate',c=>{c.ehr+=5000;}],
+ ['+5% DMG Boost',c=>{c.dmg+=5;}]];
+$('go').onclick=async()=>{
+ const btn=$('go');btn.disabled=true;cache.clear();
+ const cfg=readCfg(),{pt,pc}=readPool();
+ if(pt.length<1||pc.length<1){$('prog').textContent='Tick at least one technique and one charm.';btn.disabled=false;return;}
+ const res=await search(cfg,pt,pc,(a,b)=>$('prog').textContent=`Searching ${a}/${b}`);
+ const sims=res.map(r=>{const f=sim(applyEstimates(cfg,r.b),r.b,false);return {r,f,key:JSON.stringify([f.used.slice().sort(),r.b.charms.slice().sort()])};});
+ const seen=new Map();for(const x of sims){const k=Math.round(x.f.total/1000)+'|'+x.key;if(seen.has(k)){seen.get(k).n++;}else{x.n=1;seen.set(k,x);}}
+ const uniq=[...seen.values()].sort((a,b)=>b.f.total-a.f.total);
+ const best=uniq[0].r,topv=uniq[0].f.total;
+ const names=b=>b.tech.map(id=>TECHMAP[id].name);
+ const pills=(b,used)=>b.tech.map(id=>`<span class="pill" style="${used.includes(id)?'':'opacity:.45'}">${TECHMAP[id].name}${used.includes(id)?'':' (never cast)'}</span>`).join('')+b.charms.map(id=>`<span class="pill c">${CHMAP[id].name}</span>`).join('');
+ const cols={direct:'#7c4dff',erosion:'#ff7043',summon:'#26a69a',pet:'#ffca28',procs:'#8d6e63',rune:'#42a5f5'};
+ let h='';
+ uniq.slice(0,6).forEach((u,i)=>{const r=u.r;const full=sim(applyEstimates(cfg,r.b),r.b,i===0);const bk=full.bucket,tot=full.total;
+  const ests=r.b.charms.filter(id=>CHMAP[id].est);
+  h+=`<div style="margin-bottom:14px"><span class="rank">#${i+1}</span> <b>${fmt(tot)}</b> over ${cfg.rounds} rounds · ${fmt(tot/cfg.rounds)}/round <span class="small">(${(100*tot/topv).toFixed(1)}% of best${u.n>1?`, +${u.n-1} equivalent variants`:''})</span>`+
+  `<div class="bk">${Object.keys(bk).map(k=>`<div title="${k}" style="width:${100*bk[k]/tot}%;background:${cols[k]}"></div>`).join('')}</div>`+
+  `<div class="small">${Object.keys(bk).filter(k=>bk[k]>0).map(k=>`<span style="color:${cols[k]}">■</span> ${k} ${(100*bk[k]/tot).toFixed(0)}%`).join(' · ')}</div>`+pills(r.b,full.used)+
+  (ests.length?`<div class="small est">Uses estimated charm numbers: ${ests.map(id=>CHMAP[id].name).join(', ')}</div>`:'')+
+  (r.b.tech.some(id=>TECHMAP[id].tier===5)||r.b.charms.some(id=>CHMAP[id].tier===5)?`<div class="small">Needs Prophet (Tier 5).</div>`:'')+
+  (i===0?`<details><summary>Rotation, round by round</summary><div class="small">${full.log.join('<br>')}</div></details>`:'')+`</div>`;});
+ $('res').innerHTML=h;
+ const baseT=sim(applyEstimates(cfg,best.b),best.b,false).total;
+ let w='<table><tr><th>Change</th><th>Damage</th><th>Gain</th></tr>';
+ const rows=SCEN.map(([n,f])=>{const c=Object.assign({},cfg);f(c);c.aD0=cfg.aD0;return [n,sim(applyEstimates(c,best.b),best.b,false).total];}).sort((a,b)=>b[1]-a[1]);
+ for(const [n,v] of rows)w+=`<tr><td>${n}</td><td>${fmt(v)}</td><td>+${(100*(v/baseT-1)).toFixed(1)}%</td></tr>`;
+ $('what').innerHTML=w+'</table><p class="small">Each row changes only that one thing with the same best build, so gains are comparable.</p>';
+ $('out').hidden=false;$('prog').textContent='Done';btn.disabled=false;$('out').scrollIntoView({behavior:'smooth'});
+};
+$('exp').onclick=()=>{const o={s:{},f:{},t:[],c:[],prophet:$('prophet').checked,pet:$('pet').checked};
+ for(const [k] of STAT_FIELDS)o.s[k]=+$('s_'+k).value;for(const [k] of FIGHT_FIELDS)o.f[k]=+$('f_'+k).value;
+ o.t=TECH.filter(x=>$('t_'+x.id).checked).map(x=>x.id);o.c=CHARM.filter(x=>$('c_'+x.id).checked).map(x=>x.id);$('json').value=JSON.stringify(o);};
+$('imp').onclick=()=>{try{const o=JSON.parse($('json').value);for(const k in o.s)$('s_'+k).value=o.s[k];for(const k in o.f)$('f_'+k).value=o.f[k];
+ TECH.forEach(x=>$('t_'+x.id).checked=o.t.includes(x.id));CHARM.forEach(x=>$('c_'+x.id).checked=o.c.includes(x.id));$('prophet').checked=o.prophet;$('pet').checked=o.pet;}catch(e){alert('Could not read that text');}};
+</script>
+</body>
+</html>
