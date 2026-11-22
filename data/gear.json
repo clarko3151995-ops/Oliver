@@ -1,0 +1,17 @@
+{
+ "_note": "Equipped gear read from the player's screenshots (all +144). Gem percentages scale the item's main stat. Gear resonance activated through +140 (next unlocks at +145 HP 2%, 0/5 pieces); resonance boost currently ATK 4.71K, DEF 4.71K, HP 24.4K, SPD 3.77K.",
+ "gear": [
+  {"slot":"Weapon","name":"Twiggy Staff","rarity":"Mythic","level":160,"enhance":144,"main":{"ATK":78800,"SPD":25200},"sub":{"HP_pct":10.7,"SPD":4230,"Accuracy_pct":4.62,"DEF":5210},"gems":[{"T8 Ruby":"ATK +60.7%"},{"T7 Ruby":"ATK +40.5%"}]},
+  {"slot":"Offhand (Orb)","name":"Origin Crystal","rarity":"Legendary","level":135,"enhance":144,"main":{"HP":104000,"ElementalMastery":8350},"sub":{"DEF_pct":9.93,"CritDMG_pct":6.08,"SPD_pct":11.1,"DEF_pct_2":10.8},"gems":[{"T8 Obsidian":"ATK +56.7%, DMG Boost +0.8%"},{"T7 Beryl":"HP +40.5%"}]},
+  {"slot":"Helmet","name":"Radiant Helm","rarity":"Legendary","level":135,"enhance":144,"main":{"DEF":52200,"HP":104000},"sub":{"SPD_pct":11.1,"ATK":3230,"EffectHitRate":2960,"PhysicalMastery":3420},"gems":[{"T8 Sapphire":"DEF +60.7%"},{"T7 Sapphire":"DEF +40.5%"}]},
+  {"slot":"Armor","name":"Verdant Armor","rarity":"Mythic","level":160,"enhance":144,"main":{"HP":394000,"PhysicalRES":31500},"sub":{"SPD_pct":12.2,"HP":25500,"CritDMG_pct":5.14,"EffectRES":5360},"gems":[{"T7 Beryl":"HP +40.5%"},{"T8 Moonstone":"DEF +56.7%, DMG RES +0.8%"}]},
+  {"slot":"Boots","name":"Sparkling Boots","rarity":"Legendary","level":134,"enhance":144,"main":{"SPD":41300,"ElementalMastery":20600},"sub":{"ElementalRES":3420,"DEF_pct":11.4,"SPD_pct":10.5,"BlockRate_pct":4.16,"BlockEfficiency_pct":6.24},"gems":[{"T7 Amber":"HP +37%, Healing Boost +2.8%"},{"T6 Citrine":"SPD +27%"}]}
+ ],
+ "observations": [
+  "Orb and Helm and Boots are Legendary Lv134-135 while Weapon and Armor are Mythic Lv160: upgrading them to Mythic Lv160 gear is the biggest remaining stat lever.",
+  "Gems (inlay) give the big ATK: weapon has T8+T7 Ruby (ATK +101%), orb has T8 Obsidian (ATK +56.7%, DMG Boost +0.8%).",
+  "Gear Crit DMG: orb 6.08% + armor 5.14% = 11.22% (matches gear Crit DMG 11.2%).",
+  "Elemental Mastery from gear: boots 20.6K + orb 8.35K = 28.95K (matches 29K)."
+ ],
+ "gear_resonance": {"activated_through":"+140 on all five slots (x5 to +140)","next":"x5 to +145 HP 2% is 0/5","bonus_so_far":{"ATK":4710,"DEF":4710,"HP":24400,"SPD":3770}}
+}
