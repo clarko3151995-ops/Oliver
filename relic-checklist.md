@@ -314,27 +314,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Ox Lantern (owned, +14)
 - [x] Fire Beacon (owned, +14)
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Nightshine
-- [ ] Golden Twig
-- [ ] Silken Paper
-- [ ] Festive Lantern
-- [ ] Judge's Brush
-- [ ] Mystic Ink Stick
-- [ ] Sandalwood Casket
-- [ ] Mystic Inkstone
-- [ ] Jade Bangle
-- [ ] Fortune Abacus
-- [ ] Breezeleaf Fan
-- [ ] Paper Kite
-- [ ] Serenity Kettle
-- [ ] Rouge Casket
-- [ ] Tripod Chalice
-- [ ] Rattle Drum
-- [ ] Suona
-- [ ] Firecrackers
-- [ ] Tinder Box
-- [ ] Warm Burner
+### Rare (20) — 20/20 detailed (all owned)
+- [x] Nightshine (owned, +14)
+- [x] Golden Twig (owned, +14)
+- [x] Silken Paper (owned, +14)
+- [x] Festive Lantern (owned, +14)
+- [x] Judge's Brush (owned, +14)
+- [x] Mystic Ink Stick (owned, +14)
+- [x] Sandalwood Casket (owned, +14)
+- [x] Mystic Inkstone (owned, +14)
+- [x] Jade Bangle (owned, +14)
+- [x] Fortune Abacus (owned, +14)
+- [x] Breezeleaf Fan (owned, +14)
+- [x] Paper Kite (owned, +14)
+- [x] Serenity Kettle (owned, +14)
+- [x] Rouge Casket (owned, +14)
+- [x] Tripod Chalice (owned, +14)
+- [x] Rattle Drum (owned, +14)
+- [x] Suona (owned, +14)
+- [x] Firecrackers (owned, +14)
+- [x] Tinder Box (owned, +14)
+- [x] Warm Burner (owned, +14)
 
 ## Other regions still to send
 - [ ] Gallery overview: Loong Haven (Ethereal Oracle)
