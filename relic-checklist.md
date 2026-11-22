@@ -428,27 +428,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 
 ## Aethyris (Aurora Pact) — 80 relics, gallery counter 34/80
 
-### Mythic (20) — 0/20 detailed — send first
-- [ ] Thunderblast Hammer
-- [ ] Fallen Spear
-- [ ] Divine Grimoire
-- [ ] Eternal Sun
-- [ ] Midnight Feathers
-- [ ] Auroral Veil
-- [ ] Astral Zenith
-- [ ] Void Moon
-- [ ] Stormbringer's Sin
-- [ ] Ark of Origins
-- [ ] Aeolus's Gaze
-- [ ] Cosmic Star
-- [ ] Abyssal Crown
-- [ ] Life Elixir
-- [ ] Fountain of Fate
-- [ ] Cosmic Nexus
-- [ ] Ember Edge
-- [ ] Firewing Seal
-- [ ] Ashen Wrath
-- [ ] Ode of the Doomed
+### Mythic (20) — 20/20 detailed (0 owned)
+- [x] Thunderblast Hammer
+- [x] Fallen Spear
+- [x] Divine Grimoire
+- [x] Eternal Sun
+- [x] Midnight Feathers
+- [x] Auroral Veil
+- [x] Astral Zenith
+- [x] Void Moon
+- [x] Stormbringer's Sin
+- [x] Ark of Origins
+- [x] Aeolus's Gaze
+- [x] Cosmic Star
+- [x] Abyssal Crown
+- [x] Life Elixir
+- [x] Fountain of Fate
+- [x] Cosmic Nexus
+- [x] Ember Edge
+- [x] Firewing Seal
+- [x] Ashen Wrath
+- [x] Ode of the Doomed
 
 ### Legendary (20) — 20/20 detailed (7 owned)
 - [x] Holy Grail (owned, +14)
@@ -472,52 +472,59 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Fiery Rose (owned, +14)
 - [x] Flame Conqueror
 
-### Epic (20) — 0/20 detailed
-- [ ] Lion Key
-- [ ] Starstone Plate
-- [ ] Gleaming Mask
-- [ ] Celestial Pointer
-- [ ] Nocturnal Horn
-- [ ] Alchemist's Belt
-- [ ] Gloom Charm
-- [ ] Caged Lantern
-- [ ] Gale Talon
-- [ ] Windrite Pot
-- [ ] Whistling Cicada
-- [ ] Wind Whisperer
-- [ ] Dreamcatcher
-- [ ] Crystal Pot
-- [ ] Seacaller Bell
-- [ ] Eco Orb
-- [ ] Infernal Essence
-- [ ] Undying Lamp
-- [ ] Searing Flask
-- [ ] Lava Goggles
+### Epic (20) — 20/20 detailed (11 owned)
+- [x] Lion Key
+- [x] Starstone Plate (owned, +14)
+- [x] Gleaming Mask
+- [x] Celestial Pointer
+- [x] Nocturnal Horn (owned, +14)
+- [x] Alchemist's Belt (owned, +14)
+- [x] Gloom Charm
+- [x] Caged Lantern
+- [x] Gale Talon (owned, +14)
+- [x] Windrite Pot
+- [x] Whistling Cicada (owned, +14)
+- [x] Wind Whisperer
+- [x] Dreamcatcher (owned, +14)
+- [x] Crystal Pot (owned, +14)
+- [x] Seacaller Bell (owned, +14)
+- [x] Eco Orb
+- [x] Infernal Essence (owned, +14)
+- [x] Undying Lamp
+- [x] Searing Flask (owned, +14)
+- [x] Lava Goggles (owned, +14)
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Ancient Core
-- [ ] Wingborn Fossil
-- [ ] Spiral Sapling
-- [ ] Rabbit's Foot
-- [ ] Midnight Horn
-- [ ] Starlit Silk
-- [ ] Alchemical Creation #8
-- [ ] Sand of Stars
-- [ ] Fey Amber
-- [ ] Breezy Bracelet
-- [ ] Campanula
-- [ ] Verdant Meteor
-- [ ] Aquamarine Earrings
-- [ ] Cloudew Coral
-- [ ] Star Conch
-- [ ] Frost Dew
-- [ ] Fire Tongs
-- [ ] Pyro Orb
-- [ ] Lava Fish
-- [ ] Spark Butterfly
+### Rare (20) — 20/20 detailed (16 owned)
+- [x] Ancient Core (owned, +14)
+- [x] Wingborn Fossil (owned, +14)
+- [x] Spiral Sapling (owned, +14)
+- [x] Rabbit's Foot (owned, +14)
+- [x] Midnight Horn (owned, +14)
+- [x] Starlit Silk (owned, +14)
+- [x] Alchemical Creation #8 (owned, +14)
+- [x] Sand of Stars (owned, +14)
+- [x] Fey Amber
+- [x] Breezy Bracelet (owned, +14)
+- [x] Campanula (owned, +14)
+- [x] Verdant Meteor (owned, +14)
+- [x] Aquamarine Earrings (owned, +14)
+- [x] Cloudew Coral (owned, +14)
+- [x] Star Conch (owned, +14)
+- [x] Frost Dew
+- [x] Fire Tongs (owned, +14)
+- [x] Pyro Orb
+- [x] Lava Fish
+- [x] Spark Butterfly (owned, +14)
+
+## Other tab (event relics) — 22 relics, gallery counter 11/22
+Read from the Drive folder: only one card was legible by text (Hero's Arbor Emblem +14: Wind Affinity 315, "Bonus DMG against Storm Griffin 15%", set Four Kingdoms' Resolve 4/4 with Aquorigin Charm, Ancient Tablet, Golden Loong Token). Other cards need screenshots re-sent (text extraction returned blanks).
+- Mythic (7): Thunderlord Diadem, Lucky Statue, Primal Gem, Quintessence Vial, Hero's Handbook, Impish Basket, Primal Forge
+- Legendary (12 seen): Divine Blade Charm, Divine Shield Charm, Golden Loong Token, Dark Blade Charm, Dark Armor Charm, Arcane Grimoire Charm, Divine Staff Charm, Hero's Arbor Emblem, Divine Codex Charm, Celestial Armor Charm, Aquorigin Charm, Wand Charm
+- Epic: Ward Charm, Ancient Tablet, Portable Air Temperature Controller I (more may exist)
+These look like boss-specific event relics (conditional damage bonuses), so low priority for a general build.
 
 ## Other regions still to send
-- [ ] Gallery overview: the "Other" tab (last tab seen in the strip) and any tabs beyond it
+- [x] Gallery overview: "Other" tab (read from Drive; detail cards mostly unreadable)
 
 ## Other open data
 - [ ] Relic slot count
