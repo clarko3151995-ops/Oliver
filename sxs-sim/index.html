@@ -116,7 +116,7 @@ const CHARM=[
  C({id:'linked',name:'Linked Misfortune',tier:3,note:'60% to re-inflict Erosion (63.2% + 170K)'}),
  C({id:'vengeance',name:'Shadow Vengeance',tier:3,dmg:false,note:'cheat death'}),
  C({id:'overheal',name:'Overhealing',tier:3,dmg:false}),
- C({id:'nights',name:"Night's Blessing",tier:3,est:true,note:'est. +15% Dark DMG'}),
+ C({id:'nights',name:"Night's Blessing",tier:3,note:'+3,060 Dark Affinity (read from card)'}),
  C({id:'summfrenzy',name:"Summoner's Frenzy",tier:3,est:true,note:'est. +45% summon ATK'}),
  C({id:'sheros',name:'Shadow Erosion',tier:2,note:'40% Erosion on each Dark hit (40.8% + 30.1K)'}),
  C({id:'soulimpact',name:'Soul Impact',tier:2,note:'Dark hit when a summon expires'}),
@@ -128,7 +128,7 @@ const CHARM=[
  C({id:'unstable',name:'Unstable Aura',tier:1,note:'25% extra Wind hit'}),
  C({id:'galeshield',name:'Gale Shield',tier:1,dmg:false}),
  C({id:'insight',name:'Insight',tier:1,est:true,note:'est. +3K Effect Hit Rate'}),
- C({id:'manasurge',name:'Mana Surge',tier:1,est:true,note:'est. +5% Crit Rate'}),
+ C({id:'manasurge',name:'Mana Surge',tier:1,note:'Crit Rate 20%+13.5K (read; treated as +20 pts)'}),
  C({id:'elemmystery',name:'Elemental Mystery',tier:1,est:true,note:'est. +10K Elemental Mastery'}),
 ];
 // summons: listed ATK (% of caster ATK + flat) or HP-only (ATK assumed), dur turns, skills = [pct list per act, element, aoe]
@@ -139,14 +139,14 @@ const SUMMON={
  Stonechief:{n:1,atk:null,dur:5,el:'Physical',acts:[{p:62.8,aoe:true}],entry:{p:85.6},note:'Earthquake (+Crag Collapse on entry)'},
  Fiend:{n:1,atk:[350,229000],dur:5,el:'Fire',acts:[{p:120,aoe:true}],note:'Punch'},
  Waterling:{n:1,atk:null,dur:5,el:'Water',acts:[],note:'heals only'},
- Totem:{n:1,atk:null,dur:5,el:'Dark',acts:[],note:'skills unread'},
+ Totem:{n:1,atk:null,dur:5,el:'Dark',acts:[],note:'buffer: Fighting Spirit +12% ATK to allies within 4 grids; Inspiration advances 1 ally action bar 20% (CD1)'},
  RockRex:{n:1,atk:null,dur:99,el:'Physical',acts:[],note:'skills unread'},
 };
 const STAT_FIELDS=[['ATK','ATK',511000],['HP','HP',2810000],['dmg','DMG Boost %',42.6],['cr','Crit Rate %',22.9],['cd','Crit DMG %',70.2],['ehr','Effect Hit Rate',14900],['em','Elemental Mastery',31800],['pm','Physical Mastery',15600],
  ['aD','Dark Affinity',6370],['aF','Fire Affinity',7590],['aW','Water Affinity',7700],['aI','Wind Affinity',5840],['aL','Light Affinity',9240]];
 const FIGHT_FIELDS=[['rounds','Rounds',10],['apr','Player actions / round',1],['enemies','Enemies hit by area skills',1],['K','Residual (calibrated)',0.763],['dres','Enemy DMG RES %',21.4],['eres','Enemy Effect RES',8290],
  ['B','Affinity divisor (Master I = 9819)',9819],['M','Mastery divisor (Master I = 195002)',195002],['ramp','Soul Reap/Nightshade ramp %',25],['vuln','Vulnerability dmg %',10],['defg','Dmg gain per DEF-down stack %',3],
- ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['mat','Nyxarchon materializes after (rounds, guess)',3],['petm','Materialized pet damage factor (guess)',1],['totem','Frenzy Totem damage / turn (% of its ATK, unknown)',0],['petf','Pet passive hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
+ ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['mat','Nyxarchon first acts in round (materializes end of round 1)',1],['petm','Materialized pet damage factor (guess)',1],['petf','Pet passive hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
 
 /* ---------- ENGINE (expected-value simulation) ---------- */
 function sim(cfg,build,wantLog){
@@ -162,7 +162,7 @@ function sim(cfg,build,wantLog){
   const base=off(cfg.aD0);
   const avgA=(cfg.aD+cfg.aF+cfg.aW+cfg.aI+cfg.aL)/5;
   const elemR=el=>{let a;
-    if(el==='Dark')a=cfg.aD+(has('shadowy')?2000:0);else if(el==='Fire')a=cfg.aF;else if(el==='Water')a=cfg.aW;else if(el==='Wind')a=cfg.aI;else if(el==='Light')a=cfg.aL;
+    if(el==='Dark')a=cfg.aD+(has('shadowy')?2000:0)+(has('nights')?3060:0);else if(el==='Fire')a=cfg.aF;else if(el==='Water')a=cfg.aW;else if(el==='Wind')a=cfg.aI;else if(el==='Light')a=cfg.aL;
     if(el==='Physical')return (1+avgA/cfg.B+cfg.pm/cfg.M)/base;
     return off(a)/base;};
   const pAct=(type,t)=>{const a=apps[type];if(!a)return 0;let pr=1;for(const x of a)if(x.until>t)pr*=1-x.p;return 1-pr;};
@@ -170,11 +170,12 @@ function sim(cfg,build,wantLog){
   const distinct=t=>Math.min(3,eroP(t)+['Slow','Weakened','ArmorBreak','Frenzy','Vuln','DefRed','Immobilize','Frozen'].reduce((s,k)=>s+pAct(k,t),0));
   const defStacks=t=>{let s=0;for(const k of ['DefRed','ArmorBreak']){const a=apps[k];if(a)for(const x of a)if(x.until>t)s+=x.p;}return Math.min(3,s);};
   const summonAlive=t=>summ.some(s=>s.until>t);
-  const atkNow=t=>cfg.ATK*(1+(has('fallingstar')?.175/3:0)+(has('soulpactres')&&summonAlive(t)?.28:0));
-  const critEV=1+Math.min(1,cfg.cr/100+(has('manasurge')?.05:0))*(cfg.cd/100);
+  const totemAlive=t=>summ.some(s=>s.id==='Totem'&&s.start<=t&&s.until>t);
+  const atkNow=t=>cfg.ATK*(1+(has('fallingstar')?.175/3:0)+(has('soulpactres')&&summonAlive(t)?.28:0)+(totemAlive(t)?.12:0))+(has('soulpactres')&&summonAlive(t)?102000:0);
+  const critEV=1+Math.min(1,cfg.cr/100+(has('manasurge')?.20:0))*(cfg.cd/100);
   const addApp=(type,p,dur,t)=>{(apps[type]=apps[type]||[]).push({p,until:t+dur});};
   const mult=(el,t,o)=>{o=o||{};
-    let boost=cfg.dmg/100+(o.player!==false&&has('mantra')?.21:0)+(o.player!==false&&has('nights')&&el==='Dark'?.15:0)+(o.curse?.075*distinct(t):0);
+    let boost=cfg.dmg/100+(o.player!==false&&has('mantra')?.21:0)+(o.curse?.075*distinct(t):0);
     let m=cfg.K*elemR(el)*(1+boost)*(1-cfg.dres/100)*(1+pAct('Vuln',t)*cfg.vuln/100)*(1+defStacks(t)*cfg.defg/100);
     if(o.crit!==false)m*=critEV; return m;};
   const hit=(pct,flat,el,t,o)=>(pct/100*atkNow(t)+flat*cfg.flats)*mult(el,t,o);
@@ -245,7 +246,7 @@ function sim(cfg,build,wantLog){
     }
     // summons act
     for(const s of summ){ if(s.start>t||s.until<=t)continue; const S=s.S;
-      const acts=(s.id==='Totem'&&cfg.totem>0)?[{p:cfg.totem,aoe:true}]:S.acts;
+      const acts=S.acts;
       if(!acts.length)continue;
       let bestd=0;for(const act of acts){const dd=act.p/100*s.atk*mult(S.el,t,{player:false})*(act.aoe?cfg.enemies:1);if(dd>bestd)bestd=dd;}
       bucket.summon+=bestd*S.n; requiem(t); }
@@ -315,7 +316,7 @@ $('assume').innerHTML=[
  'Card "% + flat" on DMG Bonus / ATK Boost charms: I use only the % and ignore the flat part. Damage cards add the flat amount per hit; it is verified only for Dark Bullet (small flat). Higher-tier cards have much bigger flats (Chaos Rune +913K), so use the Flat-amount scale to correct it once you measure one more hit.',
  'Erosion lasts 3 rounds and ticks once per round; Linked Misfortune and Shadow Erosion add stacks with their own tick values. Effect-hit chance = base chance × your Effect Hit Rate ÷ enemy Effect RES (capped at 100%).',
  'Cooldown "CD n" means n rounds off after a cast. One enemy by default; area skills hit the number of enemies you set.',
- 'Summons: ATK = Summon strength × (listed % × your ATK + flat). HP-only summons use the "HP-only summon ATK %" guess. Summon skill damage uses the player\'s crit and DMG Boost. Frenzy Totem and Rock Rex have unread skills (counted as 0 unless you set Totem damage). Decoy Clone adds its HP (18.6% of your HP + 316K) as true damage per cast; allies attacking the clone is not modeled.',
+ 'Summons: ATK = Summon strength × (listed % × your ATK + flat). HP-only summons use the "HP-only summon ATK %" guess. Summon skill damage uses the player\'s crit and DMG Boost. Frenzy Totem is a buffer (+12% ATK to allies while alive; its action-bar boost is not modeled). Rock Rex skills are unread (counted as 0). Decoy Clone adds its HP (18.6% of your HP + 316K) as true damage per cast; allies attacking the clone is not modeled.',
  'Nyxarchon: Requiem Blast fires once per round when you cast a damaging skill and applies a 10% DEF-down stack. Its hit uses a measured factor (0.722 of raw). After it materializes (round count is a guess) it fights with its own ATK (67.1% of yours + 275K), casting Nightshade Blast (CD2) or Shadow Sweep each round.',
  'Mantra of Blessings and Night\'s Blessing apply to you, not to summons. Soul Pact Resonance gives you +28% ATK while any summon is out. Soulweave and Soul Impact count each wolf separately.',
  'Charms marked est. (Night\'s Blessing, Summoner\'s Frenzy, Insight, Mana Surge, Elemental Mystery) were not readable; their numbers are my guesses and they are unticked by default.'].map(s=>`<li>${s}</li>`).join('');
