@@ -1,49 +1,505 @@
 {
   "_note": "Read from the player's Drive screenshots (T5 - Prophet and Summons folders). Level 136 cards. Damage is 'pct of ATK + flat'. 'tier5' items need Prophet unlocked. Values marked null were not legible.",
-  "class": {"name":"Prophet","tier":5,"traits":{"ATK_pct":40.5,"DEF_pct":40.5,"SPD_pct":40.5,"HP_pct":45.5,"CritRES_pct":10,"HealingBoost_pct":20},"weapon":"Staff","offhand":"Orb"},
+  "class": {
+    "name": "Prophet",
+    "tier": 5,
+    "traits": {
+      "ATK_pct": 40.5,
+      "DEF_pct": 40.5,
+      "SPD_pct": 40.5,
+      "HP_pct": 45.5,
+      "CritRES_pct": 10,
+      "HealingBoost_pct": 20
+    },
+    "weapon": "Staff",
+    "offhand": "Orb"
+  },
   "techniques_tier5": [
-    {"name":"Desperate Shadow","element":"Dark","rarity":"Legendary","cd":1,"hits":1,"pct":158.6,"flat":475000,"area":"1x4 line in front","effect":"70% base chance 1 random debuff (Weakened/Armor Break/Slow) for 2 turns"},
-    {"name":"Soul Reap","element":"Dark","rarity":"Legendary","cd":2,"hits":2,"pct":156.8,"flat":411000,"range":3,"effect":"+5% damage per 5% HP lost by target, max +50%; prioritizes large targets","note":"pct/flat may be per hit"},
-    {"name":"Hexed Blast","element":"Dark","rarity":"Mythic","cd":1,"hits":1,"pct":87.9,"flat":246000,"trigger_pct":39,"trigger_flat":109000,"area":"2-grid radius, target within 3","effect":"extra hit per distinct debuff on target, up to 3"},
-    {"name":"Void Chant","element":"Dark","rarity":"Legendary","cd":2,"initial_cd":0,"pct":56,"flat":104000,"range":5,"effect":"rune lasts 2 turns; hits an enemy that casts a Technique; triggers their Erosion once"},
-    {"name":"Thalasson Summon","type":"summon","rarity":"Legendary","once_per_battle":true,"summon_atk_pct":300,"summon_flat":227000},
-    {"name":"Radiant Rhythm","type":"heal","rarity":"Legendary","cd":1,"heal_pct":0.81,"heal_flat":31200,"effect":"chains up to 5 times, repeat -35%"}
+    {
+      "name": "Desperate Shadow",
+      "element": "Dark",
+      "rarity": "Legendary",
+      "cd": 1,
+      "hits": 1,
+      "pct": 158.6,
+      "flat": 475000,
+      "area": "1x4 line in front",
+      "effect": "70% base chance 1 random debuff (Weakened/Armor Break/Slow) for 2 turns"
+    },
+    {
+      "name": "Soul Reap",
+      "element": "Dark",
+      "rarity": "Legendary",
+      "cd": 2,
+      "hits": 2,
+      "pct": 156.8,
+      "flat": 411000,
+      "range": 3,
+      "effect": "+5% damage per 5% HP lost by target, max +50%; prioritizes large targets",
+      "note": "pct/flat may be per hit"
+    },
+    {
+      "name": "Hexed Blast",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "hits": 1,
+      "pct": 87.9,
+      "flat": 246000,
+      "trigger_pct": 39,
+      "trigger_flat": 109000,
+      "area": "2-grid radius, target within 3",
+      "effect": "extra hit per distinct debuff on target, up to 3"
+    },
+    {
+      "name": "Void Chant",
+      "element": "Dark",
+      "rarity": "Legendary",
+      "cd": 2,
+      "initial_cd": 0,
+      "pct": 56,
+      "flat": 104000,
+      "range": 5,
+      "effect": "rune lasts 2 turns; hits an enemy that casts a Technique; triggers their Erosion once"
+    },
+    {
+      "name": "Thalasson Summon",
+      "type": "summon",
+      "rarity": "Legendary",
+      "once_per_battle": true,
+      "summon_atk_pct": 300,
+      "summon_flat": 227000
+    },
+    {
+      "name": "Radiant Rhythm",
+      "type": "heal",
+      "rarity": "Legendary",
+      "cd": 1,
+      "heal_pct": 0.81,
+      "heal_flat": 31200,
+      "effect": "chains up to 5 times, repeat -35%"
+    }
   ],
   "charms_tier5": [
-    {"name":"Shadowy Current","rarity":"Legendary","dark_affinity":2000,"dmg_pct":56,"dmg_flat":104000,"effect":"kill splashes Dark damage within 1 grid"},
-    {"name":"Cursed Armor","rarity":"Legendary","dmg_pct":29.4,"dmg_flat":55000,"effect":"50% to inflict Erosion on attacker when you take Technique damage"},
-    {"name":"Ring of Omen","rarity":"Legendary","effect_res_down":2540,"effect":"start of turn lowers enemy Effect RES within 5 grids; 50% Vulnerability 1 turn"},
-    {"name":"Soulweave","rarity":"Legendary","summon_atk_pct":350,"summon_flat":229000,"effect":"when 3 summons die, summons Infernal Fiend (once)"},
-    {"name":"Summoning Pact","rarity":"Legendary","hp_boost_pct":7.12,"hp_boost_flat":15700,"effect":"summoning costs 2% max HP to boost summon HP; refunded on victory"},
-    {"name":"Rejuvenating Elixir","rarity":"Legendary","heal_pct":1.2,"heal_flat":32800,"effect":"3 potions at start, +1 per 3 turns (max 5)"}
+    {
+      "name": "Shadowy Current",
+      "rarity": "Legendary",
+      "dark_affinity": 2000,
+      "dmg_pct": 56,
+      "dmg_flat": 104000,
+      "effect": "kill splashes Dark damage within 1 grid"
+    },
+    {
+      "name": "Cursed Armor",
+      "rarity": "Legendary",
+      "dmg_pct": 29.4,
+      "dmg_flat": 55000,
+      "effect": "50% to inflict Erosion on attacker when you take Technique damage"
+    },
+    {
+      "name": "Ring of Omen",
+      "rarity": "Legendary",
+      "effect_res_down": 2540,
+      "effect": "start of turn lowers enemy Effect RES within 5 grids; 50% Vulnerability 1 turn"
+    },
+    {
+      "name": "Soulweave",
+      "rarity": "Legendary",
+      "summon_atk_pct": 350,
+      "summon_flat": 229000,
+      "effect": "when 3 summons die, summons Infernal Fiend (once)"
+    },
+    {
+      "name": "Summoning Pact",
+      "rarity": "Legendary",
+      "hp_boost_pct": 7.12,
+      "hp_boost_flat": 15700,
+      "effect": "summoning costs 2% max HP to boost summon HP; refunded on victory"
+    },
+    {
+      "name": "Rejuvenating Elixir",
+      "rarity": "Legendary",
+      "heal_pct": 1.2,
+      "heal_flat": 32800,
+      "effect": "3 potions at start, +1 per 3 turns (max 5)"
+    }
   ],
   "summon_skills": {
     "Flame Wolves": [
-      {"name":"Blazing Claw","element":"Fire","cd":1,"hits":3,"first_two_pct":16.2,"last_pct":24.5,"range":1},
-      {"name":"Incinerating Wolf","element":"Fire","hits":4,"pct_per_hit":10.6,"area":"1x1 square around caster"}
+      {
+        "name": "Blazing Claw",
+        "element": "Fire",
+        "cd": 1,
+        "hits": 3,
+        "first_two_pct": 16.2,
+        "last_pct": 24.5,
+        "range": 1
+      },
+      {
+        "name": "Incinerating Wolf",
+        "element": "Fire",
+        "hits": 4,
+        "pct_per_hit": 10.6,
+        "area": "1x1 square around caster"
+      }
     ],
     "Stonechief": [
-      {"name":"Earthquake","element":"Physical","cd":1,"pct":62.8,"area":"1x1 square"},
-      {"name":"Massive Quake","element":"Physical","pct":47.5,"area":"2-grid circle","effect":"30% Taunt 1 turn"},
-      {"name":"Adamant Stance (passive)","dmg_res_pct":8,"duration_turns":3},
-      {"name":"Crag Collapse (passive)","element":"Physical","pct":85.6,"area":"3 grids","effect":"60% Taunt 1 turn, triggers on entering battle"}
+      {
+        "name": "Earthquake",
+        "element": "Physical",
+        "cd": 1,
+        "pct": 62.8,
+        "area": "1x1 square"
+      },
+      {
+        "name": "Massive Quake",
+        "element": "Physical",
+        "pct": 47.5,
+        "area": "2-grid circle",
+        "effect": "30% Taunt 1 turn"
+      },
+      {
+        "name": "Adamant Stance (passive)",
+        "dmg_res_pct": 8,
+        "duration_turns": 3
+      },
+      {
+        "name": "Crag Collapse (passive)",
+        "element": "Physical",
+        "pct": 85.6,
+        "area": "3 grids",
+        "effect": "60% Taunt 1 turn, triggers on entering battle"
+      }
     ],
     "Infernal Fiend": [
-      {"name":"Punch","element":"Fire","cd":1,"pct":120,"area":"1x2 in front"},
-      {"name":"Hook","element":"Fire","pct":40,"area":"1x1 in front"}
+      {
+        "name": "Punch",
+        "element": "Fire",
+        "cd": 1,
+        "pct": 120,
+        "area": "1x2 in front"
+      },
+      {
+        "name": "Hook",
+        "element": "Fire",
+        "pct": 40,
+        "area": "1x1 in front"
+      }
     ],
     "Thalasson": [
-      {"name":"Giant Shark","element":"Water","cd":1,"pct":90,"area":"1-grid square, target within 3"},
-      {"name":"Riptide","element":"Water","pct":45,"effect":"40% Stun 1 turn"}
+      {
+        "name": "Giant Shark",
+        "element": "Water",
+        "cd": 1,
+        "pct": 90,
+        "area": "1-grid square, target within 3"
+      },
+      {
+        "name": "Riptide",
+        "element": "Water",
+        "pct": 45,
+        "effect": "40% Stun 1 turn"
+      }
     ],
     "Treantling": [
-      {"name":"Leaf Arrow","element":"Wind","cd":1,"pct_per_hit":49,"hits":5,"effect":"-45% per subsequent hit on same target"},
-      {"name":"Drifting Leaf","element":"Wind","pct":30.4}
+      {
+        "name": "Leaf Arrow",
+        "element": "Wind",
+        "cd": 1,
+        "pct_per_hit": 49,
+        "hits": 5,
+        "effect": "-45% per subsequent hit on same target"
+      },
+      {
+        "name": "Drifting Leaf",
+        "element": "Wind",
+        "pct": 30.4
+      }
     ],
     "Waterling": [
-      {"name":"Misty Vapor","type":"heal","heal_pct":4.8,"effect":"heals all allies within 3, dispels 1"},
-      {"name":"Dewdrop","type":"heal","heal_pct":6.5}
+      {
+        "name": "Misty Vapor",
+        "type": "heal",
+        "heal_pct": 4.8,
+        "effect": "heals all allies within 3, dispels 1"
+      },
+      {
+        "name": "Dewdrop",
+        "type": "heal",
+        "heal_pct": 6.5
+      }
     ],
     "unread": "Rock Rex (stats pages), Frenzy Totem (all 3 files), several summon skill cards returned no text from Drive"
+  },
+  "techniques_tier4": [
+    {
+      "name": "Chaos Rune",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 2,
+      "pct": 284.4,
+      "flat": 913000,
+      "range": 3,
+      "effect": "40% base Frenzy 1 turn"
+    },
+    {
+      "name": "Dark Starburst",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "hits": 3,
+      "pct": 76.5,
+      "flat": 245000,
+      "range": 4,
+      "note": "pct/flat probably per hit"
+    },
+    {
+      "name": "Decoy Clone",
+      "rarity": "Divine",
+      "cd": 3,
+      "initial_cd": 0,
+      "hp_pct": 18.6,
+      "hp_flat": 316000,
+      "effect": "links to enemy; clone HP loss = true damage to target; lasts 3 turns"
+    },
+    {
+      "name": "Rock Rex Summon",
+      "type": "summon",
+      "rarity": "Mythic",
+      "once_per_battle": true,
+      "hp_pct": 40,
+      "hp_flat": 637000
+    },
+    {
+      "name": "Rejuvenating Rain",
+      "type": "heal",
+      "rarity": "Mythic",
+      "cd": null,
+      "heal_pct": 1.22,
+      "heal_flat": 59600
+    },
+    {
+      "name": "Spirit Aegis",
+      "type": "buff",
+      "rarity": "Mythic",
+      "cd": 1,
+      "dmg_reduction_pct": 21,
+      "dmg_reduction_flat": 14000
+    }
+  ],
+  "charms_tier4": [
+    {
+      "name": "Phantom Light",
+      "healing_boost_pct": 68.6,
+      "flat": 18900
+    },
+    {
+      "name": "Mantra of Blessings",
+      "dmg_bonus_pct": 21,
+      "flat": 36700,
+      "effect": "Blessing to highest-ATK ally each turn"
+    },
+    {
+      "name": "Soul Pact Resonance",
+      "atk_boost_pct": 28,
+      "flat": 102000,
+      "condition": "while a summon is on the battlefield"
+    },
+    {
+      "name": "Falling Dark Star",
+      "effect": "1 random buff per turn",
+      "spd_pct": 17.5,
+      "atk_pct": 17.5,
+      "atk_flat": 63800,
+      "hp_pct": 17.5
+    },
+    {
+      "name": "Aberrancy",
+      "dmg_reduction_pct": 21,
+      "flat": 16700
+    },
+    {
+      "name": "Soulbond Restoration",
+      "heal_pct": 1.26,
+      "flat": 80000
+    }
+  ],
+  "techniques_tier3": [
+    {
+      "name": "Shadow of Termination",
+      "element": "Dark",
+      "rarity": "Divine",
+      "cd": 2,
+      "pct": 280.3,
+      "flat": 754000,
+      "range": 3,
+      "effect": "triggers all Erosion stacks"
+    },
+    {
+      "name": "Mana Blast",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "pct": 73.5,
+      "flat": 214000,
+      "erosion_pct": 13.2,
+      "erosion_flat": 38400,
+      "area": "2-radius, target within 3",
+      "erosion_chance": 50
+    },
+    {
+      "name": "Abyssal Hand",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "pct": 93.9,
+      "flat": 250000,
+      "area": "2-radius, target within 3",
+      "effect": "50% Slow 1"
+    },
+    {
+      "name": "Frenzy Totem",
+      "type": "summon",
+      "rarity": "Mythic",
+      "cd": 4,
+      "hp_pct": 16,
+      "hp_flat": 190000,
+      "duration": 5
+    },
+    {
+      "name": "Waterling Summon",
+      "type": "summon",
+      "rarity": "Mythic",
+      "cd": 3,
+      "hp_pct": 19,
+      "hp_flat": 205000,
+      "duration": 5
+    }
+  ],
+  "charms_tier3": [
+    {
+      "name": "Linked Misfortune",
+      "rarity": "Divine",
+      "dmg_pct": 63.2,
+      "flat": 170000,
+      "effect": "60% to inflict Erosion again"
+    },
+    {
+      "name": "Shadow Vengeance",
+      "rarity": "Divine",
+      "dmg_bonus_pct": 90,
+      "flat": 5290,
+      "effect": "cheat death, Shadow Form up to 4 global turns, CD -2"
+    },
+    {
+      "name": "Overhealing",
+      "heal_pct": 3.71,
+      "flat": 20600
+    }
+  ],
+  "techniques_tier2": [
+    {
+      "name": "Shadow Impact",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "pct": 76.8,
+      "flat": 68000,
+      "area": "2-radius, target within 3",
+      "effect": "triggers Erosion twice"
+    },
+    {
+      "name": "Dark Bullet",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": null,
+      "pct": 63.4,
+      "flat": 51500,
+      "erosion_pct": 11.3,
+      "erosion_flat": 9220,
+      "range": 4,
+      "erosion_chance": 50
+    },
+    {
+      "name": "Weakening Hex",
+      "element": "Dark",
+      "rarity": "Mythic",
+      "cd": 1,
+      "pct": 70.1,
+      "flat": 56800,
+      "effect": "50% Weakened 1"
+    },
+    {
+      "name": "Flame Wolf Summon",
+      "type": "summon",
+      "cd": 2,
+      "atk_pct": 86.9,
+      "flat": 94600,
+      "wolves": 2,
+      "duration": 2
+    },
+    {
+      "name": "Treantling Summon",
+      "type": "summon",
+      "cd": 3,
+      "atk_pct": 104.4,
+      "flat": 87100,
+      "duration": 5
+    },
+    {
+      "name": "Radiant Restoration",
+      "type": "heal",
+      "cd": 2,
+      "heal_pct": 4.02,
+      "flat": 54600
+    }
+  ],
+  "charms_tier2": [
+    {
+      "name": "Shadow Erosion",
+      "dmg_pct": 40.8,
+      "flat": 30100,
+      "effect": "40% to inflict Erosion on every Dark Technique hit"
+    },
+    {
+      "name": "Soul Impact",
+      "dmg_pct": 65.6,
+      "flat": 48300,
+      "effect": "Dark damage when a summon dies or expires"
+    },
+    {
+      "name": "Soul Spark",
+      "atk_boost_pct": 45,
+      "flat": 32200,
+      "effect": "summons -2 turns"
+    },
+    {
+      "name": "Resurrection",
+      "heal_pct": 3.5,
+      "flat": 127000
+    }
+  ],
+  "class_traits_by_tier": {
+    "Sage": {
+      "all_stats_pct": 12.5,
+      "CritRES": 5,
+      "Healing": 10
+    },
+    "Arcanist": {
+      "all_stats_pct": 20.5,
+      "CritRES": 7.5,
+      "Healing": 15
+    },
+    "Dominator": {
+      "all_stats_pct": 30.5,
+      "CritRES": 10,
+      "Healing": 20
+    },
+    "Prophet": {
+      "ATK_DEF_SPD_pct": 40.5,
+      "HP_pct": 45.5,
+      "CritRES": 10,
+      "Healing": 20
+    }
   }
 }

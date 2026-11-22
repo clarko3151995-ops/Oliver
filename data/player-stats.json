@@ -258,5 +258,138 @@
     },
     "tier": "Dominator (Tier 4) now; Tier 5 Prophet expected soon. Any tier at or below current can be equipped.",
     "equipped_loadout_needed": false
-  }
+  },
+  "snapshot_2": {
+    "_note": "Newer in-game snapshot (after a level-up). Supersedes 'totals' for simulation. Class Lv 192 Dominator; Style Level 29.",
+    "totals": {
+      "ATK": 511000,
+      "DEF": 500000,
+      "HP": 2810000,
+      "SPD": 419000,
+      "CritRatePct": 22.9,
+      "CritDMGPct": 70.2,
+      "CritRESPct": 31.8,
+      "BlockRatePct": 18.3,
+      "BlockEfficiencyPct": 106.2,
+      "AccuracyPct": 25,
+      "DMGBoostPct": 42.6,
+      "DMGRESPct": 32.1,
+      "HealingBoostPct": 22.8,
+      "PvEBonusDMGPct": 12.5,
+      "PvEDMGRESPct": 11.5,
+      "EffectHitRate": 14900,
+      "EffectRES": 18300,
+      "ElementalMastery": 31800,
+      "ElementalRES": 6270,
+      "PhysicalMastery": 15600,
+      "PhysicalRES": 36300,
+      "Affinity": {
+        "Wind": 5840,
+        "Water": 7700,
+        "Fire": 7590,
+        "Light": 9240,
+        "Dark": 6370
+      },
+      "Aegis": {
+        "Wind": 6020,
+        "Water": 5870,
+        "Fire": 6660,
+        "Light": 6510,
+        "Dark": 8830
+      }
+    },
+    "sources": {
+      "character_base": {
+        "ATK": 23900,
+        "DEF": 23900,
+        "HP": 119000,
+        "SPD": 19100,
+        "CritDMGPct": 50
+      },
+      "class": {
+        "ATK": 24300,
+        "DEF": 24800,
+        "HP": 133000,
+        "SPD": 19300,
+        "CritRESPct": 10,
+        "HealingBoostPct": 20
+      },
+      "companion": {
+        "ATK": 58200,
+        "DEF": 56600,
+        "HP": 313000,
+        "SPD": 58100,
+        "CritRatePct": 5,
+        "CritRESPct": 5,
+        "BlockRatePct": 3,
+        "AccuracyPct": 4,
+        "DMGBoostPct": 22,
+        "DMGRESPct": 18
+      },
+      "gear": {
+        "ATK": 86800,
+        "DEF": 73000,
+        "HP": 672000,
+        "SPD": 86700,
+        "EffectHitRate": 2960,
+        "EffectRES": 5360,
+        "CritDMGPct": 11.2,
+        "ElementalMastery": 29000,
+        "PhysicalMastery": 3420
+      },
+      "relics": {
+        "ATK": 155000,
+        "DEF": 150000,
+        "HP": 811000,
+        "SPD": 138000,
+        "EffectHitRate": 12000,
+        "EffectRES": 12900,
+        "CritRatePct": 6,
+        "CritDMGPct": 9,
+        "DMGBoostPct": 12,
+        "DMGRESPct": 8.7,
+        "ElementalMastery": 2850,
+        "DarkAffinity": 6370
+      },
+      "inlay": {
+        "ATK": 53200,
+        "DEF": 53200,
+        "HP": 205000,
+        "SPD": 7280,
+        "DMGBoostPct": 0.8
+      },
+      "dish": {
+        "ATK": 10000,
+        "DEF": 16600,
+        "HP": 75900,
+        "SPD": 11000
+      },
+      "map_exploration": {
+        "ATK": 9390,
+        "CritRatePct": 5.6
+      },
+      "fantomon": {
+        "ATK": 79800,
+        "CritRatePct": 4.8,
+        "DMGBoostPct": 2.3
+      },
+      "guild": {
+        "ATK": 3030,
+        "CritRatePct": 1.5,
+        "DMGBoostPct": 1.5
+      },
+      "visage": {
+        "ATK": 2020
+      },
+      "astral_destiny": {
+        "ATK": 5730,
+        "DMGBoostPct": 4
+      }
+    },
+    "style_level": {
+      "level": 29,
+      "note": "+1% HP/ATK/DEF/SPD (rotating) and PvE bonuses per level up to 44; levels 30-44 locked"
+    }
+  },
+  "relic_change_note": "Relic ATK 146K->155K and Dark Affinity 6.05K->6.37K between snapshots (+5.3%): relic slot levels were raised since the first snapshot."
 }
