@@ -223,27 +223,27 @@ Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display 
 - [x] Flameman's Mask (owned, +14)
 - [x] Ghostfire Lantern (owned, +14)
 
-### Rare (20) — 0/20 detailed (low priority)
-- [ ] Wealth Hoard
-- [ ] Paper Puppet
-- [ ] Master's Drum
-- [ ] Lunaglow Stone
-- [ ] Noh Mask
-- [ ] Raven Feather
-- [ ] Rusted Chainblade
-- [ ] Centipede Charm
-- [ ] Flashing Kunai
-- [ ] Bathhouse Cloth
-- [ ] Pinwheel
-- [ ] Bamboo Dragonfly
-- [ ] Aqua Purse
-- [ ] Shishi Odoshi
-- [ ] Embroidered Ball
-- [ ] Whetstone
-- [ ] Explosive Charm
-- [ ] Firework Fan
-- [ ] Firework Tube
-- [ ] Flint Stone
+### Rare (20) — 20/20 detailed
+- [x] Wealth Hoard (owned, +14)
+- [x] Paper Puppet (owned, +14)
+- [x] Master's Drum (owned, +14)
+- [x] Lunaglow Stone (owned, +14)
+- [x] Noh Mask (owned, +14)
+- [x] Raven Feather (owned, +14)
+- [x] Rusted Chainblade (owned, +14)
+- [x] Centipede Charm (owned, +14)
+- [x] Flashing Kunai (owned, +14)
+- [x] Bathhouse Cloth (owned, +14)
+- [x] Pinwheel (owned, +14)
+- [x] Bamboo Dragonfly (owned, +14)
+- [x] Aqua Purse (owned, +14)
+- [x] Shishi Odoshi (owned, +14)
+- [x] Embroidered Ball (owned, +14)
+- [x] Whetstone (owned, +14)
+- [x] Explosive Charm (owned, +14)
+- [x] Firework Fan (owned, +14)
+- [x] Firework Tube (owned, +14)
+- [x] Flint Stone (owned, +14)
 
 ## Other regions still to send
 - [ ] Gallery overview: Loong Ha… (Celestial Cra…) and any tabs further right
