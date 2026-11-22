@@ -338,27 +338,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 
 ## Loong Haven (Ethereal Oracle) — 80 relics, gallery counter 50/80
 
-### Mythic (20) — 0/20 detailed — send first
-- [ ] Imperial Crown
-- [ ] Skyward Tower
-- [ ] Cosmic Axe
-- [ ] Dracowine Jug
-- [ ] Martial Sovereign
-- [ ] Ebonlotus Mace
-- [ ] Demon Crucible
-- [ ] Taoist Jade
-- [ ] Feathered Goblet
-- [ ] Primordial Chronicle
-- [ ] Primordial Skybreaker
-- [ ] Kui Thunderpulse Drum
-- [ ] Sumeru Mirror
-- [ ] Seawarden Core
-- [ ] Wondrous Lotus
-- [ ] Dragon Jade
-- [ ] Crimson Dominion
-- [ ] Universal Oblivion
-- [ ] Seven-Feathered Fan
-- [ ] Torch Loong Cannon
+### Mythic (20) — 20/20 detailed (2 owned)
+- [x] Imperial Crown
+- [x] Skyward Tower
+- [x] Cosmic Axe
+- [x] Dracowine Jug
+- [x] Martial Sovereign
+- [x] Ebonlotus Mace
+- [x] Demon Crucible
+- [x] Taoist Jade
+- [x] Feathered Goblet
+- [x] Primordial Chronicle
+- [x] Primordial Skybreaker
+- [x] Kui Thunderpulse Drum
+- [x] Sumeru Mirror
+- [x] Seawarden Core (owned, +14)
+- [x] Wondrous Lotus
+- [x] Dragon Jade
+- [x] Crimson Dominion
+- [x] Universal Oblivion
+- [x] Seven-Feathered Fan
+- [x] Torch Loong Cannon (owned, +14)
 
 ### Legendary (20) — 0/20 detailed
 - [ ] Golden Serpent Shears
