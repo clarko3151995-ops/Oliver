@@ -501,5 +501,153 @@
       "CritRES": 10,
       "Healing": 20
     }
+  },
+  "fantomon_nyxarchon": {
+    "level": 140,
+    "form": "Adult",
+    "role": "main, deployed",
+    "bonus_stats_at_100pct": {
+      "ATK": 38900,
+      "DEF": 40800,
+      "HP": 189000,
+      "SPD": 31000,
+      "CritRate_pct": 4.8,
+      "Accuracy_pct": 4.8,
+      "DMGBoost_pct": 1.2
+    },
+    "skills": [
+      {
+        "name": "Requiem Blast (passive)",
+        "element": "Dark",
+        "pct": 56.9,
+        "flat": 87200,
+        "effect": "when a damaging Technique is used, Dark hit on one target and enemies within 2; 100% to inflict 10% DEF Reduction (max 3 stacks, 2 turns); max twice every 2 turns"
+      },
+      {
+        "name": "Materialization - Nyxarchon",
+        "effect": "materializes when Fantasmia is full; SPD 61%+200K, HP 42.7%+879K, DEF 57.9%+238K, ATK 67.1%+275K"
+      },
+      {
+        "name": "Shadow Sweep",
+        "element": "Dark",
+        "pct": 105.7,
+        "area": "3x2 in front"
+      },
+      {
+        "name": "Nightshade Blast",
+        "element": "Dark",
+        "cd": 2,
+        "pct": 340.2,
+        "range": 2,
+        "effect": "+5% damage per 5% HP lost by target, max +50%; cooldown resets on materialization"
+      },
+      {
+        "name": "Death Star Scatter (passive)",
+        "element": "Dark",
+        "pct": 55,
+        "effect": "kill deals Dark damage to enemies within 2"
+      }
+    ],
+    "fantasmia": "+50 at end of your turn, +6 per 1% max HP lost; not from your own effects"
+  },
+  "techniques_tier1_nondark": {
+    "_note": "Tier 1 techniques are Fire/Water/Wind (not Dark). Level 136 values, pct + flat.",
+    "Water Assault": {
+      "cd": 1,
+      "pct": 69.8,
+      "flat": 64400,
+      "area": "3x4",
+      "note": "-25% per repeat hit"
+    },
+    "Blazing Fire Ring": {
+      "cd": 1,
+      "pct": 85.9,
+      "flat": 57000
+    },
+    "Wind's Delight": {
+      "cd": 1,
+      "pct": 40.4,
+      "flat": 23800,
+      "waves": 7
+    },
+    "Tempest Sphere": {
+      "cd": 1,
+      "pct": 26.8,
+      "flat": 21700,
+      "hits": 5
+    },
+    "Cyclone": {
+      "cd": 1,
+      "pct": 47.7,
+      "flat": 42200
+    },
+    "Fireball": {
+      "cd": 1,
+      "pct": 80.5,
+      "flat": 71200
+    },
+    "Water Shot": {
+      "pct": 77.8,
+      "flat": 63100
+    },
+    "Iron Thorn": {
+      "cd": 1,
+      "pct": 91.8,
+      "flat": 74500
+    },
+    "Ice Spike": {
+      "cd": 1,
+      "pct": 85.4,
+      "flat": 69300
+    },
+    "Flame Jet": {
+      "cd": 1,
+      "pct": 42.5,
+      "flat": 34500,
+      "hits": 3
+    },
+    "Stonechief Summon": {
+      "cd": 5,
+      "hp_pct": 18,
+      "flat": 166000
+    },
+    "Healing Touch": {
+      "cd": 1,
+      "heal_pct": 2.62,
+      "flat": 35600
+    },
+    "Void Blessing": {
+      "cd": 2,
+      "hp_pct": 16,
+      "flat": 154000,
+      "note": "casts once before battle"
+    }
+  },
+  "charms_tier1": {
+    "Curse Resonance": {
+      "dmg_bonus_pct_per_debuff": 7.5,
+      "flat_per_debuff": 7060,
+      "max_stacks": 3,
+      "note": "strong with Erosion/debuff builds"
+    },
+    "Gale Shield": {
+      "shield": "10%+108K",
+      "dmg": "35%+25.8K"
+    },
+    "Water to Ice": {
+      "dmg_pct": 34.1,
+      "flat": 27600
+    },
+    "Flaming Path": {
+      "dmg_pct": 52.5,
+      "flat": 42500
+    },
+    "Unstable Aura": {
+      "dmg_pct": 39.3,
+      "flat": 31900,
+      "chance": 25,
+      "element": "Wind"
+    },
+    "unread": "Insight, Mana Surge, Elemental Mystery, Dew's Blessing, Heart of Flame, Elemental Body, Tough Soul, Wind's Whisper (cards returned no text)"
   }
 }
