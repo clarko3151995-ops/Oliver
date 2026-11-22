@@ -336,9 +336,99 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Tinder Box (owned, +14)
 - [x] Warm Burner (owned, +14)
 
+## Loong Haven (Ethereal Oracle) — 80 relics, gallery counter 50/80
+
+### Mythic (20) — 0/20 detailed — send first
+- [ ] Imperial Crown
+- [ ] Skyward Tower
+- [ ] Cosmic Axe
+- [ ] Dracowine Jug
+- [ ] Martial Sovereign
+- [ ] Ebonlotus Mace
+- [ ] Demon Crucible
+- [ ] Taoist Jade
+- [ ] Feathered Goblet
+- [ ] Primordial Chronicle
+- [ ] Primordial Skybreaker
+- [ ] Kui Thunderpulse Drum
+- [ ] Sumeru Mirror
+- [ ] Seawarden Core
+- [ ] Wondrous Lotus
+- [ ] Dragon Jade
+- [ ] Crimson Dominion
+- [ ] Universal Oblivion
+- [ ] Seven-Feathered Fan
+- [ ] Torch Loong Cannon
+
+### Legendary (20) — 0/20 detailed
+- [ ] Golden Serpent Shears
+- [ ] Golden Peacock Hairpin
+- [ ] Puppet Beacon
+- [ ] Revolving Lantern
+- [ ] Amethyst Baton
+- [ ] Skysplitting Hammer
+- [ ] Stealthy Dart
+- [ ] Movable Type Plate
+- [ ] Bell of Eternity
+- [ ] Zephyr Berry
+- [ ] Plantain Fan
+- [ ] Tempest Stick
+- [ ] Orchid Scroll
+- [ ] Rootless Water Pot
+- [ ] Death Flywheel
+- [ ] Icejade Bed
+- [ ] Pyrocloud Spear
+- [ ] Flaming Wheel
+- [ ] Tome of Battles
+- [ ] Firewyrm Breaker
+
+### Epic (20) — 0/20 detailed
+- [ ] Lightweave Drum
+- [ ] Lucky Tiger Doll
+- [ ] Copper Coin String
+- [ ] Baguenaudier
+- [ ] Darkwolf Fang
+- [ ] Beast-Faced Knocker
+- [ ] Backscratcher
+- [ ] Shadowrap
+- [ ] Folding Screen
+- [ ] Milewalker
+- [ ] Cerulean Plate
+- [ ] Auric Sachet
+- [ ] Precious Waterwheel
+- [ ] Interwoven Chainmail
+- [ ] Water Rake
+- [ ] Glass Cup
+- [ ] Gourd Flute
+- [ ] Tiger-Head Hat
+- [ ] Fire Rabbit
+- [ ] Forsaken Sword
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Copper Lock
+- [ ] Nightwatch Gong
+- [ ] Wooden Horse
+- [ ] Burr Puzzle
+- [ ] Bamboo Tube
+- [ ] Eyebrow Pencil
+- [ ] Dustveil
+- [ ] Wooden Fish
+- [ ] Soothing Plant
+- [ ] Exotic Stone
+- [ ] Herb Grinder
+- [ ] Porcelain Cup
+- [ ] Oil-Paper Umbrella
+- [ ] Steel Fork
+- [ ] Bamboo Fish Basket
+- [ ] Sheepskin Water Bag
+- [ ] Caltrop
+- [ ] Field Cauldron
+- [ ] Royal Chef's Ladle
+- [ ] Auspicious Knot
+
 ## Other regions still to send
-- [ ] Gallery overview: Loong Haven (Ethereal Oracle)
-- [ ] Gallery overview: Aethyr… (Aurora P…, name cut off) and any tabs further right
+- [ ] Gallery overview: Aethyris (Aurora Pact)
+- [ ] Gallery overview: one more tab to the right of Aethyris (name cut off, starts with "C") and any beyond it
 
 ## Other open data
 - [ ] Relic slot count
