@@ -201,27 +201,27 @@ Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display 
 - [x] Flame Spear (owned, +14)
 - [x] Scarlet Cannon (owned, +14)
 
-### Epic (20) — 0/20 detailed
-- [ ] Hawkeye Spyglass
-- [ ] Daruma's Balance
-- [ ] Thunderbolt Sigil
-- [ ] Spiritforge Alloy
-- [ ] Tome of Oddities
-- [ ] Soulwail Stone
-- [ ] Oni Mask
-- [ ] Moonlit Hat
-- [ ] Ritual Catalpa Bow
-- [ ] Gale Shuriken
-- [ ] Windwalker's Geta
-- [ ] Arrow Talisman
-- [ ] Hexbane Urn
-- [ ] Memory Shell
-- [ ] Tsukumogami Umbrella
-- [ ] Water Strider
-- [ ] Flame Crest Charm
-- [ ] Triad Flame
-- [ ] Flameman's Mask
-- [ ] Ghostfire Lantern
+### Epic (20) — 20/20 detailed
+- [x] Hawkeye Spyglass (owned, +14)
+- [x] Daruma's Balance (owned, +14)
+- [x] Thunderbolt Sigil (owned, +14)
+- [x] Spiritforge Alloy (owned, +14)
+- [x] Tome of Oddities (owned, +14)
+- [x] Soulwail Stone (owned, +14)
+- [x] Oni Mask (owned, +14)
+- [x] Moonlit Hat (owned, +14)
+- [x] Ritual Catalpa Bow (owned, +14)
+- [x] Gale Shuriken (owned, +14)
+- [x] Windwalker's Geta (owned, +14)
+- [x] Arrow Talisman (owned, +14)
+- [x] Hexbane Urn (owned, +14)
+- [x] Memory Shell (owned, +14)
+- [x] Tsukumogami Umbrella (owned, +14)
+- [x] Water Strider (owned, +14)
+- [x] Flame Crest Charm (owned, +14)
+- [x] Triad Flame (owned, +14)
+- [x] Flameman's Mask (owned, +14)
+- [x] Ghostfire Lantern (owned, +14)
 
 ### Rare (20) — 0/20 detailed (low priority)
 - [ ] Wealth Hoard
