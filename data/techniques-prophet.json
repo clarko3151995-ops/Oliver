@@ -1,0 +1,49 @@
+{
+  "_note": "Read from the player's Drive screenshots (T5 - Prophet and Summons folders). Level 136 cards. Damage is 'pct of ATK + flat'. 'tier5' items need Prophet unlocked. Values marked null were not legible.",
+  "class": {"name":"Prophet","tier":5,"traits":{"ATK_pct":40.5,"DEF_pct":40.5,"SPD_pct":40.5,"HP_pct":45.5,"CritRES_pct":10,"HealingBoost_pct":20},"weapon":"Staff","offhand":"Orb"},
+  "techniques_tier5": [
+    {"name":"Desperate Shadow","element":"Dark","rarity":"Legendary","cd":1,"hits":1,"pct":158.6,"flat":475000,"area":"1x4 line in front","effect":"70% base chance 1 random debuff (Weakened/Armor Break/Slow) for 2 turns"},
+    {"name":"Soul Reap","element":"Dark","rarity":"Legendary","cd":2,"hits":2,"pct":156.8,"flat":411000,"range":3,"effect":"+5% damage per 5% HP lost by target, max +50%; prioritizes large targets","note":"pct/flat may be per hit"},
+    {"name":"Hexed Blast","element":"Dark","rarity":"Mythic","cd":1,"hits":1,"pct":87.9,"flat":246000,"trigger_pct":39,"trigger_flat":109000,"area":"2-grid radius, target within 3","effect":"extra hit per distinct debuff on target, up to 3"},
+    {"name":"Void Chant","element":"Dark","rarity":"Legendary","cd":2,"initial_cd":0,"pct":56,"flat":104000,"range":5,"effect":"rune lasts 2 turns; hits an enemy that casts a Technique; triggers their Erosion once"},
+    {"name":"Thalasson Summon","type":"summon","rarity":"Legendary","once_per_battle":true,"summon_atk_pct":300,"summon_flat":227000},
+    {"name":"Radiant Rhythm","type":"heal","rarity":"Legendary","cd":1,"heal_pct":0.81,"heal_flat":31200,"effect":"chains up to 5 times, repeat -35%"}
+  ],
+  "charms_tier5": [
+    {"name":"Shadowy Current","rarity":"Legendary","dark_affinity":2000,"dmg_pct":56,"dmg_flat":104000,"effect":"kill splashes Dark damage within 1 grid"},
+    {"name":"Cursed Armor","rarity":"Legendary","dmg_pct":29.4,"dmg_flat":55000,"effect":"50% to inflict Erosion on attacker when you take Technique damage"},
+    {"name":"Ring of Omen","rarity":"Legendary","effect_res_down":2540,"effect":"start of turn lowers enemy Effect RES within 5 grids; 50% Vulnerability 1 turn"},
+    {"name":"Soulweave","rarity":"Legendary","summon_atk_pct":350,"summon_flat":229000,"effect":"when 3 summons die, summons Infernal Fiend (once)"},
+    {"name":"Summoning Pact","rarity":"Legendary","hp_boost_pct":7.12,"hp_boost_flat":15700,"effect":"summoning costs 2% max HP to boost summon HP; refunded on victory"},
+    {"name":"Rejuvenating Elixir","rarity":"Legendary","heal_pct":1.2,"heal_flat":32800,"effect":"3 potions at start, +1 per 3 turns (max 5)"}
+  ],
+  "summon_skills": {
+    "Flame Wolves": [
+      {"name":"Blazing Claw","element":"Fire","cd":1,"hits":3,"first_two_pct":16.2,"last_pct":24.5,"range":1},
+      {"name":"Incinerating Wolf","element":"Fire","hits":4,"pct_per_hit":10.6,"area":"1x1 square around caster"}
+    ],
+    "Stonechief": [
+      {"name":"Earthquake","element":"Physical","cd":1,"pct":62.8,"area":"1x1 square"},
+      {"name":"Massive Quake","element":"Physical","pct":47.5,"area":"2-grid circle","effect":"30% Taunt 1 turn"},
+      {"name":"Adamant Stance (passive)","dmg_res_pct":8,"duration_turns":3},
+      {"name":"Crag Collapse (passive)","element":"Physical","pct":85.6,"area":"3 grids","effect":"60% Taunt 1 turn, triggers on entering battle"}
+    ],
+    "Infernal Fiend": [
+      {"name":"Punch","element":"Fire","cd":1,"pct":120,"area":"1x2 in front"},
+      {"name":"Hook","element":"Fire","pct":40,"area":"1x1 in front"}
+    ],
+    "Thalasson": [
+      {"name":"Giant Shark","element":"Water","cd":1,"pct":90,"area":"1-grid square, target within 3"},
+      {"name":"Riptide","element":"Water","pct":45,"effect":"40% Stun 1 turn"}
+    ],
+    "Treantling": [
+      {"name":"Leaf Arrow","element":"Wind","cd":1,"pct_per_hit":49,"hits":5,"effect":"-45% per subsequent hit on same target"},
+      {"name":"Drifting Leaf","element":"Wind","pct":30.4}
+    ],
+    "Waterling": [
+      {"name":"Misty Vapor","type":"heal","heal_pct":4.8,"effect":"heals all allies within 3, dispels 1"},
+      {"name":"Dewdrop","type":"heal","heal_pct":6.5}
+    ],
+    "unread": "Rock Rex (stats pages), Frenzy Totem (all 3 files), several summon skill cards returned no text from Drive"
+  }
+}
