@@ -337,7 +337,8 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [ ] Warm Burner
 
 ## Other regions still to send
-- [ ] Gallery overview: the tab right of Loong Haven (label cut off: "Loor… Ethe…") and any tabs further right
+- [ ] Gallery overview: Loong Haven (Ethereal Oracle)
+- [ ] Gallery overview: Aethyr… (Aurora P…, name cut off) and any tabs further right
 
 ## Other open data
 - [ ] Relic slot count
