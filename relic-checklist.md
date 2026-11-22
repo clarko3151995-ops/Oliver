@@ -248,27 +248,27 @@ Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display 
 ## Loong Haven (Celestial Crafts) — 80 relics (20 per rarity), gallery counter 60/80
 Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Array and Fiend Stone were seen highlighted (owned) in earlier set lists.
 
-### Mythic (20) — 0/20 detailed — send first
-- [ ] Arcane Pagoda
-- [ ] Skymending Stone
-- [ ] Celestial Trigram Array
-- [ ] Emperor's Tomb
-- [ ] Astrolabe Cosmos
-- [ ] Fiend Stone
-- [ ] Cycle of Fate
-- [ ] Mystic Yin-Yang Mirror
-- [ ] Wildfront Carillon
-- [ ] Primordial Gourd
-- [ ] Seven Stars Lamp
-- [ ] Zephyr's Chalice
-- [ ] Oceanbinder's Seal
-- [ ] Land's Tapestry
-- [ ] Ascension Box
-- [ ] Glyph of the Tortoise
-- [ ] Trinity Crucible
-- [ ] Loong Flame Aegis
-- [ ] Supreme Cauldron
-- [ ] Yinglong Fan
+### Mythic (20) — 20/20 detailed (4 owned)
+- [x] Arcane Pagoda
+- [x] Skymending Stone (owned, +14)
+- [x] Celestial Trigram Array (owned, +14)
+- [x] Emperor's Tomb
+- [x] Astrolabe Cosmos
+- [x] Fiend Stone (owned, +14)
+- [x] Cycle of Fate (owned, +14)
+- [x] Mystic Yin-Yang Mirror
+- [x] Wildfront Carillon
+- [x] Primordial Gourd
+- [x] Seven Stars Lamp
+- [x] Zephyr's Chalice
+- [x] Oceanbinder's Seal
+- [x] Land's Tapestry
+- [x] Ascension Box
+- [x] Glyph of the Tortoise
+- [x] Trinity Crucible
+- [x] Loong Flame Aegis
+- [x] Supreme Cauldron
+- [x] Yinglong Fan
 
 ### Legendary (20) — 0/20 detailed
 - [ ] Auspicious Ruyi
