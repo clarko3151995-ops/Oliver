@@ -270,27 +270,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Supreme Cauldron
 - [x] Yinglong Fan
 
-### Legendary (20) — 0/20 detailed
-- [ ] Auspicious Ruyi
-- [ ] Lotus Lantern
-- [ ] Immortal's Compass
-- [ ] Imperial Cauldron
-- [ ] Immortal's Bind
-- [ ] Malefic Blade Charm
-- [ ] Solitude's End
-- [ ] Abyssal Decree
-- [ ] Wind Sentinel
-- [ ] Sunset Bow
-- [ ] Rainmaker's Mirror
-- [ ] Celestial Gambit
-- [ ] Jade Purity Vase
-- [ ] Aquaward Bead
-- [ ] Loongpike
-- [ ] Moonlit Belle
-- [ ] Phoenix Chakram
-- [ ] Feast Vessel
-- [ ] Qilin Jade
-- [ ] Mountsplitter
+### Legendary (20) — 20/20 detailed (16 owned)
+- [x] Auspicious Ruyi (owned, +14)
+- [x] Lotus Lantern
+- [x] Immortal's Compass (owned, +14)
+- [x] Imperial Cauldron
+- [x] Immortal's Bind (owned, +14)
+- [x] Malefic Blade Charm (owned, +14)
+- [x] Solitude's End (owned, +14)
+- [x] Abyssal Decree (owned, +14)
+- [x] Wind Sentinel (owned, +14)
+- [x] Sunset Bow (owned, +14)
+- [x] Rainmaker's Mirror (owned, +14)
+- [x] Celestial Gambit (owned, +14)
+- [x] Jade Purity Vase (owned, +14)
+- [x] Aquaward Bead (owned, +14)
+- [x] Loongpike (owned, +14)
+- [x] Moonlit Belle
+- [x] Phoenix Chakram (owned, +14)
+- [x] Feast Vessel
+- [x] Qilin Jade (owned, +14)
+- [x] Mountsplitter (owned, +14)
 
 ### Epic (20) — 0/20 detailed
 - [ ] Thunderpulse Drum
