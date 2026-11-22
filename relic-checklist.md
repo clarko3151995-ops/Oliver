@@ -360,27 +360,27 @@ Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Arr
 - [x] Seven-Feathered Fan
 - [x] Torch Loong Cannon (owned, +14)
 
-### Legendary (20) — 0/20 detailed
-- [ ] Golden Serpent Shears
-- [ ] Golden Peacock Hairpin
-- [ ] Puppet Beacon
-- [ ] Revolving Lantern
-- [ ] Amethyst Baton
-- [ ] Skysplitting Hammer
-- [ ] Stealthy Dart
-- [ ] Movable Type Plate
-- [ ] Bell of Eternity
-- [ ] Zephyr Berry
-- [ ] Plantain Fan
-- [ ] Tempest Stick
-- [ ] Orchid Scroll
-- [ ] Rootless Water Pot
-- [ ] Death Flywheel
-- [ ] Icejade Bed
-- [ ] Pyrocloud Spear
-- [ ] Flaming Wheel
-- [ ] Tome of Battles
-- [ ] Firewyrm Breaker
+### Legendary (20) — 20/20 detailed (13 owned)
+- [x] Golden Serpent Shears (owned, +14)
+- [x] Golden Peacock Hairpin (owned, +14)
+- [x] Puppet Beacon
+- [x] Revolving Lantern (owned, +14)
+- [x] Amethyst Baton (owned, +14)
+- [x] Skysplitting Hammer (owned, +14)
+- [x] Stealthy Dart
+- [x] Movable Type Plate
+- [x] Bell of Eternity (owned, +14)
+- [x] Zephyr Berry
+- [x] Plantain Fan
+- [x] Tempest Stick (owned, +14)
+- [x] Orchid Scroll (owned, +14)
+- [x] Rootless Water Pot (owned, +14)
+- [x] Death Flywheel (owned, +14)
+- [x] Icejade Bed
+- [x] Pyrocloud Spear (owned, +14)
+- [x] Flaming Wheel (owned, +14)
+- [x] Tome of Battles
+- [x] Firewyrm Breaker (owned, +14)
 
 ### Epic (20) — 0/20 detailed
 - [ ] Lightweave Drum
