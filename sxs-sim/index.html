@@ -67,7 +67,7 @@ const TECH=[
  // Tier 4
  T({id:'chaos',name:'Chaos Rune',tier:4,el:'Dark',cd:2,pct:284.4,flat:913000,deb:[['Frenzy',1,1,.4]]}),
  T({id:'starburst',name:'Dark Starburst',tier:4,el:'Dark',cd:1,hits:3,pct:76.5,flat:245000}),
- T({id:'decoy',name:'Decoy Clone',tier:4,type:'support'}),
+ T({id:'decoy',name:'Decoy Clone',tier:4,type:'decoy',el:'True',cd:3,hp:[18.6,316000]}),
  T({id:'rockrex',name:'Rock Rex Summon',tier:4,type:'summon',cd:99,summon:'RockRex'}),
  T({id:'rejrain',name:'Rejuvenating Rain',tier:4,type:'support'}),
  T({id:'spiritaegis',name:'Spirit Aegis',tier:4,type:'support'}),
@@ -142,20 +142,20 @@ const SUMMON={
  Totem:{n:1,atk:null,dur:5,el:'Dark',acts:[],note:'skills unread'},
  RockRex:{n:1,atk:null,dur:99,el:'Physical',acts:[],note:'skills unread'},
 };
-const STAT_FIELDS=[['ATK','ATK',511000],['dmg','DMG Boost %',42.6],['cr','Crit Rate %',22.9],['cd','Crit DMG %',70.2],['ehr','Effect Hit Rate',14900],['em','Elemental Mastery',31800],['pm','Physical Mastery',15600],
+const STAT_FIELDS=[['ATK','ATK',511000],['HP','HP',2810000],['dmg','DMG Boost %',42.6],['cr','Crit Rate %',22.9],['cd','Crit DMG %',70.2],['ehr','Effect Hit Rate',14900],['em','Elemental Mastery',31800],['pm','Physical Mastery',15600],
  ['aD','Dark Affinity',6370],['aF','Fire Affinity',7590],['aW','Water Affinity',7700],['aI','Wind Affinity',5840],['aL','Light Affinity',9240]];
 const FIGHT_FIELDS=[['rounds','Rounds',10],['apr','Player actions / round',1],['enemies','Enemies hit by area skills',1],['K','Residual (calibrated)',0.763],['dres','Enemy DMG RES %',21.4],['eres','Enemy Effect RES',8290],
  ['B','Affinity divisor (Master I = 9819)',9819],['M','Mastery divisor (Master I = 195002)',195002],['ramp','Soul Reap/Nightshade ramp %',25],['vuln','Vulnerability dmg %',10],['defg','Dmg gain per DEF-down stack %',3],
- ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['petassist','Pet assist skill uptime (0-1)',0.5],['petf','Pet hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
+ ['sstr','Summon strength (0-1)',0.25],['hpatk','HP-only summon ATK %',60],['basic','Basic attack % (no skill ready)',40],['mat','Nyxarchon materializes after (rounds, guess)',3],['petm','Materialized pet damage factor (guess)',1],['totem','Frenzy Totem damage / turn (% of its ATK, unknown)',0],['petf','Pet passive hit factor (measured)',0.722],['ecast','Enemy casts / round (0-1)',1],['ecap','Erosion stack cap (guess)',3],['escale','Erosion tick strength (guess)',1],['flats','Flat-amount scale (1 = as on card)',1]];
 
 /* ---------- ENGINE (expected-value simulation) ---------- */
 function sim(cfg,build,wantLog){
   const R=cfg.rounds,A=cfg.apr;
   const ch=new Set(build.charms),has=id=>ch.has(id);
   const techs=build.tech.map(id=>TECHMAP[id]);
-  const bucket={direct:0,erosion:0,summon:0,pet:0,procs:0,rune:0};
+  const bucket={direct:0,erosion:0,summon:0,pet:0,procs:0,rune:0,decoy:0};
   const log=[];
-  let used=new Set(),cds={},apps={},stacks=[],summ=[],expired=0,weave=false,runes=[],reqRound=-1;
+  let pcd=0,used=new Set(),cds={},apps={},stacks=[],summ=[],expired=0,weave=false,runes=[],reqRound=-1;
   const scale=()=>Math.min(3,cfg.ehr/Math.max(1,cfg.eres-(has('omen')?2540:0)))+0; // effect-hit multiplier
   const eff=b=>Math.min(1,b*scale());
   const off=a=>1+a/cfg.B+cfg.em/cfg.M;
@@ -203,6 +203,7 @@ function sim(cfg,build,wantLog){
     if(tech.type==='support')return 0;
     if(tech.type==='summon'){const S=SUMMON[tech.summon];if(!S||!S.acts.length)return .1;let atk=S.atk?S.atk[0]/100*cfg.ATK+S.atk[1]:cfg.hpatk/100*cfg.ATK;
       const per=S.acts.reduce((m,a)=>Math.max(m,a.p/100*atk*cfg.sstr*mult(S.el,t,{player:false})*(a.aoe?cfg.enemies:1)),0)*S.n;return per*Math.min(rem,S.dur);}
+    if(tech.type==='decoy')return tech.hp[0]/100*cfg.HP+tech.hp[1];
     if(tech.type==='rune'){return 2*(hit(tech.pct,tech.flat,'Dark',t)+eroTrigger(1,t))*cfg.ecast;}
     const n=tech.aoe?cfg.enemies:1;
     let v=tech.hits*n*hit(tech.pct,tech.flat,tech.el,t,{curse:has('curse')})*(tech.ramp?1+cfg.ramp/100:1);
@@ -215,6 +216,7 @@ function sim(cfg,build,wantLog){
   const cast=(tech,t)=>{
     if(tech.type==='summon'){spawn(tech.summon,t);return;}
     if(tech.type==='rune'){runes.push({until:t+2,tech});return;}
+    if(tech.type==='decoy'){bucket.decoy+=tech.hp[0]/100*cfg.HP+tech.hp[1];return;}
     const n=tech.aoe?cfg.enemies:1;
     let d=tech.hits*n*hit(tech.pct,tech.flat,tech.el,t,{curse:has('curse')})*(tech.ramp?1+cfg.ramp/100:1);
     bucket.direct+=d;
@@ -243,11 +245,14 @@ function sim(cfg,build,wantLog){
     }
     // summons act
     for(const s of summ){ if(s.start>t||s.until<=t)continue; const S=s.S;
-      if(!S.acts.length)continue;
-      let bestd=0;for(const act of S.acts){const dd=act.p/100*s.atk*mult(S.el,t,{player:false})*(act.aoe?cfg.enemies:1);if(dd>bestd)bestd=dd;}
-      bucket.summon+=bestd*S.n; if(S.acts.length)requiem(t); }
-    // pet assist skills
-    if(petOn&&cfg.petassist>0){const ns=(t%3===0)?340.2/100*atkNow(t)*(1+cfg.ramp/100):105.7/100*atkNow(t);bucket.pet+=ns*cfg.petf*cfg.petassist;}
+      const acts=(s.id==='Totem'&&cfg.totem>0)?[{p:cfg.totem,aoe:true}]:S.acts;
+      if(!acts.length)continue;
+      let bestd=0;for(const act of acts){const dd=act.p/100*s.atk*mult(S.el,t,{player:false})*(act.aoe?cfg.enemies:1);if(dd>bestd)bestd=dd;}
+      bucket.summon+=bestd*S.n; requiem(t); }
+    // Nyxarchon after materialization: own ATK, Nightshade Blast (CD2, ready on materialization) / Shadow Sweep
+    if(petOn&&t>=cfg.mat){const patk=.671*cfg.ATK+275000;const pm=mult('Dark',t,{player:false,crit:false})*cfg.petm;
+      if(pcd<=t){bucket.pet+=3.402*patk*(1+cfg.ramp/100)*pm;pcd=t+3;}else bucket.pet+=1.057*patk*pm*cfg.enemies;
+      bucket.pet+=0;}
     // enemy phase
     let ticks=0;for(const s of stacks)if(s.until>t)ticks+=stackVal(s,t);
     bucket.erosion+=ticks*capF(t);
@@ -306,12 +311,12 @@ function poolHTML(){let h='';
 $('pool').innerHTML=poolHTML();
 $('assume').innerHTML=[
  'Damage per hit = (% × ATK + flat) × Residual(0.763) × (1 + DMG Boost + buffs) × (1 − enemy DMG RES) × crit. Residual measured from one Dark Bullet; it folds in enemy DEF and the Affinity ratio.',
- 'Non-Dark elements: scaled by the ratio of your Affinity for that element to Dark, using the wiki formula with the divisors for the monster's rank (Master I, from the in-game test screen). The formula itself is from a community wiki, not confirmed by the developers.',
+ 'Non-Dark elements: scaled by the ratio of your Affinity for that element to Dark, using the wiki formula with the divisors for the monster rank (Master I, from the in-game test screen). The formula itself is from a community wiki, not confirmed by the developers.',
  'Card "% + flat" on DMG Bonus / ATK Boost charms: I use only the % and ignore the flat part. Damage cards add the flat amount per hit; it is verified only for Dark Bullet (small flat). Higher-tier cards have much bigger flats (Chaos Rune +913K), so use the Flat-amount scale to correct it once you measure one more hit.',
  'Erosion lasts 3 rounds and ticks once per round; Linked Misfortune and Shadow Erosion add stacks with their own tick values. Effect-hit chance = base chance × your Effect Hit Rate ÷ enemy Effect RES (capped at 100%).',
  'Cooldown "CD n" means n rounds off after a cast. One enemy by default; area skills hit the number of enemies you set.',
- 'Summons: ATK = Summon strength × (listed % × your ATK + flat). HP-only summons use the "HP-only summon ATK %" guess. Summon skill damage uses the player\'s crit and DMG Boost. Frenzy Totem and Rock Rex have unread skills (counted as 0).',
- 'Nyxarchon: Requiem Blast fires once per round when you cast a damaging skill and applies a 10% DEF-down stack. Its hit uses a measured factor (0.722 of raw). Assist skills (Nightshade Blast, Shadow Sweep) fire at the uptime you set (unknown).',
+ 'Summons: ATK = Summon strength × (listed % × your ATK + flat). HP-only summons use the "HP-only summon ATK %" guess. Summon skill damage uses the player\'s crit and DMG Boost. Frenzy Totem and Rock Rex have unread skills (counted as 0 unless you set Totem damage). Decoy Clone adds its HP (18.6% of your HP + 316K) as true damage per cast; allies attacking the clone is not modeled.',
+ 'Nyxarchon: Requiem Blast fires once per round when you cast a damaging skill and applies a 10% DEF-down stack. Its hit uses a measured factor (0.722 of raw). After it materializes (round count is a guess) it fights with its own ATK (67.1% of yours + 275K), casting Nightshade Blast (CD2) or Shadow Sweep each round.',
  'Mantra of Blessings and Night\'s Blessing apply to you, not to summons. Soul Pact Resonance gives you +28% ATK while any summon is out. Soulweave and Soul Impact count each wolf separately.',
  'Charms marked est. (Night\'s Blessing, Summoner\'s Frenzy, Insight, Mana Surge, Elemental Mystery) were not readable; their numbers are my guesses and they are unticked by default.'].map(s=>`<li>${s}</li>`).join('');
 function readCfg(){const c={};
@@ -346,7 +351,7 @@ $('go').onclick=async()=>{
  const best=uniq[0].r,topv=uniq[0].f.total;
  const names=b=>b.tech.map(id=>TECHMAP[id].name);
  const pills=(b,used)=>b.tech.map(id=>`<span class="pill" style="${used.includes(id)?'':'opacity:.45'}">${TECHMAP[id].name}${used.includes(id)?'':' (never cast)'}</span>`).join('')+b.charms.map(id=>`<span class="pill c">${CHMAP[id].name}</span>`).join('');
- const cols={direct:'#7c4dff',erosion:'#ff7043',summon:'#26a69a',pet:'#ffca28',procs:'#8d6e63',rune:'#42a5f5'};
+ const cols={decoy:'#ec407a',direct:'#7c4dff',erosion:'#ff7043',summon:'#26a69a',pet:'#ffca28',procs:'#8d6e63',rune:'#42a5f5'};
  let h='';
  uniq.slice(0,6).forEach((u,i)=>{const r=u.r;const full=sim(applyEstimates(cfg,r.b),r.b,i===0);const bk=full.bucket,tot=full.total;
   const ests=r.b.charms.filter(id=>CHMAP[id].est);

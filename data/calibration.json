@@ -42,7 +42,20 @@
     "character_action_turns": 12,
     "total_damage": 24700000,
     "avg_damage_per_turn": 2060000,
-    "loadout": "'Support' preset (4 techniques + 4 charms + Nyxarchon); exact names not yet confirmed",
-    "note": "Master 01 rank implies hidden divisors Base Elemental Add 9,819 and Base Elemental Mastery 195,002 (wiki table, Master I level 140)."
+    "loadout": "Support preset: techniques Dark Bullet, Frenzy Totem, Radiant Restoration, Decoy Clone; charms Mantra of Blessings, Healing Mastery, Phantom Light, Aberrancy; pet Nyxarchon",
+    "note": "Master 01 rank implies hidden divisors Base Elemental Add 9,819 and Base Elemental Mastery 195,002 (wiki table, Master I level 140).",
+    "model_check": {
+      "sim_total_12_turns": 18700000,
+      "actual": 24700000,
+      "ratio": 0.76,
+      "sim_breakdown": {
+        "pet": 12390000.0,
+        "direct": 2820000.0,
+        "decoy": 2520000.0,
+        "erosion": 980000.0,
+        "totem": 0
+      },
+      "gap_note": "Missing ~6M; Frenzy Totem skills are unread (counted 0), pet materialization round and damage factor are guesses."
+    }
   }
 }
