@@ -245,8 +245,99 @@ Owned unknown until detail cards arrive. Dark Mythics seen on your Dark display 
 - [x] Firework Tube (owned, +14)
 - [x] Flint Stone (owned, +14)
 
+## Loong Haven (Celestial Crafts) — 80 relics (20 per rarity), gallery counter 60/80
+Note: this tab has 20 Mythics, double the earlier regions. Celestial Trigram Array and Fiend Stone were seen highlighted (owned) in earlier set lists.
+
+### Mythic (20) — 0/20 detailed — send first
+- [ ] Arcane Pagoda
+- [ ] Skymending Stone
+- [ ] Celestial Trigram Array
+- [ ] Emperor's Tomb
+- [ ] Astrolabe Cosmos
+- [ ] Fiend Stone
+- [ ] Cycle of Fate
+- [ ] Mystic Yin-Yang Mirror
+- [ ] Wildfront Carillon
+- [ ] Primordial Gourd
+- [ ] Seven Stars Lamp
+- [ ] Zephyr's Chalice
+- [ ] Oceanbinder's Seal
+- [ ] Land's Tapestry
+- [ ] Ascension Box
+- [ ] Glyph of the Tortoise
+- [ ] Trinity Crucible
+- [ ] Loong Flame Aegis
+- [ ] Supreme Cauldron
+- [ ] Yinglong Fan
+
+### Legendary (20) — 0/20 detailed
+- [ ] Auspicious Ruyi
+- [ ] Lotus Lantern
+- [ ] Immortal's Compass
+- [ ] Imperial Cauldron
+- [ ] Immortal's Bind
+- [ ] Malefic Blade Charm
+- [ ] Solitude's End
+- [ ] Abyssal Decree
+- [ ] Wind Sentinel
+- [ ] Sunset Bow
+- [ ] Rainmaker's Mirror
+- [ ] Celestial Gambit
+- [ ] Jade Purity Vase
+- [ ] Aquaward Bead
+- [ ] Loongpike
+- [ ] Moonlit Belle
+- [ ] Phoenix Chakram
+- [ ] Feast Vessel
+- [ ] Qilin Jade
+- [ ] Mountsplitter
+
+### Epic (20) — 0/20 detailed
+- [ ] Thunderpulse Drum
+- [ ] Rooster of Dawn
+- [ ] Jade Chime
+- [ ] Jade in Gold
+- [ ] White Lotus Ocarina
+- [ ] Spirit Ward Mask
+- [ ] Coiled Serpent
+- [ ] Shaman's Vessel
+- [ ] Boshan Censer
+- [ ] Moon Pipa
+- [ ] Wind Whisk
+- [ ] Divine Banner
+- [ ] Pisces Pendant
+- [ ] Water Gourd
+- [ ] Floodtamer's Codex
+- [ ] Tidebreaker Rule
+- [ ] Fire Spirit Flute
+- [ ] Scorched Tail Qin
+- [ ] Ox Lantern
+- [ ] Fire Beacon
+
+### Rare (20) — 0/20 detailed (low priority)
+- [ ] Nightshine
+- [ ] Golden Twig
+- [ ] Silken Paper
+- [ ] Festive Lantern
+- [ ] Judge's Brush
+- [ ] Mystic Ink Stick
+- [ ] Sandalwood Casket
+- [ ] Mystic Inkstone
+- [ ] Jade Bangle
+- [ ] Fortune Abacus
+- [ ] Breezeleaf Fan
+- [ ] Paper Kite
+- [ ] Serenity Kettle
+- [ ] Rouge Casket
+- [ ] Tripod Chalice
+- [ ] Rattle Drum
+- [ ] Suona
+- [ ] Firecrackers
+- [ ] Tinder Box
+- [ ] Warm Burner
+
 ## Other regions still to send
-- [ ] Gallery overview: Loong Ha… (Celestial Cra…) and any tabs further right
+- [ ] Gallery overview: the tab right of Loong Haven (label cut off: "Loor… Ethe…") and any tabs further right
 
 ## Other open data
 - [ ] Relic slot count
