@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Felt Diorama Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #efe3cc;
+    --ink: #4a3222;
+    --ink-soft: #7a5a40;
+    --thread: #f3e7cf;
+    --felt-green: #7d8a4a;
+    --felt-rust: #b5452a;
+    --wood-light: #d8a86c;
+    --wood-dark: #8a5a32;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper);
+    background-size: 1400px auto;
+    color: var(--ink);
+    font-family: "Patrick Hand", "Comic Sans MS", "Segoe Print", cursive;
+    font-size: 19px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 16px; }
+  header { display: flex; align-items: center; gap: 14px; margin: 4px 0 14px; flex-wrap: wrap; }
+  .tag {
+    background: var(--felt-rust); color: var(--thread); padding: 8px 22px; border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(60,30,10,.35), inset 0 0 0 5px var(--felt-rust), inset 0 0 0 7px transparent;
+    outline: 2px dashed rgba(243,231,207,.85); outline-offset: -8px;
+    font-size: 30px; letter-spacing: .5px; margin: 0;
+  }
+  header p { margin: 0; color: var(--ink-soft); flex: 1 1 260px; }
+
+  .layout { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .panel { order: 2; } }
+
+  .panel {
+    background: #5c6a34; border-radius: 18px; padding: 20px 18px;
+    box-shadow: 0 10px 22px rgba(60,35,15,.35);
+    outline: 2px dashed rgba(243,231,207,.8); outline-offset: -9px;
+    color: #fbf3e2;
+  }
+  .panel h2 { font-size: 22px; margin: 4px 0 10px; font-weight: normal; }
+  .panel .group { margin-bottom: 16px; }
+  .panel label { display: block; margin: 8px 0 4px; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+  .tabs button { flex: 1; }
+  select, input[type=number] {
+    width: 100%; font: inherit; color: var(--ink); background: #f6ecd8; border: none; border-radius: 10px;
+    padding: 6px 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,.18);
+  }
+  input[type=range] { width: 100%; accent-color: #c8642a; }
+  .check { display: flex; align-items: center; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .check input { width: 20px; height: 20px; accent-color: #c8642a; }
+
+  /* Wooden buttons */
+  .wood {
+    font: inherit; font-size: 19px; color: #3e2614; cursor: pointer; border: none;
+    padding: 9px 16px; border-radius: 999px;
+    background:
+      repeating-radial-gradient(ellipse at 30% 20%, rgba(120,70,30,.10) 0 3px, transparent 3px 7px),
+      radial-gradient(circle at 35% 30%, #e9bf86, var(--wood-light) 45%, #b98349 100%);
+    box-shadow: 0 5px 0 var(--wood-dark), 0 8px 14px rgba(50,25,8,.4), inset 0 0 0 3px rgba(120,70,30,.25);
+    transition: transform .08s, box-shadow .08s;
+  }
+  .wood:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--wood-dark), 0 3px 6px rgba(50,25,8,.4), inset 0 0 0 3px rgba(120,70,30,.25); }
+  .wood.on { background: radial-gradient(circle at 35% 30%, #f0a565, #c8642a 60%, #9c3b22); color: #fff4e2; }
+  .wood.big { width: 100%; font-size: 21px; margin-top: 6px; }
+  .wood:focus-visible { outline: 2px dashed #fff3d9; outline-offset: 3px; }
+
+  .stage {
+    position: relative; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 14px 30px rgba(60,35,15,.38);
+    background: #e8dbc1;
+  }
+  canvas { display: block; width: 100%; height: auto; }
+  .status {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    background: rgba(74,50,34,.85); color: var(--thread); padding: 10px 22px; border-radius: 999px;
+    font-size: 22px; pointer-events: none; opacity: 0; transition: opacity .2s;
+  }
+  .status.show { opacity: 1; }
+  .hint { font-size: 16px; color: #f3e7cf; opacity: .9; margin: 6px 0 0; }
+  .hidden { display: none; }
+  .file { display: block; width: 100%; text-align: center; }
+  .file input { display: none; }
+  footer { color: var(--ink-soft); font-size: 16px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="tag">Felt Diorama Studio</h1>
+    <p>Hand-cut felt, corrugated cardboard, stitches and yarn &mdash; generated fresh every time.</p>
+  </header>
+
+  <div class="layout">
+    <aside class="panel">
+      <div class="tabs">
+        <button class="wood on" id="tabIsland" type="button">Island</button>
+        <button class="wood" id="tabPhoto" type="button">Photo</button>
+      </div>
+
+      <div class="group">
+        <label for="palette">Palette</label>
+        <select id="palette">
+          <option value="autumn">Autumn Orchard</option>
+          <option value="spring">Spring Meadow</option>
+          <option value="winter">Winter Wool</option>
+          <option value="twilight">Twilight Patchwork</option>
+        </select>
+      </div>
+
+      <div id="islandControls">
+        <div class="group">
+          <label for="seed">Seed</label>
+          <div class="row">
+            <input type="number" id="seed" min="1" max="999999" value="2024">
+            <button class="wood" id="shuffle" type="button" title="New random island">Shuffle</button>
+          </div>
+        </div>
+        <div class="group">
+          <label for="trees">Trees: <span id="treesVal">6</span></label>
+          <input type="range" id="trees" min="2" max="10" value="6">
+        </div>
+        <label class="check"><input type="checkbox" id="leaves" checked> Falling leaves</label>
+        <label class="check"><input type="checkbox" id="hills" checked> Backdrop hills</label>
+      </div>
+
+      <div id="photoControls" class="hidden">
+        <div class="group">
+          <label class="wood file">Choose a photo
+            <input type="file" id="photo" accept="image/*">
+          </label>
+          <p class="hint">Your photo stays on this device; nothing is uploaded.</p>
+        </div>
+        <div class="group">
+          <label for="colors">Felt colours: <span id="colorsVal">7</span></label>
+          <input type="range" id="colors" min="3" max="12" value="7">
+        </div>
+        <label class="check"><input type="checkbox" id="warm" checked> Warm it up (cozy tones)</label>
+      </div>
+
+      <div class="group">
+        <label class="check"><input type="checkbox" id="stitch" checked> Stitching</label>
+        <label class="check"><input type="checkbox" id="frame" checked> Craft frame (buttons &amp; yarn)</label>
+      </div>
+
+      <button class="wood big" id="save" type="button">Save PNG</button>
+    </aside>
+
+    <main>
+      <div class="stage">
+        <canvas id="cv" width="1600" height="1100" aria-label="Generated felt and cardboard diorama"></canvas>
+        <div class="status" id="status">Stitching&hellip;</div>
+      </div>
+      <footer>Tip: every seed is a different island. Note the seed you like to make it again.</footer>
+    </main>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ================================================================
+   Felt Diorama Studio
+   A procedural renderer for the felt + cardboard diorama look:
+   - felt: fibrous textures, fuzzy edges, slight thickness
+   - cardboard: corrugated flute edges swept below a printed face
+   - layered drop shadows for shadowbox depth
+   - dashed stitching, wooden buttons, yarn, crumpled paper
+   ================================================================ */
+
+const W = 1600, H = 1100;
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+/* ---------- random + colour helpers ---------- */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function hashStr(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = (h * 33 ^ s.charCodeAt(i)) >>> 0; return h; }
+const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function toRgb(c) {
+  if (Array.isArray(c)) return c;
+  const h = c.replace('#', '');
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+function css(c, a = 1) { const [r, g, b] = toRgb(c); return `rgba(${r | 0},${g | 0},${b | 0},${a})`; }
+function shade(c, f) {
+  const [r, g, b] = toRgb(c);
+  return f >= 0 ? [r + (255 - r) * f, g + (255 - g) * f, b + (255 - b) * f] : [r * (1 + f), g * (1 + f), b * (1 + f)];
+}
+function key(c) { return toRgb(c).map(v => v | 0).join(','); }
+
+/* ---------- palettes ---------- */
+const PALETTES = {
+  autumn: {
+    name: 'Autumn Orchard', paper: '#efe3cc', glow: '#f6d9a8',
+    grass: ['#7d8a4a', '#94a05a', '#6b7a3e', '#a3a865'],
+    soil: ['#5e3a24', '#7f5232', '#a06a3c'],
+    foliage: ['#c8642a', '#d9893a', '#b5452a', '#e0a744', '#9c3b22'],
+    pine: ['#5d6e3f', '#4f5e37', '#6f7d48'],
+    trunk: '#5a3a24', card: '#c29a6b', cloud: '#efe6d6', sun: '#e2a845',
+    rock: '#8f8578', cap: '#b8442e', fruit: '#d6772f', thread: '#f3e7cf', accent: '#b5452a',
+    hills: ['#c9b07e', '#b39567'], yarn: '#b5452a', yarn2: '#7d8a4a', tag: '#b5452a', moon: false,
+  },
+  spring: {
+    name: 'Spring Meadow', paper: '#f1e9d6', glow: '#f3e7b6',
+    grass: ['#78a04f', '#8fb862', '#679043', '#a5c777'],
+    soil: ['#6a4630', '#8a5d3d', '#a77a4f'],
+    foliage: ['#e7a1a8', '#f1c4c2', '#d97c8a', '#f4e3b0', '#c9e09a'],
+    pine: ['#4f7c4a', '#5f8f55', '#467044'],
+    trunk: '#6a4630', card: '#caa57a', cloud: '#f7f1e6', sun: '#f2c94c',
+    rock: '#9a9488', cap: '#d0533f', fruit: '#f2c94c', thread: '#fff8ea', accent: '#d97c8a',
+    hills: ['#bfcf96', '#a6bb7d'], yarn: '#d97c8a', yarn2: '#78a04f', tag: '#d97c8a', moon: false,
+  },
+  winter: {
+    name: 'Winter Wool', paper: '#ebe7df', glow: '#dfe8ef',
+    grass: ['#f1eee8', '#e3e1dc', '#f8f6f2', '#d9dde0'],
+    soil: ['#5b4a42', '#76625a', '#8f7d72'],
+    foliage: ['#3f6b5a', '#4f7d68', '#355c4d', '#a9c4cf', '#b94a3e'],
+    pine: ['#365e50', '#2f5246', '#447060'],
+    trunk: '#5b4436', card: '#b8a38a', cloud: '#f8f8f6', sun: '#f0dca8',
+    rock: '#8d8f93', cap: '#b94a3e', fruit: '#b94a3e', thread: '#ffffff', accent: '#4f7d68',
+    hills: ['#cfd6da', '#b8c3c9'], yarn: '#b94a3e', yarn2: '#a9c4cf', tag: '#4f7d68', moon: false,
+  },
+  twilight: {
+    name: 'Twilight Patchwork', paper: '#e6dccb', glow: '#e9c6b8',
+    grass: ['#4f6f5f', '#5f8270', '#426052', '#6f907a'],
+    soil: ['#4a3343', '#634558', '#7d5a6b'],
+    foliage: ['#7a4a7f', '#9b5f8a', '#d58a6a', '#e3b46b', '#5a8a96'],
+    pine: ['#35574f', '#2e4b45', '#40665b'],
+    trunk: '#4a3343', card: '#a98e7a', cloud: '#efe2da', sun: '#f3e5c0',
+    rock: '#7d7a86', cap: '#d58a6a', fruit: '#e3b46b', thread: '#fbeedd', accent: '#9b5f8a',
+    hills: ['#b9a2a8', '#9e8794'], yarn: '#9b5f8a', yarn2: '#5a8a96', tag: '#7a4a7f', moon: true,
+  },
+};
+
+/* ---------- textures ---------- */
+const patCache = new Map();
+function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+
+// Felt: base colour, soft mottling, thousands of short curly fibres, speckle.
+function feltPattern(color) {
+  const k = 'felt:' + key(color);
+  if (patCache.has(k)) return patCache.get(k);
+  const S = 220, c = makeCanvas(S, S), x = c.getContext('2d');
+  const base = toRgb(color), r = mulberry32(hashStr(k));
+  x.fillStyle = css(base); x.fillRect(0, 0, S, S);
+  const wrap = (fn, px, py, m) => {
+    for (const ox of [-S, 0, S]) for (const oy of [-S, 0, S]) {
+      if ((ox && Math.abs(px + ox - S / 2) > S / 2 + m) || (oy && Math.abs(py + oy - S / 2) > S / 2 + m)) continue;
+      fn(px + ox, py + oy);
+    }
+  };
+  for (let i = 0; i < 26; i++) { // mottling
+    const px = r() * S, py = r() * S, rad = 20 + r() * 50, f = (r() - 0.5) * 0.16;
+    wrap((X, Y) => {
+      const g = x.createRadialGradient(X, Y, 0, X, Y, rad);
+      g.addColorStop(0, css(shade(base, f), 0.5)); g.addColorStop(1, css(shade(base, f), 0));
+      x.fillStyle = g; x.fillRect(X - rad, Y - rad, rad * 2, rad * 2);
+    }, px, py, rad);
+  }
+  x.lineCap = 'round';
+  for (let i = 0; i < 5200; i++) { // fibres
+    const px = r() * S, py = r() * S, a = r() * Math.PI * 2, l = 1.5 + r() * 5.5, bend = (r() - 0.5) * 3;
+    const f = (r() - 0.5) * 0.38;
+    x.strokeStyle = css(shade(base, f), 0.18 + r() * 0.4);
+    x.lineWidth = 0.4 + r() * 0.9;
+    const dx = Math.cos(a) * l, dy = Math.sin(a) * l;
+    wrap((X, Y) => {
+      x.beginPath(); x.moveTo(X, Y);
+      x.quadraticCurveTo(X + dx / 2 - dy * bend / l, Y + dy / 2 + dx * bend / l, X + dx, Y + dy); x.stroke();
+    }, px, py, 8);
+  }
+  const id = x.getImageData(0, 0, S, S), d = id.data; // speckle
+  for (let i = 0; i < d.length; i += 4) { const n = (r() - 0.5) * 14; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  x.putImageData(id, 0, 0);
+  const p = ctx.createPattern(c, 'repeat'); patCache.set(k, p); return p;
+}
+
+// Cardboard face: smooth kraft paper with flecks and faint grain streaks.
+function cardPattern(color) {
+  const k = 'card:' + key(color);
+  if (patCache.has(k)) return patCache.get(k);
+  const S = 256, c = makeCanvas(S, S), x = c.getContext('2d');
+  const base = toRgb(color), r = mulberry32(hashStr(k));
+  x.fillStyle = css(base); x.fillRect(0, 0, S, S);
+  for (let i = 0; i < 60; i++) { // grain streaks
+    x.strokeStyle = css(shade(base, (r() - 0.5) * 0.12), 0.25);
+    x.lineWidth = 0.6 + r() * 1.4; const y = r() * S;
+    x.beginPath(); x.moveTo(0, y); x.bezierCurveTo(S / 3, y + (r() - .5) * 4, 2 * S / 3, y + (r() - .5) * 4, S, y); x.stroke();
+  }
+  for (let i = 0; i < 900; i++) { // flecks
+    x.fillStyle = css(shade(base, r() < 0.5 ? -0.35 * r() : 0.3 * r()), 0.5);
+    x.fillRect(r() * S, r() * S, 0.6 + r() * 1.6, 0.5 + r() * 1.1);
+  }
+  const id = x.getImageData(0, 0, S, S), d = id.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (r() - 0.5) * 8; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  x.putImageData(id, 0, 0);
+  const p = ctx.createPattern(c, 'repeat'); patCache.set(k, p); return p;
+}
+
+// Corrugated edge: vertical flutes (light/dark sinusoid).
+function corrugPattern(color) {
+  const k = 'corr:' + key(color);
+  if (patCache.has(k)) return patCache.get(k);
+  const P = 8, c = makeCanvas(P, 4), x = c.getContext('2d');
+  for (let i = 0; i < P; i++) {
+    const v = 0.5 + 0.5 * Math.cos((i / P) * Math.PI * 2);
+    x.fillStyle = css(shade(color, -0.32 + v * 0.26)); x.fillRect(i, 0, 1, 4);
+  }
+  const p = ctx.createPattern(c, 'repeat'); patCache.set(k, p); return p;
+}
+
+// Crumpled paper: mottled noise, faceted creases, fibres, vignette.
+function paperCanvas(w, h, color, seed, vignette = true) {
+  const c = makeCanvas(w, h), x = c.getContext('2d'), r = mulberry32(seed);
+  const base = toRgb(color);
+  x.fillStyle = css(base); x.fillRect(0, 0, w, h);
+  for (const [cell, amp] of [[90, 0.10], [36, 0.06], [12, 0.04]]) { // mottling octaves
+    const sw = Math.ceil(w / cell) + 2, sh = Math.ceil(h / cell) + 2, s = makeCanvas(sw, sh), sx = s.getContext('2d');
+    const id = sx.createImageData(sw, sh);
+    for (let i = 0; i < id.data.length; i += 4) {
+      const v = r() < 0.5 ? 0 : 255; id.data[i] = id.data[i + 1] = id.data[i + 2] = v; id.data[i + 3] = 255 * amp * r();
+    }
+    sx.putImageData(id, 0, 0);
+    x.imageSmoothingEnabled = true; x.drawImage(s, -cell, -cell, sw * cell, sh * cell);
+  }
+  for (let i = 0; i < 140; i++) { // facets
+    const cx = r() * w, cy = r() * h, rad = 40 + r() * 160;
+    x.beginPath();
+    for (let j = 0; j < 3 + (r() * 3 | 0); j++) { const a = r() * Math.PI * 2; x.lineTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad); }
+    x.closePath(); x.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(90,60,30,0.035)'; x.fill();
+  }
+  for (let i = 0; i < 70; i++) { // creases
+    let px = r() * w, py = r() * h, a = r() * Math.PI * 2;
+    const pts = [[px, py]];
+    for (let j = 0; j < 3 + (r() * 4 | 0); j++) { a += (r() - 0.5) * 0.9; const l = 30 + r() * 120; px += Math.cos(a) * l; py += Math.sin(a) * l; pts.push([px, py]); }
+    for (const [off, col] of [[1.2, 'rgba(90,60,30,0.09)'], [0, 'rgba(255,255,255,0.32)']]) {
+      x.beginPath(); pts.forEach(([X, Y], j) => j ? x.lineTo(X + off, Y + off) : x.moveTo(X + off, Y + off));
+      x.strokeStyle = col; x.lineWidth = 1 + r() * 0.6; x.stroke();
+    }
+  }
+  for (let i = 0; i < (w * h) / 900; i++) { x.fillStyle = css(shade(base, -0.3), 0.25 * r()); x.fillRect(r() * w, r() * h, 1 + r() * 2, 0.6); }
+  if (!vignette) return c;
+  const g = x.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.75);
+  g.addColorStop(0, 'rgba(80,50,20,0)'); g.addColorStop(1, 'rgba(80,50,20,0.22)');
+  x.fillStyle = g; x.fillRect(0, 0, w, h);
+  return c;
+}
+
+/* ---------- shapes ---------- */
+// Hand-cut blob: an ellipse wobbled by a few periodic sine harmonics.
+function blob(r, cx, cy, rx, ry, wob = 0.1, n = 72, rot = 0) {
+  const harm = [[2, wob], [3 + (r() * 3 | 0), wob * 0.5], [7, wob * 0.22], [13, wob * 0.1]].map(([f, a]) => [f, a, r() * Math.PI * 2]);
+  const pts = [];
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2;
+    let k = 1; for (const [f, a, p] of harm) k += a * Math.sin(f * t + p);
+    k += (r() - 0.5) * wob * 0.12;
+    const ex = Math.cos(t) * rx * k, ey = Math.sin(t) * ry * k;
+    pts.push([cx + ex * Math.cos(rot) - ey * Math.sin(rot), cy + ex * Math.sin(rot) + ey * Math.cos(rot)]);
+  }
+  return pts;
+}
+// Densify a polygon so smoothing keeps corners nearly sharp, with scissor jitter.
+function poly(r, verts, step = 10, jit = 0.8) {
+  const out = [];
+  for (let i = 0; i < verts.length; i++) {
+    const a = verts[i], b = verts[(i + 1) % verts.length];
+    const n = Math.max(1, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1]) / step));
+    for (let j = 0; j < n; j++) {
+      const t = j / n, edge = j === 0 ? 0 : jit;
+      out.push([lerp(a[0], b[0], t) + (r() - 0.5) * edge, lerp(a[1], b[1], t) + (r() - 0.5) * edge]);
+    }
+  }
+  return out;
+}
+function trace(c, pts, dx = 0, dy = 0) {
+  const n = pts.length;
+  c.beginPath();
+  c.moveTo((pts[n - 1][0] + pts[0][0]) / 2 + dx, (pts[n - 1][1] + pts[0][1]) / 2 + dy);
+  for (let i = 0; i < n; i++) {
+    const p = pts[i], q = pts[(i + 1) % n];
+    c.quadraticCurveTo(p[0] + dx, p[1] + dy, (p[0] + q[0]) / 2 + dx, (p[1] + q[1]) / 2 + dy);
+  }
+  c.closePath();
+}
+function centroid(pts) { let x = 0, y = 0; for (const p of pts) { x += p[0]; y += p[1]; } return [x / pts.length, y / pts.length]; }
+function bbox(pts) {
+  let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity;
+  for (const [x, y] of pts) { a = Math.min(a, x); b = Math.min(b, y); c = Math.max(c, x); d = Math.max(d, y); }
+  return [a, b, c, d];
+}
+function inset(pts, d) {
+  const [cx, cy] = centroid(pts);
+  return pts.map(([x, y]) => { const l = Math.hypot(x - cx, y - cy) || 1; const k = Math.max(0, (l - d) / l); return [cx + (x - cx) * k, cy + (y - cy) * k]; });
+}
+
+/* ---------- drawing primitives ---------- */
+const OPT = { stitch: true };
+
+function stitchPath(c, pts, thread, closed = true, width = 1.8) {
+  c.save();
+  c.lineCap = 'round'; c.setLineDash([7, 6]);
+  for (const [off, col, lw] of [[0.9, 'rgba(30,15,5,0.35)', width + 0.4], [0, css(thread), width]]) {
+    c.beginPath();
+    pts.forEach(([x, y], i) => i ? c.lineTo(x + off, y + off) : c.moveTo(x + off, y + off));
+    if (closed) c.closePath();
+    c.strokeStyle = col; c.lineWidth = lw; c.stroke();
+  }
+  c.restore();
+}
+
+/**
+ * Draw one cut-out piece.
+ * mat: 'felt' | 'card'. depth: thickness in px. lift: how high above the layer below (shadow size).
+ */
+function piece(c, r, pts, { color, mat = 'felt', depth = 4, lift = 1, stitch = null, fuzz = true, stitchInset = 7 }) {
+  const base = toRgb(color);
+  const side = mat === 'card' ? corrugPattern(base) : css(shade(base, -0.3));
+  // body + drop shadow
+  c.save();
+  c.shadowColor = `rgba(45,26,10,${0.22 + 0.16 * Math.min(lift, 1.5)})`;
+  c.shadowBlur = 6 + 12 * lift; c.shadowOffsetX = 2 + 4 * lift; c.shadowOffsetY = 3 + 8 * lift;
+  c.fillStyle = side; trace(c, pts, 0, depth); c.fill();
+  c.restore();
+  c.fillStyle = side;
+  for (let d = depth - 1; d > 0; d--) { trace(c, pts, 0, d); c.fill(); }
+  if (mat === 'card' && depth > 3) { // liner edges on the cardboard side
+    trace(c, pts, 0, depth); c.strokeStyle = css(shade(base, -0.45), 0.7); c.lineWidth = 1.2; c.stroke();
+  }
+  // face
+  trace(c, pts); c.fillStyle = mat === 'card' ? cardPattern(base) : feltPattern(base); c.fill();
+  const [x0, y0, x1, y1] = bbox(pts);
+  c.save(); trace(c, pts); c.clip();
+  const g = c.createLinearGradient(0, y0, 0, y1);
+  g.addColorStop(0, 'rgba(255,244,220,0.14)'); g.addColorStop(1, 'rgba(50,25,5,0.14)');
+  c.fillStyle = g; c.fillRect(x0, y0, x1 - x0, y1 - y0);
+  trace(c, pts); c.strokeStyle = 'rgba(40,20,5,0.13)'; c.lineWidth = 7; c.stroke(); // soft inner edge
+  c.restore();
+  if (mat === 'card') { trace(c, pts); c.strokeStyle = css(shade(base, 0.25), 0.8); c.lineWidth = 1.2; c.stroke(); }
+  // fuzzy felt edge
+  if (mat === 'felt' && fuzz) {
+    const [cx, cy] = centroid(pts), n = pts.length;
+    c.save(); c.lineCap = 'round';
+    for (let i = 0; i < n; i++) {
+      const p = pts[i], q = pts[(i + 1) % n];
+      let nx = q[1] - p[1], ny = -(q[0] - p[0]); const l = Math.hypot(nx, ny) || 1; nx /= l; ny /= l;
+      if (nx * (p[0] - cx) + ny * (p[1] - cy) < 0) { nx = -nx; ny = -ny; }
+      for (let k = 0; k < 3; k++) {
+        const t = r(), sx = lerp(p[0], q[0], t), sy = lerp(p[1], q[1], t), len = 0.8 + r() * 2.6, sw = (r() - 0.5) * 2.5;
+        c.strokeStyle = css(shade(base, (r() - 0.5) * 0.25), 0.55 + r() * 0.35); c.lineWidth = 0.5 + r() * 0.7;
+        c.beginPath(); c.moveTo(sx - nx, sy - ny); c.lineTo(sx + nx * len - ny * sw, sy + ny * len + nx * sw); c.stroke();
+      }
+    }
+    c.restore();
+  }
+  if (stitch && OPT.stitch) {
+    const [cx, cy] = centroid(pts);
+    const rad = pts.reduce((s, [x, y]) => s + Math.hypot(x - cx, y - cy), 0) / pts.length;
+    if (rad > stitchInset * 2.4) stitchPath(c, inset(pts, stitchInset), stitch);
+  }
+}
+
+// Catmull-Rom sampled curve through control points.
+function spline(ctrl, seg = 20) {
+  const out = [], P = [ctrl[0], ...ctrl, ctrl[ctrl.length - 1]];
+  for (let i = 1; i < P.length - 2; i++) {
+    const [p0, p1, p2, p3] = [P[i - 1], P[i], P[i + 1], P[i + 2]];
+    for (let j = 0; j < seg; j++) {
+      const t = j / seg, t2 = t * t, t3 = t2 * t;
+      out.push([0, 1].map(k => 0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2 + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3)));
+    }
+  }
+  out.push(ctrl[ctrl.length - 1]);
+  return out;
+}
+
+// Yarn: a thick strand with twisted plies.
+function yarn(c, ctrl, color, w = 9) {
+  const pts = spline(ctrl, 26), base = toRgb(color);
+  const path = () => { c.beginPath(); pts.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); };
+  c.save(); c.lineCap = 'round'; c.lineJoin = 'round';
+  c.shadowColor = 'rgba(40,22,8,0.35)'; c.shadowBlur = 8; c.shadowOffsetX = 3; c.shadowOffsetY = 7;
+  path(); c.strokeStyle = css(shade(base, -0.25)); c.lineWidth = w; c.stroke();
+  c.shadowColor = 'transparent';
+  path(); c.strokeStyle = css(base); c.lineWidth = w - 2.5; c.stroke();
+  let acc = 0;
+  for (let i = 1; i < pts.length; i++) {
+    const [ax, ay] = pts[i - 1], [bx, by] = pts[i]; const l = Math.hypot(bx - ax, by - ay); if (!l) continue;
+    const tx = (bx - ax) / l, ty = (by - ay) / l, nx = -ty, ny = tx, hw = w / 2 - 0.8;
+    acc += l;
+    while (acc > 4.6) {
+      acc -= 4.6; const t = 1 - acc / l, px = lerp(ax, bx, t), py = lerp(ay, by, t);
+      c.lineWidth = 1.4; c.strokeStyle = css(shade(base, -0.35), 0.6);
+      c.beginPath(); c.moveTo(px + nx * hw - tx * 2.4, py + ny * hw - ty * 2.4); c.lineTo(px - nx * hw + tx * 2.4, py - ny * hw + ty * 2.4); c.stroke();
+      c.lineWidth = 1; c.strokeStyle = css(shade(base, 0.3), 0.5);
+      c.beginPath(); c.moveTo(px + nx * hw - tx * 0.6, py + ny * hw - ty * 0.6); c.lineTo(px - nx * hw * 0.2 + tx * 1.6, py - ny * hw * 0.2 + ty * 1.6); c.stroke();
+    }
+  }
+  c.restore();
+}
+
+function yarnBall(c, r, x, y, rad, color) {
+  const base = toRgb(color);
+  c.save();
+  c.shadowColor = 'rgba(40,22,8,0.4)'; c.shadowBlur = 18; c.shadowOffsetX = 6; c.shadowOffsetY = 12;
+  c.beginPath(); c.arc(x, y, rad, 0, Math.PI * 2); c.fillStyle = css(shade(base, -0.1)); c.fill();
+  c.restore();
+  c.save(); c.beginPath(); c.arc(x, y, rad, 0, Math.PI * 2); c.clip();
+  c.lineCap = 'round';
+  for (let i = 0; i < 46; i++) {
+    const a = r() * Math.PI, rr = rad * (0.5 + r() * 0.75);
+    c.strokeStyle = css(shade(base, (r() - 0.45) * 0.5), 0.9); c.lineWidth = 2.5 + r() * 2.5;
+    c.beginPath(); c.ellipse(x + (r() - 0.5) * rad * 0.4, y + (r() - 0.5) * rad * 0.4, rr, rr * (0.25 + r() * 0.35), a, 0, Math.PI * 2); c.stroke();
+  }
+  const g = c.createRadialGradient(x - rad * 0.35, y - rad * 0.4, rad * 0.1, x, y, rad);
+  g.addColorStop(0, 'rgba(255,240,220,0.25)'); g.addColorStop(1, 'rgba(40,15,0,0.35)');
+  c.fillStyle = g; c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+  c.restore();
+}
+
+// Wooden sewing button with grain, rim, 4 holes and a thread cross.
+function woodButton(c, r, x, y, rad, thread) {
+  c.save();
+  c.shadowColor = 'rgba(40,22,8,0.45)'; c.shadowBlur = 12; c.shadowOffsetX = 4; c.shadowOffsetY = 8;
+  const g = c.createRadialGradient(x - rad * 0.3, y - rad * 0.35, rad * 0.1, x, y, rad);
+  g.addColorStop(0, '#e9bf86'); g.addColorStop(0.55, '#c9955a'); g.addColorStop(1, '#93602f');
+  c.beginPath(); c.arc(x, y, rad, 0, Math.PI * 2); c.fillStyle = g; c.fill();
+  c.restore();
+  c.save(); c.beginPath(); c.arc(x, y, rad, 0, Math.PI * 2); c.clip();
+  const gx = x + (r() - 0.5) * rad * 3, gy = y - rad * (1.2 + r());
+  for (let i = 0; i < 16; i++) { // grain rings
+    c.beginPath(); c.ellipse(gx, gy, rad * (0.4 + i * 0.22), rad * (0.25 + i * 0.14), 0.3, 0, Math.PI * 2);
+    c.strokeStyle = `rgba(110,60,20,${0.1 + r() * 0.12})`; c.lineWidth = 0.8 + r(); c.stroke();
+  }
+  c.restore();
+  c.beginPath(); c.arc(x, y, rad * 0.72, 0, Math.PI * 2); // recessed centre
+  c.strokeStyle = 'rgba(90,50,18,0.45)'; c.lineWidth = 2; c.stroke();
+  c.beginPath(); c.arc(x - 0.8, y - 0.8, rad * 0.72, Math.PI * 0.1, Math.PI * 1.1);
+  c.strokeStyle = 'rgba(255,230,190,0.35)'; c.lineWidth = 1.2; c.stroke();
+  const h = rad * 0.26, hr = Math.max(2, rad * 0.1);
+  const holes = [[-h, -h], [h, -h], [h, h], [-h, h]].map(([a, b]) => [x + a, y + b]);
+  for (const [hx, hy] of holes) { c.beginPath(); c.arc(hx, hy, hr, 0, Math.PI * 2); c.fillStyle = '#4a2a12'; c.fill(); }
+  c.save(); c.lineCap = 'round';
+  for (const [a, b] of [[0, 2], [1, 3]]) {
+    c.strokeStyle = 'rgba(30,15,5,0.4)'; c.lineWidth = hr * 1.1;
+    c.beginPath(); c.moveTo(holes[a][0] + 1, holes[a][1] + 1.5); c.lineTo(holes[b][0] + 1, holes[b][1] + 1.5); c.stroke();
+    c.strokeStyle = css(thread); c.lineWidth = hr * 0.95;
+    c.beginPath(); c.moveTo(...holes[a]); c.lineTo(...holes[b]); c.stroke();
+  }
+  c.restore();
+}
+
+/* ---------- scene elements ---------- */
+function cloudShape(r, cx, cy, rx, ry) {
+  const pts = [], n = 90, bumps = 4 + (r() * 3 | 0), ph = r() * 6;
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2;
+    let x = Math.cos(t) * rx, y = Math.sin(t) * ry;
+    if (y < 0) { const k = 1 + 0.22 * Math.abs(Math.sin(bumps * t / 2 + ph)); x *= k; y *= k * 1.15; }
+    else { y = Math.min(y, ry * 0.45); }
+    pts.push([cx + x, cy + y]);
+  }
+  return pts;
+}
+
+function tree(c, r, P, x, y, h) {
+  const bw = h * 0.1;
+  piece(c, r, poly(r, [[x - bw / 2, y], [x + bw / 2, y], [x + bw * 0.22, y - h * 0.62], [x - bw * 0.22, y - h * 0.62]], 8), { color: P.trunk, depth: 3, lift: 0.6 });
+  const side = r() < 0.5 ? -1 : 1;
+  piece(c, r, poly(r, [[x, y - h * 0.3], [x + side * h * 0.2, y - h * 0.5], [x + side * h * 0.22, y - h * 0.47], [x + side * bw * 0.2, y - h * 0.24]], 6), { color: P.trunk, depth: 2, lift: 0.4, fuzz: false });
+  const fx = x, fy = y - h * 0.74, R = h * 0.3;
+  const blobs = [[0, 0, R]];
+  const extra = 3 + (r() * 3 | 0);
+  for (let i = 0; i < extra; i++) { const a = -Math.PI * (0.05 + r() * 0.9) + (i % 2 ? 0 : Math.PI * 0.1); blobs.push([Math.cos(a) * R * (0.55 + r() * 0.3), Math.sin(a) * R * 0.45 + R * 0.2 * (r() - 0.3), R * (0.5 + r() * 0.25)]); }
+  blobs.sort((a, b) => b[2] - a[2]);
+  blobs.forEach(([dx, dy, rr], i) => {
+    piece(c, r, blob(r, fx + dx, fy + dy, rr, rr * 0.92, 0.09), { color: pick(r, P.foliage), depth: 4, lift: i ? 0.7 : 1, stitch: i < 2 ? P.thread : null, stitchInset: 6 });
+  });
+}
+
+function pine(c, r, P, x, y, h) {
+  const bw = h * 0.08;
+  piece(c, r, poly(r, [[x - bw / 2, y], [x + bw / 2, y], [x + bw / 3, y - h * 0.25], [x - bw / 3, y - h * 0.25]], 6), { color: P.trunk, depth: 3, lift: 0.5 });
+  for (let k = 0; k < 3; k++) {
+    const by = y - h * 0.16 - k * h * 0.22, w = h * 0.3 * (1 - k * 0.22), ay = by - h * 0.4;
+    piece(c, r, poly(r, [[x - w, by], [x + w, by], [x + (r() - 0.5) * 4, ay]], 9, 1.2), { color: pick(r, P.pine), depth: 4, lift: 0.8, stitch: P.thread, stitchInset: 8 });
+  }
+}
+
+function bush(c, r, P, x, y, s) {
+  const cols = r() < 0.5 ? P.grass : P.pine;
+  for (let i = 0; i < 3; i++) piece(c, r, blob(r, x + (i - 1) * s * 0.55, y - s * (0.45 + (i === 1 ? 0.2 : 0)), s * 0.55, s * 0.48, 0.1), { color: pick(r, cols), depth: 3, lift: 0.6 });
+}
+
+function mushroom(c, r, P, x, y, s) {
+  piece(c, r, poly(r, [[x - s * 0.16, y], [x + s * 0.16, y], [x + s * 0.11, y - s * 0.55], [x - s * 0.11, y - s * 0.55]], 5), { color: '#efe3cc', depth: 2, lift: 0.4 });
+  const cap = [];
+  for (let i = 0; i <= 30; i++) { const t = Math.PI + (i / 30) * Math.PI; cap.push([x + Math.cos(t) * s * 0.5, y - s * 0.5 + Math.sin(t) * s * 0.42]); }
+  cap.push([x + s * 0.45, y - s * 0.44], [x - s * 0.45, y - s * 0.44]);
+  piece(c, r, cap, { color: P.cap, depth: 3, lift: 0.6 });
+  for (let i = 0; i < 4; i++) {
+    const a = Math.PI * (1.15 + i * 0.23), d = s * (0.22 + r() * 0.1);
+    piece(c, r, blob(r, x + Math.cos(a) * d * 1.3, y - s * 0.55 + Math.sin(a) * d, s * 0.06, s * 0.05, 0.1, 16), { color: '#f6efe0', depth: 1, lift: 0.15, fuzz: false });
+  }
+}
+
+function pumpkin(c, r, P, x, y, s) {
+  const base = toRgb(P.fruit);
+  for (const [dx, k] of [[-0.28, -0.1], [0.28, -0.1], [0, 0.04]]) piece(c, r, blob(r, x + dx * s, y - s * 0.32, s * 0.32, s * 0.32, 0.05, 40), { color: shade(base, k), depth: 3, lift: 0.5, fuzz: true });
+  piece(c, r, poly(r, [[x - 3, y - s * 0.6], [x + 3, y - s * 0.6], [x + 6, y - s * 0.8], [x + 1, y - s * 0.82]], 4), { color: P.pine[0], depth: 2, lift: 0.3, fuzz: false });
+  if (OPT.stitch) stitchPath(c, [[x, y - s * 0.56], [x, y - s * 0.1]], P.thread, false, 1.4);
+}
+
+function rock(c, r, P, x, y, s) { piece(c, r, blob(r, x, y - s * 0.3, s * 0.55, s * 0.36, 0.14, 40), { color: shade(P.rock, (r() - 0.5) * 0.2), depth: 3, lift: 0.5 }); }
+
+function leaf(c, r, x, y, L, ang, color, thread) {
+  const pts = [], n = 36;
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2, lx = Math.cos(t) * L, ly = Math.sin(t) * L * 0.45 * Math.pow(Math.abs(Math.cos(t * 0.5)), 0.6) * (Math.cos(t) > 0 ? 0.9 : 1);
+    pts.push([x + lx * Math.cos(ang) - ly * Math.sin(ang), y + lx * Math.sin(ang) + ly * Math.cos(ang)]);
+  }
+  piece(c, r, pts, { color, depth: 2, lift: 0.9, stitch: null });
+  if (OPT.stitch) stitchPath(c, [[x - Math.cos(ang) * L * 0.8, y - Math.sin(ang) * L * 0.8], [x + Math.cos(ang) * L * 0.75, y + Math.sin(ang) * L * 0.75]], thread, false, 1.2);
+}
+
+function sunOrMoon(c, r, P, x, y, rad) {
+  if (!P.moon) {
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 + 0.1, a1 = a - 0.11, a2 = a + 0.11;
+      piece(c, r, poly(r, [[x + Math.cos(a1) * rad * 1.05, y + Math.sin(a1) * rad * 1.05], [x + Math.cos(a) * rad * 1.55, y + Math.sin(a) * rad * 1.55], [x + Math.cos(a2) * rad * 1.05, y + Math.sin(a2) * rad * 1.05]], 6, 1), { color: shade(P.sun, i % 2 ? 0.1 : -0.06), depth: 2, lift: 0.4 });
+    }
+    piece(c, r, blob(r, x, y, rad, rad, 0.04, 60), { color: P.sun, depth: 4, lift: 0.8, stitch: P.thread, stitchInset: 9 });
+  } else {
+    piece(c, r, blob(r, x, y, rad, rad, 0.03, 60), { color: P.sun, depth: 4, lift: 0.8, stitch: P.thread, stitchInset: 9 });
+    for (let i = 0; i < 18; i++) { // felt stars
+      const sx = 120 + r() * (W - 240), sy = 90 + r() * H * 0.3, s = 5 + r() * 7;
+      const v = []; for (let k = 0; k < 10; k++) { const a = (k / 10) * Math.PI * 2 - Math.PI / 2, rr = k % 2 ? s * 0.45 : s; v.push([sx + Math.cos(a) * rr, sy + Math.sin(a) * rr]); }
+      piece(c, r, poly(r, v, 3, 0.3), { color: P.sun, depth: 1, lift: 0.3, fuzz: false });
+    }
+  }
+}
+
+/* ---------- the floating island ---------- */
+function islandProfile(r, cx, top, rx, depthMax, lobes, ph, n = 60) {
+  const pts = [];
+  for (let i = 0; i <= 12; i++) pts.push([cx - rx + (2 * rx * i) / 12, top + (r() - 0.5) * 3]);
+  for (let i = n; i >= 0; i--) {
+    const t = i / n, x = cx - rx * 0.96 + t * 2 * rx * 0.96;
+    const prof = Math.pow(Math.sin(Math.PI * t), 0.75);
+    const scallop = 0.78 + 0.22 * Math.abs(Math.cos(Math.PI * t * lobes + ph));
+    pts.push([x, top + depthMax * prof * scallop + (r() - 0.5) * 3]);
+  }
+  return pts;
+}
+
+function drawIsland(c, r, P, opts) {
+  const cx = W * 0.5 + (r() - 0.5) * W * 0.06, gy = H * 0.56, rx = W * 0.3, ry = H * 0.075;
+  const deep = H * (0.26 + r() * 0.06), lobes = 6 + (r() * 5 | 0), ph = r() * 3;
+
+  // dangling roots + felt pebbles under the island
+  const roots = 4 + (r() * 4 | 0);
+  for (let i = 0; i < roots; i++) {
+    const t = 0.2 + r() * 0.6, x = cx - rx * 0.96 + t * 2 * rx * 0.96, y0 = gy + 10 + deep * Math.pow(Math.sin(Math.PI * t), 0.75) * 0.8;
+    const len = 50 + r() * 110, sw = (r() - 0.5) * 50;
+    yarn(c, [[x, y0 - 20], [x + sw * 0.3, y0 + len * 0.35], [x - sw * 0.4, y0 + len * 0.7], [x + sw * 0.2, y0 + len]], shade(P.soil[1], 0.1), 5);
+    if (r() < 0.5) piece(c, r, blob(r, x + sw * 0.2, y0 + len + 8, 10, 9, 0.1, 20), { color: P.rock, depth: 2, lift: 0.5 });
+  }
+  // stacked felt soil strata
+  piece(c, r, islandProfile(r, cx, gy + 8, rx * 0.97, deep, lobes, ph), { color: P.soil[0], depth: 5, lift: 1.4 });
+  piece(c, r, islandProfile(r, cx, gy + 8, rx * 0.9, deep * 0.66, lobes - 1, ph + 1), { color: P.soil[1], depth: 4, lift: 0.9, stitch: P.thread, stitchInset: 10 });
+  piece(c, r, islandProfile(r, cx, gy + 8, rx * 0.82, deep * 0.34, lobes + 2, ph + 2), { color: P.soil[2], depth: 3, lift: 0.7 });
+  for (let i = 0; i < 7; i++) { // embedded stones
+    const t = 0.15 + r() * 0.7, x = cx - rx * 0.8 + t * 1.6 * rx, y = gy + 30 + r() * deep * 0.45 * Math.sin(Math.PI * t);
+    piece(c, r, blob(r, x, y, 10 + r() * 12, 7 + r() * 7, 0.12, 24), { color: shade(P.rock, (r() - 0.5) * 0.25), depth: 2, lift: 0.4 });
+  }
+  // cardboard platform with corrugated edge
+  piece(c, r, blob(r, cx, gy + 2, rx * 1.04, ry * 1.08, 0.04, 90), { color: P.card, mat: 'card', depth: 20, lift: 1 });
+  // felt grass top with highlight patches
+  const top = blob(r, cx, gy - 10, rx * 0.99, ry * 0.95, 0.05, 90);
+  piece(c, r, top, { color: P.grass[0], depth: 5, lift: 0.8, stitch: P.thread, stitchInset: 11 });
+  for (let i = 0; i < 3; i++) {
+    piece(c, r, blob(r, cx + (r() - 0.5) * rx * 1.1, gy - 12 + (r() - 0.5) * ry * 0.6, rx * (0.16 + r() * 0.14), ry * (0.25 + r() * 0.15), 0.12, 40), { color: pick(r, P.grass.slice(1)), depth: 1, lift: 0.15, fuzz: true });
+  }
+  // grass fringe along the front lip
+  for (let i = 0; i < 26; i++) {
+    const t = Math.PI * (0.12 + 0.76 * (i / 25)) + (r() - 0.5) * 0.05;
+    const x = cx + Math.cos(t) * rx * 0.97, y = gy - 10 + Math.sin(t) * ry * 0.95 + 4, w = 7 + r() * 6, h = 12 + r() * 14;
+    piece(c, r, poly(r, [[x - w, y], [x - w * 0.3, y - h], [x, y - h * 0.4], [x + w * 0.4, y - h * 0.9], [x + w, y]], 4, 0.6), { color: pick(r, P.grass), depth: 1, lift: 0.3, fuzz: true });
+  }
+
+  // things on the island, back to front
+  const items = [], nTrees = opts.trees;
+  let tries = 0;
+  while (items.length < nTrees && tries++ < 400) {
+    const u = (r() * 2 - 1) * 0.82, v = -0.55 + r() * 0.75;
+    if (u * u + v * v > 0.75) continue;
+    const x = cx + u * rx, y = gy - 10 + v * ry;
+    if (items.some(it => Math.abs(it.x - x) < rx * 0.15 && Math.abs(it.y - y) < ry * 0.9)) continue;
+    items.push({ x, y, kind: r() < 0.32 ? 'pine' : 'tree' });
+  }
+  const smalls = 4 + (r() * 5 | 0);
+  for (let i = 0; i < smalls; i++) {
+    const u = (r() * 2 - 1) * 0.85, v = -0.3 + r() * 0.85;
+    if (u * u + v * v > 0.85) continue;
+    items.push({ x: cx + u * rx, y: gy - 10 + v * ry, kind: pick(r, ['bush', 'bush', 'mushroom', 'pumpkin', 'rock']) });
+  }
+  items.sort((a, b) => a.y - b.y);
+  for (const it of items) {
+    const depthScale = 0.85 + 0.3 * ((it.y - (gy - ry)) / (ry * 1.6));
+    const s = H * depthScale;
+    if (it.kind === 'tree') tree(c, r, P, it.x, it.y, s * (0.2 + r() * 0.08));
+    else if (it.kind === 'pine') pine(c, r, P, it.x, it.y, s * (0.22 + r() * 0.08));
+    else if (it.kind === 'bush') bush(c, r, P, it.x, it.y, s * 0.045);
+    else if (it.kind === 'mushroom') mushroom(c, r, P, it.x, it.y, s * 0.05);
+    else if (it.kind === 'pumpkin') pumpkin(c, r, P, it.x, it.y, s * 0.05);
+    else rock(c, r, P, it.x, it.y, s * 0.04);
+  }
+  return { cx, gy, rx, deep };
+}
+
+function hills(c, r, P) {
+  P.hills.forEach((col, k) => {
+    const yb = H * (0.8 + k * 0.08), pts = [[-40, H + 40]];
+    const n = 8, ph = r() * 6;
+    for (let i = 0; i <= n; i++) { const x = -40 + (i / n) * (W + 80); pts.push([x, yb - 40 - 55 * Math.abs(Math.sin(i * 0.9 + ph)) - r() * 20]); }
+    pts.push([W + 40, H + 40]);
+    piece(c, r, poly(r, pts, 14, 1.5), { color: col, mat: k === 0 ? 'card' : 'felt', depth: k === 0 ? 12 : 4, lift: 0.8, stitch: k === 1 ? P.thread : null, stitchInset: 12 });
+  });
+}
+
+function craftFrame(c, r, P, label) {
+  if (OPT.stitch) {
+    const m = 30, pts = [];
+    for (const [x, y] of [[m, m], [W - m, m], [W - m, H - m], [m, H - m]]) pts.push([x, y]);
+    c.save(); c.setLineDash([10, 8]); c.lineCap = 'round';
+    for (const [off, col, lw] of [[1.2, 'rgba(40,20,5,0.3)', 2.8], [0, css(P.thread), 2.4]]) {
+      c.beginPath(); c.roundRect(m + off, m + off, W - 2 * m, H - 2 * m, 22); c.strokeStyle = col; c.lineWidth = lw; c.stroke();
+    }
+    c.restore();
+  }
+  // felt label tag
+  const tw = 330, th = 74, tx = W - tw - 70, ty = 58;
+  const tag = poly(r, [[tx, ty], [tx + tw, ty], [tx + tw, ty + th], [tx, ty + th]], 12, 1);
+  piece(c, r, tag, { color: P.tag, depth: 4, lift: 1, stitch: P.thread, stitchInset: 9 });
+  c.save(); c.fillStyle = css(P.thread); c.font = '40px "Patrick Hand", "Comic Sans MS", cursive';
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.shadowColor = 'rgba(30,10,0,0.35)'; c.shadowOffsetY = 2; c.shadowBlur = 2;
+  c.fillText(label, tx + tw / 2, ty + th / 2 + 2); c.restore();
+  // yarn trailing from the ball, buttons on top
+  yarnBall(c, r, W - 120, H - 115, 58, P.yarn);
+  yarn(c, [[W - 150, H - 80], [W * 0.78, H - 42], [W * 0.55, H - 78], [W * 0.32, H - 40], [W * 0.12, H - 72], [-30, H - 50]], P.yarn, 9);
+  yarn(c, [[98, 150], [70, 240], [110, 330], [62, 420]], P.yarn2, 6);
+  woodButton(c, r, 90, 92, 40, P.thread);
+  woodButton(c, r, 158, 128, 26, P.accent);
+  woodButton(c, r, 92, H - 200, 22, P.thread);
+}
+
+/* ---------- island render ---------- */
+function renderIsland(seed, P, opts) {
+  patCache.clear();
+  const r = mulberry32(seed * 7919 + 17);
+  ctx.setLineDash([]);
+  ctx.drawImage(paperCanvas(W, H, P.paper, seed), 0, 0);
+  const g = ctx.createRadialGradient(W * 0.5, H * 0.45, 40, W * 0.5, H * 0.45, W * 0.55);
+  g.addColorStop(0, css(P.glow, 0.75)); g.addColorStop(1, css(P.glow, 0));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  const sunLeft = r() < 0.5;
+  sunOrMoon(ctx, r, P, sunLeft ? W * 0.2 : W * 0.78, H * 0.22, 62);
+  if (opts.hills) hills(ctx, r, P);
+  // clouds behind
+  const cl = [[W * 0.14, H * 0.42], [W * 0.86, H * 0.36], [sunLeft ? W * 0.7 : W * 0.3, H * 0.13]];
+  for (const [x, y] of cl) piece(ctx, r, cloudShape(r, x + (r() - 0.5) * 60, y + (r() - 0.5) * 40, 90 + r() * 50, 38 + r() * 14), { color: P.cloud, mat: 'card', depth: 14, lift: 1 });
+
+  const isl = drawIsland(ctx, r, P, opts);
+
+  // a cloud drifting in front of the island's underside
+  const fx = isl.cx + (r() < 0.5 ? -1 : 1) * isl.rx * (0.55 + r() * 0.3);
+  piece(ctx, r, cloudShape(r, fx, isl.gy + isl.deep * 0.75, 110, 40), { color: P.cloud, mat: 'card', depth: 16, lift: 1.5 });
+
+  if (opts.leaves) {
+    const nl = 10 + (r() * 8 | 0);
+    for (let i = 0; i < nl; i++) {
+      const x = 80 + r() * (W - 160), y = H * 0.1 + r() * H * 0.75;
+      if (Math.abs(x - isl.cx) < isl.rx * 0.9 && y > isl.gy - H * 0.3 && y < isl.gy + isl.deep) continue;
+      leaf(ctx, r, x, y, 14 + r() * 10, r() * Math.PI * 2, pick(r, P.foliage), P.thread);
+    }
+  }
+  if (opts.frame) craftFrame(ctx, r, P, P.name);
+}
+
+/* ---------- photo → felt collage ---------- */
+let photoImg = null;
+
+function kmeans(data, k, r) {
+  const n = data.length / 4, sample = [];
+  for (let i = 0; i < Math.min(n, 12000); i++) { const j = (r() * n | 0) * 4; if (data[j + 3] > 10) sample.push([data[j], data[j + 1], data[j + 2]]); }
+  const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+  const C = [sample[r() * sample.length | 0].slice()];
+  while (C.length < k) { // k-means++ seeding
+    const ds = sample.map(p => Math.min(...C.map(c => d2(p, c))));
+    let tot = ds.reduce((a, b) => a + b, 0) * r(), i = 0;
+    while (i < ds.length - 1 && (tot -= ds[i]) > 0) i++;
+    C.push(sample[i].slice());
+  }
+  for (let it = 0; it < 12; it++) {
+    const acc = C.map(() => [0, 0, 0, 0]);
+    for (const p of sample) { let bi = 0, bd = Infinity; C.forEach((c, ci) => { const d = d2(p, c); if (d < bd) { bd = d; bi = ci; } }); const a = acc[bi]; a[0] += p[0]; a[1] += p[1]; a[2] += p[2]; a[3]++; }
+    acc.forEach((a, i) => { if (a[3]) C[i] = [a[0] / a[3], a[1] / a[3], a[2] / a[3]]; });
+  }
+  return C;
+}
+
+function cozy([r0, g0, b0]) { // muted, warmer, slightly lifted
+  const l = 0.3 * r0 + 0.59 * g0 + 0.11 * b0;
+  let [r, g, b] = [lerp(r0, l, 0.22), lerp(g0, l, 0.22), lerp(b0, l, 0.22)];
+  r = r * 1.06 + 6; g = g * 1.0 + 4; b = b * 0.86;
+  return [Math.min(255, r), Math.min(255, g), Math.min(255, b)].map(v => lerp(v, 128, 0.06));
+}
+
+function boxBlur(src, w, h, rad) {
+  const tmp = new Float32Array(w * h), out = new Float32Array(w * h), k = 2 * rad + 1;
+  for (let y = 0; y < h; y++) { let s = 0; for (let x = -rad; x <= rad; x++) s += src[y * w + Math.min(w - 1, Math.max(0, x))]; for (let x = 0; x < w; x++) { tmp[y * w + x] = s / k; s += src[y * w + Math.min(w - 1, x + rad + 1)] - src[y * w + Math.max(0, x - rad)]; } }
+  for (let x = 0; x < w; x++) { let s = 0; for (let y = -rad; y <= rad; y++) s += tmp[Math.min(h - 1, Math.max(0, y)) * w + x]; for (let y = 0; y < h; y++) { out[y * w + x] = s / k; s += tmp[Math.min(h - 1, y + rad + 1) * w + x] - tmp[Math.max(0, y - rad) * w + x]; } }
+  return out;
+}
+
+function renderPhoto(P, opts) {
+  patCache.clear();
+  const r = mulberry32(1234);
+  ctx.setLineDash([]);
+  ctx.drawImage(paperCanvas(W, H, P.paper, 77), 0, 0);
+  const m = 70, rx0 = m, ry0 = m, rw = W - 2 * m, rh = H - 2 * m;
+  if (!photoImg) {
+    ctx.save(); ctx.fillStyle = css(P.ink || '#7a5a40'); ctx.font = '48px "Patrick Hand", cursive'; ctx.textAlign = 'center';
+    ctx.fillText('Choose a photo to turn it into felt', W / 2, H / 2); ctx.restore();
+    if (opts.frame) craftFrame(ctx, r, P, 'Felt Collage');
+    return;
+  }
+  // work at half resolution
+  const ww = Math.round(rw / 2), wh = Math.round(rh / 2), wc = makeCanvas(ww, wh), wx = wc.getContext('2d');
+  const s = Math.max(ww / photoImg.width, wh / photoImg.height);
+  wx.drawImage(photoImg, (ww - photoImg.width * s) / 2, (wh - photoImg.height * s) / 2, photoImg.width * s, photoImg.height * s);
+  const px = wx.getImageData(0, 0, ww, wh).data;
+  const k = opts.colors, C = kmeans(px, k, r);
+  const labels = new Uint8Array(ww * wh), counts = new Array(k).fill(0);
+  for (let i = 0; i < ww * wh; i++) {
+    let bi = 0, bd = Infinity;
+    for (let c = 0; c < k; c++) { const d = (px[i * 4] - C[c][0]) ** 2 + (px[i * 4 + 1] - C[c][1]) ** 2 + (px[i * 4 + 2] - C[c][2]) ** 2; if (d < bd) { bd = d; bi = c; } }
+    labels[i] = bi; counts[bi]++;
+  }
+  const order = [...Array(k).keys()].sort((a, b) => counts[b] - counts[a]);
+  const colorOf = ci => opts.warm ? cozy(C[ci]) : C[ci];
+
+  // base sheet: the most common colour covers the whole panel
+  const panel = poly(r, [[rx0, ry0], [rx0 + rw, ry0], [rx0 + rw, ry0 + rh], [rx0, ry0 + rh]], 20, 1.2);
+  piece(ctx, r, panel, { color: colorOf(order[0]), depth: 5, lift: 1.2 });
+
+  const mc = makeCanvas(ww, wh), mx = mc.getContext('2d');
+  const big = makeCanvas(rw, rh), bx = big.getContext('2d');
+  const layer = makeCanvas(rw, rh), lx = layer.getContext('2d');
+  for (let oi = 1; oi < order.length; oi++) {
+    const ci = order[oi];
+    const f = new Float32Array(ww * wh);
+    for (let i = 0; i < f.length; i++) f[i] = labels[i] === ci ? 1 : 0;
+    const bl = boxBlur(boxBlur(f, ww, wh, 2), ww, wh, 1);
+    const id = mx.createImageData(ww, wh);
+    for (let i = 0; i < bl.length; i++) { id.data[i * 4 + 3] = bl[i] * 255; }
+    mx.putImageData(id, 0, 0);
+    bx.clearRect(0, 0, rw, rh); bx.imageSmoothingEnabled = true; bx.drawImage(mc, 0, 0, rw, rh);
+    const bd = bx.getImageData(0, 0, rw, rh), d = bd.data;
+    for (let i = 3; i < d.length; i += 4) d[i] = d[i] > 105 ? 255 : 0; // slight dilation → overlapping cut edges
+    bx.putImageData(bd, 0, 0);
+    lx.clearRect(0, 0, rw, rh);
+    lx.globalCompositeOperation = 'source-over';
+    lx.drawImage(big, 0, 0);
+    lx.globalCompositeOperation = 'source-in';
+    lx.save(); lx.translate(-rx0, -ry0); lx.fillStyle = feltPattern(colorOf(ci)); lx.fillRect(rx0, ry0, rw, rh); lx.restore();
+    lx.globalCompositeOperation = 'source-over';
+    ctx.save();
+    ctx.shadowColor = 'rgba(40,22,8,0.42)'; ctx.shadowBlur = 9; ctx.shadowOffsetX = 2.5; ctx.shadowOffsetY = 4;
+    ctx.drawImage(layer, rx0, ry0);
+    ctx.restore();
+  }
+  if (opts.frame) craftFrame(ctx, r, P, 'Felt Collage');
+}
+
+/* ---------- UI wiring ---------- */
+const $ = id => document.getElementById(id);
+let mode = 'island';
+function opts() {
+  return {
+    trees: +$('trees').value, leaves: $('leaves').checked, hills: $('hills').checked,
+    frame: $('frame').checked, colors: +$('colors').value, warm: $('warm').checked,
+  };
+}
+let pending = 0;
+function render() {
+  const ticket = ++pending;
+  $('status').classList.add('show');
+  setTimeout(() => {
+    if (ticket !== pending) return;
+    OPT.stitch = $('stitch').checked;
+    const P = PALETTES[$('palette').value];
+    document.body.style.backgroundColor = P.paper;
+    if (mode === 'island') renderIsland(Math.max(1, +$('seed').value | 0), P, opts());
+    else renderPhoto(P, opts());
+    $('status').classList.remove('show');
+  }, 30);
+}
+function setMode(m) {
+  mode = m;
+  $('tabIsland').classList.toggle('on', m === 'island');
+  $('tabPhoto').classList.toggle('on', m === 'photo');
+  $('islandControls').classList.toggle('hidden', m !== 'island');
+  $('photoControls').classList.toggle('hidden', m !== 'photo');
+  render();
+}
+$('tabIsland').onclick = () => setMode('island');
+$('tabPhoto').onclick = () => setMode('photo');
+$('shuffle').onclick = () => { $('seed').value = 1 + Math.floor(Math.random() * 999998); render(); };
+$('trees').oninput = () => { $('treesVal').textContent = $('trees').value; };
+$('colors').oninput = () => { $('colorsVal').textContent = $('colors').value; };
+for (const id of ['palette', 'seed', 'trees', 'leaves', 'hills', 'stitch', 'frame', 'colors', 'warm']) $(id).addEventListener('change', render);
+$('photo').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const img = new Image();
+  img.onload = () => { photoImg = img; render(); };
+  img.src = URL.createObjectURL(f);
+};
+$('save').onclick = () => {
+  cv.toBlob(b => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = mode === 'island' ? `felt-island-${$('seed').value}.png` : 'felt-collage.png';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+};
+
+// paper texture for the page itself
+document.body.style.backgroundImage = `url(${paperCanvas(1400, 1000, '#efe3cc', 5, false).toDataURL('image/jpeg', 0.85)})`;
+(document.fonts ? document.fonts.load('40px "Patrick Hand"').catch(() => {}) : Promise.resolve()).finally(render);
+</script>
+</body>
+</html>
