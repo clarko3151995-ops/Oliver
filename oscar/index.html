@@ -52,7 +52,10 @@
       display: flex; flex-direction: column; align-items: center;
       padding: max(1rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
       -webkit-tap-highlight-color: transparent;
+      /* an app, not a page: a press on a label mustn't select words or open Google's lookup panel */
+      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
     }
+    input, textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
     .container { width: 100%; max-width: 440px; }
 
     header { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1.25rem; }

@@ -1,6 +1,6 @@
 // Keeps the Oscar app's own files on the phone so it opens with no signal.
 // Scans are never handled here; the page queues them itself. Bump VERSION when the app files change.
-const VERSION = 'oscar-v5';
+const VERSION = 'oscar-v6';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
